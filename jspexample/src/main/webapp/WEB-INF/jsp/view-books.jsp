@@ -3,6 +3,9 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
   <head>
     <title>View Books</title>
+    <link href="
+    <c:url value="/css/style.css" />
+    " rel="stylesheet" type="text/css">
   </head>
   <body>
     <table>
@@ -15,6 +18,24 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
       </thead>
       <tbody>
         <c:forEach items="${books}" var="book">
+          <tr>
+            <td>${book.isbn}</td>
+            <td>${book.name}</td>
+            <td>${book.author}</td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </table>
+    <table>
+      <thead>
+        <tr>
+          <th>ISBN</th>
+          <th>Name</th>
+          <th>Author</th>
+        </tr>
+      </thead>
+      <tbody>
+        <c:forEach items="${books2}" var="book">
           <tr>
             <td>${book.isbn}</td>
             <td>${book.name}</td>
