@@ -3,6 +3,7 @@ package com.springboot.blog.controllers;
 import com.springboot.blog.exceptions.UserAlreadyExistsException;
 import com.springboot.blog.payloads.UserDto;
 import com.springboot.blog.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class UserController {
 
     // Add user
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto, HttpSession session){
         UserDto newUserDto = userService.createUser(userDto);
         return new ResponseEntity<>(newUserDto, HttpStatus.CREATED);
     }
