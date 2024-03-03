@@ -1,14 +1,18 @@
-import { useState } from "react";
-import "./App.css";
-import Login from "./components/Login";
+import AddTemp from "./components/Temp/AddTemp";
+import DeleteTemp from "./components/Temp/DeleteTemp";
+import GetAllTemp from "./components/Temp/GetAllTemp";
+import UpdateTemp from "./components/Temp/UpdateTemp";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <Login />
-    </>
+    <div className="h-screen w-screen bg-black">
+      <div className="container w-[70%] m-auto align-middle text-center">
+        <GetAllTemp />
+        <DeleteTemp />
+        <AddTemp />
+        <UpdateTemp />
+      </div>
+    </div>
   );
 }
 

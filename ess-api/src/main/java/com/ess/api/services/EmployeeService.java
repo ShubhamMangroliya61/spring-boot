@@ -19,6 +19,14 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    // Update by id
+    /*
+    public Employee updateEmployee(Long empId, Employee employee){
+        Employee employeeWithId = this.getEmployee(empId);
+        if(employee.getEmail() != null) employeeWithId.setEmail(employee.getEmail());
+    }
+    */
+
     // Get all
     public List<Employee> getAllEmployees(){
         return employeeRepository.findAll();
