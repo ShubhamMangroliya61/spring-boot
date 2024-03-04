@@ -24,7 +24,7 @@ public class RoleService {
         return roleRepository
                 .findById(roleId)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Role", "RoleId", roleId));
+                        () -> new ResourceNotFoundException("Role", "RoleId", ""+roleId));
     }
 
     // Update Role

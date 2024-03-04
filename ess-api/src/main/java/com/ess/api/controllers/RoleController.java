@@ -47,6 +47,13 @@ public class RoleController {
         return ResponseEntity.ok(allRoles);
     }
 
+    // Get By id
+    @GetMapping("/{roleId}")
+    public ResponseEntity<Role> getRoleById(@PathVariable Long roleId){
+        Role role = roleService.getRoleById(roleId);
+        return ResponseEntity.ok(role);
+    }
+
     // Delete all
     /*
     @DeleteMapping("/all")
