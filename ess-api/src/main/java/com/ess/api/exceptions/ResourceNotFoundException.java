@@ -4,9 +4,9 @@ public class ResourceNotFoundException extends RuntimeException{
     private String resource;
     private String sunResource;
 
-    private long fieldValue;
+    private String fieldValue;
 
-    public ResourceNotFoundException(String resource, String sunResource, long fieldValue) {
+    public ResourceNotFoundException(String resource, String sunResource, String fieldValue) {
         super(String.format("%s not found with %s : %s", resource, sunResource, fieldValue));
         this.resource = resource;
         this.sunResource = sunResource;

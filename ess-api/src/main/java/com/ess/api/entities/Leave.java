@@ -3,6 +3,7 @@ package com.ess.api.entities;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -54,6 +55,7 @@ public class Leave {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
+    @JsonBackReference
     private Employee employee;
 
     @Column(name = "leave_days", columnDefinition = "BIGINT DEFAULT 1")
