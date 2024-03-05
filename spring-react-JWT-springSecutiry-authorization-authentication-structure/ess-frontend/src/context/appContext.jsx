@@ -32,7 +32,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const authFetch = axios.create({
-    baseURL: "http://localhost:8080/",
+    baseURL: "http://localhost:8080/api",
   });
 
   authFetch.interceptors.request.use(
@@ -87,7 +87,7 @@ const AppProvider = ({ children }) => {
     });
     try {
       await authFetch
-        .post("/api/auth/login", employee)
+        .post("/auth/login", employee)
         .then((res) => {
           console.log(res.data);
           dispatch({

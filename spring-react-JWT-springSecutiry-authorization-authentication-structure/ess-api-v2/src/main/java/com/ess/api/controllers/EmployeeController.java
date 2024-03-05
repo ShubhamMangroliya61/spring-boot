@@ -35,13 +35,13 @@ public class EmployeeController {
     // Get all
     @GetMapping("/all")
     public ResponseEntity<List<Employee>> getAllEmployees(HttpSession session){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetailsImpl userDetails =  (UserDetailsImpl) authentication.getPrincipal();
             String useremail = userDetails.getEmail();
         } else {
             System.out.println("No user logged in.");
-        }
+        }*/
         List<Employee> allEmployees = employeeService.getAllEmployees();
         return ResponseEntity.ok(allEmployees);
     }
