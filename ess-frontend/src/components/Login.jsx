@@ -16,15 +16,19 @@ function Login() {
     }));
   };
 
+  /*
   useEffect(() => {
     console.log(employee);
   }, [employee]);
+  */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // axios
-    //   .post("http://localhost:8080/api/employee/login", employee)
-    //   .then((res) => console.log(res.data));
+    /*
+    axios
+      .post("http://localhost:8080/api/employee/login", employee)
+      .then((res) => console.log(res.data));
+      */
     await setUpUser(employee);
   };
 
@@ -70,6 +74,7 @@ function Login() {
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
               Sign in to continue
             </h2>
+            {showAlert && <p>{alert.msg}</p>}
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

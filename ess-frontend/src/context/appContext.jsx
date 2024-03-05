@@ -12,8 +12,8 @@ import {
   DISPLAY_PASS_ERROR,
 } from "./actions";
 
-// const jwtToken = sessionStorage.getItem("jwtToken");
-const user = sessionStorage.getItem("user");
+const jwtToken = localStorage.getItem("jwtToken");
+const user = localStorage.getItem("user");
 
 const initialState = {
   isLoading: false,
@@ -23,6 +23,7 @@ const initialState = {
     type: "",
   },
   user: user || null,
+  jwtToken: jwtToken || null,
 };
 
 const AppContext = React.createContext();
@@ -31,8 +32,35 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const authFetch = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:8080/",
   });
+
+  authFetch.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("jwtToken");
+      if (token) {
+        config.headers["Authorization"] = "Bearer " + token;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  authFetch.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response?.status === 401) {
+        dispatch({
+          type: LOGOUT_USER,
+        });
+      }
+      return Promise.reject(error);
+    }
+  );
 
   const displayAlert = (msg, type) => {
     dispatch({
@@ -59,17 +87,17 @@ const AppProvider = ({ children }) => {
     });
     try {
       await authFetch
-        .post("/employee/login", employee, {
-          credentials: "include",
-        })
+        .post("/api/auth/login", employee)
         .then((res) => {
+          console.log(res.data);
           dispatch({
             type: SETUP_USER_SUCCESS,
             payload: {
               user: res.data,
+              jwtToken: res.data.token,
             },
           });
-          sessionStorage.setItem("user", res.data);
+          localStorage.setItem("jwtToken", res.data.token);
           displayAlert("Login Successful", "success");
         })
         .catch((error) => {
@@ -91,7 +119,7 @@ const AppProvider = ({ children }) => {
     dispatch({
       type: LOGOUT_USER,
     });
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("jwtToken");
     displayAlert("Logged out successfully", "success");
     clearAlert();
   };
