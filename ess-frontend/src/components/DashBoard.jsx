@@ -8,8 +8,8 @@ function DashBoard() {
   }, []);
 
   return (
-    <div className="flex align-middle justify-center text-5xl">
-      <div>DashBoard</div>
+    <div className="flex h-screen align-middle justify-center text-5xl bg-login-bg">
+      <div className="">DashBoard</div>
     </div>
   );
 }

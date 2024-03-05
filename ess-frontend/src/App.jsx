@@ -1,5 +1,6 @@
 import DashBoard from "./components/DashBoard.jsx";
 import Login from "./components/Login";
+import Navbar from "./components/Navbar.jsx";
 import { useGlobalContext } from "./context/appContext.jsx";
 import {
   BrowserRouter as Router,
@@ -10,18 +11,21 @@ import {
 function App() {
   const { jwtToken } = useGlobalContext();
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/login"
-          element={!jwtToken ? <Login /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/"
-          element={jwtToken ? <DashBoard /> : <Navigate to="/login" />}
-        />
-      </Routes>
-    </Router>
+    <div className="">
+      <div className="">{jwtToken && <Navbar />}</div>
+      <Router>
+        <Routes>
+          <Route
+            path="/login"
+            element={!jwtToken ? <Login /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/"
+            element={jwtToken ? <DashBoard /> : <Navigate to="/login" />}
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 export default App;
