@@ -17,13 +17,13 @@ public class HomeController {
         return ResponseEntity.ok("I am PUBLIC user");
     }
 
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     @GetMapping("/normal")
     public ResponseEntity<String> normalUser(Principal principal){
         return ResponseEntity.ok("I am NORMAL user: " + principal.getName());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
     public ResponseEntity<String> adminUser(Principal principal){
         return ResponseEntity.ok("I am ADMIN user: " + principal.getName());

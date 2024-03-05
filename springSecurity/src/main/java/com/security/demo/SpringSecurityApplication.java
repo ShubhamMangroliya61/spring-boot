@@ -1,13 +1,16 @@
 package com.security.demo;
 
+import com.security.demo.config.RsaKeyProperties;
 import com.security.demo.entity.User;
 import com.security.demo.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@EnableConfigurationProperties(RsaKeyProperties.class)
 @SpringBootApplication
 public class SpringSecurityApplication {
 
