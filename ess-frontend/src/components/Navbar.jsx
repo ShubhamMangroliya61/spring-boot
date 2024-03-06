@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useGlobalContext } from "../context/appContext";
 
 function Navbar() {
+  const { authFetch } = useGlobalContext();
+
   const [punchOptions, setPunchOptions] = useState(false);
   const [subOptions, setSubOptions] = useState(false);
   const [profileOptions, setProfileOptions] = useState(false);
@@ -40,6 +43,20 @@ function Navbar() {
     }
   };
 
+  const handlePunchIn = () => {
+    authFetch
+      .post("/punchIn")
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
+  const handlePunchOut = () => {
+    authFetch
+      .post("/punchOut")
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="relative bg-slate-800 w-full text-gray-400 py-6">
       <div className="w-[95%] m-auto flex flex-row text-center justify-between items-center">
@@ -59,10 +76,16 @@ function Navbar() {
                 } absolute top-14 bg-slate-500 w-[150px] h-[100px] rounded-md right-32 bg-slate-500/50 backdrop-blur-md`}
               >
                 <ul>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
+                  <li
+                    className="cursor-pointer duration-200 hover:text-gray-300"
+                    onClick={handlePunchIn}
+                  >
                     Punch in
                   </li>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
+                  <li
+                    className="cursor-pointer duration-200 hover:text-gray-300"
+                    onClick={handlePunchOut}
+                  >
                     Punch out
                   </li>
                 </ul>

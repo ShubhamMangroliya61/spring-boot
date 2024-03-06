@@ -3,6 +3,7 @@ package com.ess.api.security;
 import com.ess.api.security.jwt.AuthEntryPointJwt;
 import com.ess.api.security.jwt.AuthTokenFilter;
 import com.ess.api.security.services.UserDetailsServiceImpl;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,13 +30,18 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @CrossOrigin(origins = "http://localhost:5173")
 public class WebSecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,13 +51,17 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         auth -> auth
+                                // Below two lines provide inter resources authentication
+                                .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.FORWARD, DispatcherType.ERROR)
+                                .permitAll()
+                                // Above two lines provide inter resources authentication
                                 .requestMatchers("/api/auth/login")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
                 );
 
-        http.addFilterBefore((Filter) authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -59,11 +69,6 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
     }
 
     @Bean

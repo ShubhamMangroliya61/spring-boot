@@ -21,36 +21,36 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "punchin")
+@Table(name = "punchout")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PunchIn {
+public class PunchOut {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "punchin_id")
+    @Column(name = "punchout_id")
     private long id;
 
-    @Column(name = "punchin_date")
+    @Column(name = "punchout_date")
     private LocalDate date;
 
-    @Column(name = "punchin_time")
+    @Column(name = "punchout_time")
     private LocalTime time;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    public PunchIn(Employee employee){
+    public PunchOut(Employee employee){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         this.date = LocalDate.now();
         this.time = LocalTime.parse(LocalTime.now().format(formatter));
         this.employee = employee;
     }
 
-    public PunchIn(LocalDate date, LocalTime time, Employee employee) {
+    public PunchOut(LocalDate date, LocalTime time, Employee employee) {
         this.date = date;
         this.time = time;
         this.employee = employee;
@@ -60,5 +60,4 @@ public class PunchIn {
     public String toString() {
         return "PunchIn [id=" + id + ", date=" + date + ", time=" + time + ", employee=" + employee + "]";
     }
-
 }

@@ -1,6 +1,10 @@
 package com.ess.api.security.jwt;
 
+import com.ess.api.entities.Employee;
+import com.ess.api.exceptions.ResourceNotFoundException;
+import com.ess.api.repositories.EmployeeRepository;
 import com.ess.api.security.services.UserDetailsServiceImpl;
+import com.ess.api.services.EmployeeService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +29,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
@@ -39,7 +46,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);

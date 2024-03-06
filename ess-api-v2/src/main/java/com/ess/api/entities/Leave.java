@@ -53,7 +53,7 @@ public class Leave {
     @Column(name = "leave_to")
     private LocalDate to;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     @JsonBackReference
     private Employee employee;
