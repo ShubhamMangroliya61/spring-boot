@@ -3,22 +3,26 @@ package com.ess.api.controllers;
 import com.ess.api.entities.Employee;
 import com.ess.api.entities.PunchIn;
 import com.ess.api.entities.PunchOut;
+import com.ess.api.repositories.PunchInRepository;
 import com.ess.api.request.GetPunchInAndOutRequest;
+import com.ess.api.response.DateAndNetMinutes;
 import com.ess.api.response.Punch;
 import com.ess.api.services.PunchInAndOutService;
 import com.ess.api.services.PunchInService;
 import com.ess.api.services.PunchOutService;
 import com.ess.api.utils.GetCurrentEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/punches")
@@ -38,7 +42,6 @@ public class PunchInAndOutController {
 
     @PostMapping
     public ResponseEntity<List<Punch>> getAllPunchesOfCurrentUserByDate(Authentication authentication, @RequestBody GetPunchInAndOutRequest getPunchInAndOutRequest ){
-        System.out.println(getPunchInAndOutRequest);
         int day = Integer.parseInt(getPunchInAndOutRequest.getDay());
         int month = Integer.parseInt(getPunchInAndOutRequest.getMonth());
         int year = Integer.parseInt(getPunchInAndOutRequest.getYear());
@@ -48,5 +51,22 @@ public class PunchInAndOutController {
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         List<Punch> allPunchInAndOut = punchInAndOutService.getAllPunchesByDateAndEmployee(currentEmployee, date);
         return ResponseEntity.ok(allPunchInAndOut);
+    }
+
+    @GetMapping("/allDates")
+    public ResponseEntity<?> getAllDates(Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        Set<LocalDate> allDates = punchInAndOutService.getAllDates(currentEmployee);
+
+
+        ArrayList<DateAndNetMinutes> dateAndNetMinutes = new ArrayList<>();
+        for (LocalDate date:allDates) {
+            long netMinutes = punchInAndOutService.countNetMinutes(currentEmployee, date);
+            Duration d = Duration.ofMinutes(netMinutes);
+            LocalTime time = LocalTime.MIN.plus(d);
+            dateAndNetMinutes.add(new DateAndNetMinutes(date, time));
+        }
+
+        return ResponseEntity.ok(dateAndNetMinutes);
     }
 }

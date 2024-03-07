@@ -6,9 +6,16 @@ function DashBoard() {
   const { authFetch } = useGlobalContext();
   const [todayPunchs, setTodayPunchs] = useState({});
 
+  // useEffect(() => {
+  //   console.log(todayPunchs);
+  // }, [todayPunchs]);
+
   useEffect(() => {
-    console.log(todayPunchs);
-  }, [todayPunchs]);
+    authFetch
+      .get("/punches/allDates")
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     let dateObj = new Date();
@@ -29,19 +36,6 @@ function DashBoard() {
     <>
       <div className="absolute min-h-svh w-screen bg-black">
         <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-300/40 backdrop-blur-md rounded-md pb-5 mb-6">
-          <div className="w-[50%] px-[20px] text-center">
-            <p className="py-4 text-gray-200 text-lg">
-              Punch logs of selected Date
-            </p>
-            <TempTable todaysPunches={todayPunchs} />
-          </div>
-          <div className="w-[50%] px-[20px] text-center">
-            <p className="py-4 text-gray-200 text-lg">Select day from here</p>
-            <TempTable todaysPunches={todayPunchs} />
-          </div>
-        </div>
-
-        <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-300/40 backdrop-blur-md rounded-md  pb-5">
           <div className="w-[50%] px-[20px] text-center">
             <p className="py-4 text-gray-200 text-lg">
               Punch logs of selected Date
