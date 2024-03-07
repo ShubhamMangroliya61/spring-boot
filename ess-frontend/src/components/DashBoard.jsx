@@ -27,9 +27,31 @@ function DashBoard() {
 
   return (
     <>
-      <div className="flex flex-col h-screen align-middle justify-center text-5xl bg-login-bg">
-        <div className="w-[95%] m-auto bg-black">
-          <TempTable todaysPunches={todayPunchs} />
+      <div className="absolute min-h-svh w-screen bg-black">
+        <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-300/40 backdrop-blur-md rounded-md pb-5 mb-6">
+          <div className="w-[50%] px-[20px] text-center">
+            <p className="py-4 text-gray-200 text-lg">
+              Punch logs of selected Date
+            </p>
+            <TempTable todaysPunches={todayPunchs} />
+          </div>
+          <div className="w-[50%] px-[20px] text-center">
+            <p className="py-4 text-gray-200 text-lg">Select day from here</p>
+            <TempTable todaysPunches={todayPunchs} />
+          </div>
+        </div>
+
+        <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-300/40 backdrop-blur-md rounded-md  pb-5">
+          <div className="w-[50%] px-[20px] text-center">
+            <p className="py-4 text-gray-200 text-lg">
+              Punch logs of selected Date
+            </p>
+            <TempTable todaysPunches={todayPunchs} />
+          </div>
+          <div className="w-[50%] px-[20px] text-center">
+            <p className="py-4 text-gray-200 text-lg">Select day from here</p>
+            <TempTable todaysPunches={todayPunchs} />
+          </div>
         </div>
       </div>
     </>

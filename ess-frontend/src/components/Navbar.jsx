@@ -58,12 +58,12 @@ function Navbar() {
   };
 
   return (
-    <div className="relative bg-slate-800 w-full text-gray-400 py-6">
+    <div className="fixed bg-slate-800 w-full text-gray-400 py-6">
       <div className="w-[95%] m-auto flex flex-row text-center justify-between items-center">
         <div className="left">TruFlux</div>
         <div className="right">
           <ul>
-            <div className="relative flex flex-row mx-[-20px] items-center">
+            <div className="relative flex flex-row px-[-20px] items-center">
               <li
                 className="px-[10px] cursor-pointer duration-200 hover:text-gray-300"
                 onClick={handlePunchClick}
@@ -73,7 +73,7 @@ function Navbar() {
               <div
                 className={`${
                   punchOptions ? "" : "hidden"
-                } absolute top-14 bg-slate-500 w-[150px] h-[100px] rounded-md right-32 bg-slate-500/50 backdrop-blur-md`}
+                } absolute top-14 w-[150px] h-[100px] rounded-md right-32 bg-gray-950/30 backdrop-blur-md z-10`}
               >
                 <ul>
                   <li
@@ -99,7 +99,7 @@ function Navbar() {
               <div
                 className={`${
                   subOptions ? "" : "hidden"
-                } absolute top-14 bg-slate-500 w-[150px] h-[100px] rounded-md bg-slate-500/50 backdrop-blur-md`}
+                } absolute top-14  w-[150px] h-[100px] rounded-md  backdrop-blur-md bg-gray-950/30 z-10`}
               >
                 <ul>
                   <li className="cursor-pointer duration-200 hover:text-gray-300">
@@ -125,7 +125,7 @@ function Navbar() {
                   profileOptions
                     ? "opacity-100"
                     : "hidden opacity-0 pointer-events-none"
-                } transition-opacity duration-300 absolute top-14 bg-slate-500/50 backdrop-blur-md w-[150px] h-[100px] rounded-md right-3`}
+                } transition-opacity duration-300 absolute top-14 backdrop-blur-md w-[150px] h-[100px] rounded-md right-3 bg-gray-950/30 z-10`}
               >
                 <ul>
                   <li className="cursor-pointer duration-200 hover:text-gray-300">
@@ -134,7 +134,7 @@ function Navbar() {
                   <li className="cursor-pointer duration-200 hover:text-gray-300">
                     View profile
                   </li>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
+                  <li className="cursor-pointer duration-200 text-red-400  hover:text-red-600">
                     Logout
                   </li>
                 </ul>

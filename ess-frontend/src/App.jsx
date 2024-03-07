@@ -11,8 +11,8 @@ import {
 function App() {
   const { jwtToken } = useGlobalContext();
   return (
-    <div className="">
-      <div className="">{jwtToken && <Navbar />}</div>
+    <div className="absolute">
+      <div className="w-screen relative z-10">{jwtToken && <Navbar />}</div>
       <Router>
         <Routes>
           <Route
