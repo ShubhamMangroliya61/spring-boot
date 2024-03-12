@@ -16,9 +16,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Role {
 
     public enum SecurityClearance {
@@ -57,6 +54,42 @@ public class Role {
     public Role(String name) {
         this.name = name;
         this.description = name.trim().toUpperCase()+"_DESCRIPTION";
+    }
+
+    public Role() {
+        super();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public SecurityClearance getClearance() {
+        return clearance;
+    }
+
+    public void setClearance(SecurityClearance clearance) {
+        this.clearance = clearance;
     }
 
     @Override

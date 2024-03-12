@@ -13,7 +13,7 @@ import {
 } from "./actions";
 
 const jwtToken = localStorage.getItem("jwtToken");
-const user = localStorage.getItem("user");
+const role = localStorage.getItem("role");
 
 const initialState = {
   isLoading: false,
@@ -22,7 +22,7 @@ const initialState = {
     msg: "",
     type: "",
   },
-  user: user || null,
+  role: role || null,
   jwtToken: jwtToken || null,
 };
 
@@ -93,11 +93,12 @@ const AppProvider = ({ children }) => {
           dispatch({
             type: SETUP_USER_SUCCESS,
             payload: {
-              user: res.data,
+              role: res.data.role.toString().toLowerCase(),
               jwtToken: res.data.token,
             },
           });
           localStorage.setItem("jwtToken", res.data.token);
+          localStorage.setItem("role", res.data.role.toString().toLowerCase());
           displayAlert("Login Successful", "success");
         })
         .catch((error) => {
@@ -120,6 +121,7 @@ const AppProvider = ({ children }) => {
       type: LOGOUT_USER,
     });
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("role");
     displayAlert("Logged out successfully", "success");
     clearAlert();
   };

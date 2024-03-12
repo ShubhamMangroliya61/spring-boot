@@ -22,10 +22,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "punchout")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class PunchOut {
 
     @Id
@@ -53,6 +49,49 @@ public class PunchOut {
     public PunchOut(LocalDate date, LocalTime time, Employee employee) {
         this.date = date;
         this.time = time;
+        this.employee = employee;
+    }
+
+    public PunchOut() {
+        super();
+    }
+
+    public PunchOut(long id, LocalDate date, LocalTime time, Employee employee) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.employee = employee;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
         this.employee = employee;
     }
 

@@ -39,7 +39,7 @@ public class LeaveController {
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllLeaves(Authentication authentication){
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
-        if(!currentEmployee.getRole().toString().equalsIgnoreCase("ADMIN")){
+        if(!currentEmployee.getRole().getName().equalsIgnoreCase("ADMIN")){
             ApiResponse message = new ApiResponse("You are not allowed", false);
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
@@ -52,6 +52,14 @@ public class LeaveController {
     public ResponseEntity<List<Leave>> getAllLeaveRequestsByEmployee(Authentication authentication){
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         List<Leave> listOfRequests = leaveService.getAllLeaveRequestsByEmployee(currentEmployee);
+        listOfRequests = listOfRequests.reversed();
         return ResponseEntity.ok(listOfRequests);
+    }
+
+    // Update request
+    @PutMapping("/{leaveId}")
+    public ResponseEntity<Leave> updateLeaveRequest(@PathVariable Long leaveId, @RequestBody Leave leave){
+        Leave updateDLeaveRequest = leaveService.updateLeaveRequest(leaveId , leave);
+        return ResponseEntity.ok(updateDLeaveRequest);
     }
 }

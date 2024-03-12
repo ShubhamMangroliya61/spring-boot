@@ -8,12 +8,30 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
 public class DateAndNetMinutes {
     private LocalDate date;
     private LocalTime netHours;
+
+    public DateAndNetMinutes(LocalDate date, LocalTime netHours) {
+        this.date = date;
+        this.netHours = netHours;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getNetHours() {
+        return netHours;
+    }
+
+    public void setNetHours(LocalTime netHours) {
+        this.netHours = netHours;
+    }
 
     @Override
     public String toString() {

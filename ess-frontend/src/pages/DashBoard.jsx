@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useGlobalContext } from "../context/appContext";
-import DatesAndPunchInOutLog from "../components/DatesAndPunchInOutLog";
 import SideBar from "../components/SideBar";
-import RequestLeave from "../components/RequestLeave";
-import LeaveCount from "../components/LeaveCount";
+
+import LeaveRequestPage from "./LeaveRequestPage";
 
 function DashBoard() {
   return (
@@ -19,14 +17,7 @@ function DashBoard() {
             {/* Section 1 end */}
 
             {/* Section 2 start */}
-            <div className="flex">
-              <div className="w-[50%]">
-                <RequestLeave />
-              </div>
-              <div className="w-[50%]">
-                <LeaveCount />
-              </div>
-            </div>
+            <LeaveRequestPage />
             {/* Section 2 start */}
           </div>
         </div>

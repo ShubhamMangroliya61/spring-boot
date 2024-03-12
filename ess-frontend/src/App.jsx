@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import DashBoard from "./pages/DashBoard.jsx";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar.jsx";
@@ -8,8 +9,11 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+
 function App() {
-  const { jwtToken } = useGlobalContext();
+  const { jwtToken, role } = useGlobalContext();
+
   return (
     <div className="absolute bg-black min-h-svh">
       <div className="w-screen relative z-10">{jwtToken && <Navbar />}</div>
@@ -21,7 +25,17 @@ function App() {
           />
           <Route
             path="/"
-            element={jwtToken ? <DashBoard /> : <Navigate to="/login" />}
+            element={
+              jwtToken ? (
+                role === "admin" ? (
+                  <AdminDashboard />
+                ) : (
+                  <DashBoard />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
         </Routes>
       </Router>

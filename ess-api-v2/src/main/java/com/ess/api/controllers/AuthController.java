@@ -1,10 +1,12 @@
 package com.ess.api.controllers;
 
+import com.ess.api.entities.Employee;
 import com.ess.api.request.LoginRequest;
 import com.ess.api.repositories.EmployeeRepository;
 import com.ess.api.response.JwtResponse;
 import com.ess.api.security.jwt.JwtUtils;
 import com.ess.api.security.services.UserDetailsImpl;
+import com.ess.api.utils.GetCurrentEmployee;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,9 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private GetCurrentEmployee getCurrentEmployee;
+
     @PostMapping("/login")
     public ResponseEntity<?> logIn(@RequestBody LoginRequest loginRequest){
         System.out.println(encoder.encode(loginRequest.getPassword()));
@@ -40,8 +45,8 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        System.out.println("Details: " + userDetails);
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         return ResponseEntity
-                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
+                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), currentEmployee.getRole().getName()));
     }
 }

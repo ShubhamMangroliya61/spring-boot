@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useGlobalContext } from "../context/appContext";
 
 function Navbar() {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, logoutUser } = useGlobalContext();
 
   const [punchOptions, setPunchOptions] = useState(false);
   const [subOptions, setSubOptions] = useState(false);
@@ -55,6 +55,10 @@ function Navbar() {
       .post("/punchOut")
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
+  };
+
+  const handleLogOut = () => {
+    logoutUser();
   };
 
   return (
@@ -134,7 +138,10 @@ function Navbar() {
                   <li className="cursor-pointer duration-200 hover:text-gray-300">
                     View profile
                   </li>
-                  <li className="cursor-pointer duration-200 text-red-400  hover:text-red-600">
+                  <li
+                    className="cursor-pointer duration-200 text-red-400  hover:text-red-600"
+                    onClick={handleLogOut}
+                  >
                     Logout
                   </li>
                 </ul>

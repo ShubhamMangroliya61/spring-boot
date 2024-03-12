@@ -6,6 +6,7 @@ export default {
       backgroundImage: {
         "login-bg": "url('/src/assets/loginBg.png')",
       },
+      boxShadow: {},
       listStyleType: {},
     },
   },

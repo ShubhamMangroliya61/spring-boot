@@ -25,8 +25,8 @@ function RequestLeave() {
   };
 
   return (
-    <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md pb-5 mb-6">
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md p-5">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="w-[100%]">
           <div className="flex justify-between">
             <div>
@@ -94,6 +94,7 @@ function RequestLeave() {
                   id="reason"
                   onChange={handleChange}
                   className="w-[100%]"
+                  defaultValue={""}
                 >
                   <option value="" disabled>
                     ---select type---
@@ -108,7 +109,11 @@ function RequestLeave() {
               </div>
             </div>
           </div>
-          <button type="submit" onClick={handleSubmit}>
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="bg-slate-400 p-2 mt-2 text-sm rounded-md hover:bg-blue-200 duration-300"
+          >
             Add request
           </button>
         </form>

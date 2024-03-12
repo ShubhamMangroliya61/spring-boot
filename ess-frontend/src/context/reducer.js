@@ -39,20 +39,20 @@ const reducer = (state, action) => {
       return {
         ...state,
         isLoading: false,
-        user: action.payload.user,
+        role: action.payload.role,
         jwtToken: action.payload.jwtToken,
       };
     case SETUP_USER_ERROR:
       return {
         ...state,
         isLoading: false,
-        user: null,
+        role: null,
         jwtToken: null,
       };
     case LOGOUT_USER:
       return {
         ...state,
-        user: null,
+        role: null,
         jwtToken: null,
       };
     case DISPLAY_PASS_ERROR:

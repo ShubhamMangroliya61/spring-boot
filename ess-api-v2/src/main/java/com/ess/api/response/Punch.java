@@ -12,10 +12,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Punch {
     private long id;
     private LocalDate date;
@@ -23,4 +19,77 @@ public class Punch {
     private Employee employee;
     private boolean isPunchIn;
     private boolean isPunchOut;
+
+    public Punch() {
+        super();
+    }
+
+    public Punch(long id, LocalDate date, LocalTime time, Employee employee, boolean isPunchIn, boolean isPunchOut) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.employee = employee;
+        this.isPunchIn = isPunchIn;
+        this.isPunchOut = isPunchOut;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public boolean isPunchIn() {
+        return isPunchIn;
+    }
+
+    public void setPunchIn(boolean punchIn) {
+        isPunchIn = punchIn;
+    }
+
+    public boolean isPunchOut() {
+        return isPunchOut;
+    }
+
+    public void setPunchOut(boolean punchOut) {
+        isPunchOut = punchOut;
+    }
+
+    @Override
+    public String toString() {
+        return "Punch{" +
+                "id=" + id +
+                ", date=" + date +
+                ", time=" + time +
+                ", employee=" + employee +
+                ", isPunchIn=" + isPunchIn +
+                ", isPunchOut=" + isPunchOut +
+                '}';
+    }
 }
