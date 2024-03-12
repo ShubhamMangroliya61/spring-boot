@@ -1,4 +1,4 @@
-import DashBoard from "./components/DashBoard.jsx";
+import DashBoard from "./pages/DashBoard.jsx";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar.jsx";
 import { useGlobalContext } from "./context/appContext.jsx";

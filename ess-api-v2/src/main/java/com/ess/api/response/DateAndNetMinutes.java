@@ -14,4 +14,12 @@ import java.time.LocalTime;
 public class DateAndNetMinutes {
     private LocalDate date;
     private LocalTime netHours;
+
+    @Override
+    public String toString() {
+        return "DateAndNetMinutes{" +
+                "date=" + date +
+                ", netHours=" + netHours +
+                '}';
+    }
 }

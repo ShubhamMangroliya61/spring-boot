@@ -64,7 +64,9 @@ public class PunchInAndOutController {
             long netMinutes = punchInAndOutService.countNetMinutes(currentEmployee, date);
             Duration d = Duration.ofMinutes(netMinutes);
             LocalTime time = LocalTime.MIN.plus(d);
-            dateAndNetMinutes.add(new DateAndNetMinutes(date, time));
+            DateAndNetMinutes dnm = new DateAndNetMinutes(date, time);
+//            System.out.println(dnm);
+            dateAndNetMinutes.add(dnm);
         }
 
         return ResponseEntity.ok(dateAndNetMinutes);

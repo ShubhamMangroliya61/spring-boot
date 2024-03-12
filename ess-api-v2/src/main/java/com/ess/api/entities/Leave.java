@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -64,6 +66,18 @@ public class Leave {
     @Enumerated(EnumType.STRING)
     @Column(name = "leave_status", columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
     private LeaveStatus status;
+
+    @JsonCreator
+    public Leave(@JsonProperty("from") LocalDate from,
+                 @JsonProperty("to") LocalDate to,
+                 @JsonProperty("reason") String reason,
+                 @JsonProperty("type") LeaveType type){
+        this.from = from;
+        this.to = to;
+        this.reason = reason;
+        this.type = type;
+        this.status = LeaveStatus.PENDING;
+    }
 
     @Override
     public String toString() {
