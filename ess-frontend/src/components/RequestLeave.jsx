@@ -5,9 +5,19 @@ function RequestLeave() {
   const { authFetch } = useGlobalContext();
 
   const [leaveRequest, setLeaveRequest] = useState({});
+  const [isStartDateSelected, setIsStartDateSelected] = useState(false);
+
+  const [minEndDate, setMinEndDate] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "from" && value !== "") {
+      setIsStartDateSelected(true);
+      setMinEndDate(value);
+    } else {
+      setIsStartDateSelected(false);
+      setMinEndDate("");
+    }
     setLeaveRequest((prevRequest) => ({
       ...prevRequest,
       [name]: value,
@@ -42,6 +52,7 @@ function RequestLeave() {
                   name="from"
                   id="startDate"
                   onChange={handleChange}
+                  min={new Date().toISOString().split("T")[0]}
                 />
               </div>
             </div>
@@ -58,6 +69,8 @@ function RequestLeave() {
                   name="to"
                   id="endDate"
                   onChange={handleChange}
+                  disabled={isStartDateSelected ? false : true}
+                  min={minEndDate}
                 />
               </div>
             </div>

@@ -13,8 +13,10 @@ const columns = [
   { id: "from", label: "from (yyyy/mm/dd)", maxWidth: 100 },
   { id: "to", label: "to (yyyy/mm/dd)", maxWidth: 100 },
   { id: "reason", label: "reason", maxWidth: 100 },
+  { id: "days", label: "days", maxWidth: 100 },
   { id: "type", label: "type", maxWidth: 100 },
   { id: "status", label: "status", maxWidth: 100 },
+  { id: "employee name", label: "employee name", maxWidth: 100 },
   { id: "options", label: "options", maxWidth: 100 },
 ];
 
@@ -26,7 +28,43 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
 
   const [rows, setRows] = React.useState([]);
 
+  const [listOfAllEmployees, setListOfAllEmployees] = React.useState([]);
+  const [mapOfEmployeeAndLeaveRequest, setMapOfEmployeeAndLeaveRequest] =
+    React.useState(new Map());
+
   React.useEffect(() => {
+    authFetch
+      .get(`/employee/all`)
+      .then((res) => {
+        setListOfAllEmployees(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  React.useEffect(() => {
+    let map = new Map();
+    listOfAllEmployees.forEach((employee) =>
+      employee.leaves.forEach((leave) =>
+        map.set(
+          leave.id,
+          employee.firstName.toString() + " " + employee.lastName.toString()
+        )
+      )
+    );
+    setMapOfEmployeeAndLeaveRequest(map);
+  }, [listOfAllEmployees]);
+
+  const addEmployeeInfo = () => {
+    allPreviousLeaveRequests.forEach((leaveRequest) => {
+      leaveRequest["employee name"] = mapOfEmployeeAndLeaveRequest.get(
+        leaveRequest.id
+      );
+    });
+  };
+
+  React.useEffect(() => {
+    addEmployeeInfo();
+    console.log("allPrev: ", allPreviousLeaveRequests);
     let temp = [];
     for (let request in allPreviousLeaveRequests) {
       if (allPreviousLeaveRequests[request].status.toString() === "PENDING") {
@@ -37,7 +75,7 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
       temp.push(allPreviousLeaveRequests[request]);
     }
     setRows(temp);
-  }, [allPreviousLeaveRequests]);
+  }, [mapOfEmployeeAndLeaveRequest, allPreviousLeaveRequests]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
