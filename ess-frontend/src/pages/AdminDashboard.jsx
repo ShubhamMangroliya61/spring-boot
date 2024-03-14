@@ -1,6 +1,6 @@
 import React from "react";
 import AdminSideBar from "../components/AdminSideBar";
-import DisplayLeaveRequests from "../components/DisplayLeaveRequests";
+import DisplayLeaveRequests from "./DisplayLeaveRequests";
 import CreateNewPage from "./CreateNewPage";
 
 function AdminDashboard() {

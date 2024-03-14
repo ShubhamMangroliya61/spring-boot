@@ -10,6 +10,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import ProjectManagementDashboard from "./pages/ProjectManagementDashboard.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -29,6 +30,20 @@ function App() {
               jwtToken ? (
                 role === "admin" ? (
                   <AdminDashboard />
+                ) : (
+                  <DashBoard />
+                )
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/projectManagement/dashdoard"
+            element={
+              jwtToken ? (
+                role === "admin" ? (
+                  <ProjectManagementDashboard />
                 ) : (
                   <DashBoard />
                 )

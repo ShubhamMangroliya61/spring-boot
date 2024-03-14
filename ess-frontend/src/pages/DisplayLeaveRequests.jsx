@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../context/appContext";
-import AdminLeaveRequestTable from "./AdminLeaveRequestTable";
-import CounterCard from "./CounterCard";
+import AdminLeaveRequestTable from "../components/AdminLeaveRequestTable";
+import CounterCard from "../components/CounterCard";
 
 function DisplayLeaveRequests() {
   const { authFetch } = useGlobalContext();
