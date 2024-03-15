@@ -134,7 +134,7 @@ function ProjectManagementDashboard() {
               </div>
               <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
                 <div className="w-[95%] p-5 pb-10">
-                  <h1 className="text-lg text-gray-400 mb-5">
+                  <h1 className="text-lg text-gray-400 mb-5 pb-0">
                     Project managers
                   </h1>
                   <ManagersWithProjectCntTable

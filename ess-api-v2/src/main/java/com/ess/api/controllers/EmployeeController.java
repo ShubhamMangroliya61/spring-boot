@@ -1,10 +1,17 @@
 package com.ess.api.controllers;
 
+import com.ess.api.entities.Leave;
+import com.ess.api.entities.Role;
+import com.ess.api.entities.Team;
+import com.ess.api.request.AddEmployeeRequest;
 import com.ess.api.response.ApiResponse;
 import com.ess.api.entities.Employee;
 import com.ess.api.security.services.UserDetailsImpl;
 import com.ess.api.security.services.UserDetailsServiceImpl;
 import com.ess.api.services.EmployeeService;
+import com.ess.api.services.RoleService;
+import com.ess.api.services.TeamService;
+import com.ess.api.utils.GetCurrentEmployee;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -25,16 +35,33 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private GetCurrentEmployee getCurrentEmployee;
+
     // Add
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee){
-        Employee newEmployee = employeeService.addEmployee(employee);
-        return ResponseEntity.ok(newEmployee);
+    public ResponseEntity<?> addEmployee(@RequestBody AddEmployeeRequest newEmployee){
+        newEmployee.setPassword(passwordEncoder.encode(newEmployee.getPassword()));
+        Role role =  roleService.getRoleById(newEmployee.getRoleId());
+        Team team = teamService.GetTeamById(newEmployee.getTeamId());
+        Employee employeeToAdd = new Employee(newEmployee.getFirstName(), newEmployee.getLastName(), newEmployee.getEmail(), newEmployee.getPassword(), role, team);
+
+        Employee newAddedEmployee = employeeService.addEmployee(employeeToAdd);
+        return ResponseEntity.ok(newAddedEmployee);
     }
 
     // Get all
     @GetMapping("/all")
-    public ResponseEntity<List<Employee>> getAllEmployees(HttpSession session){
+    public ResponseEntity<?> getAllEmployees(HttpSession session, Authentication authentication){
         /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetailsImpl userDetails =  (UserDetailsImpl) authentication.getPrincipal();
@@ -42,6 +69,11 @@ public class EmployeeController {
         } else {
             System.out.println("No user logged in.");
         }*/
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+            ApiResponse response = new ApiResponse("You are not authorized", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         List<Employee> allEmployees = employeeService.getAllEmployees();
         return ResponseEntity.ok(allEmployees);
     }

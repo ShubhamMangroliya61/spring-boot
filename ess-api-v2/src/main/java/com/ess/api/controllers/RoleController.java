@@ -1,11 +1,14 @@
 package com.ess.api.controllers;
 
+import com.ess.api.entities.Employee;
 import com.ess.api.response.ApiResponse;
 import com.ess.api.entities.Role;
 import com.ess.api.services.RoleService;
+import com.ess.api.utils.GetCurrentEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +20,9 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private GetCurrentEmployee getCurrentEmployee;
 
     // Add
     @PostMapping
@@ -42,7 +48,12 @@ public class RoleController {
 
     //Get all Roles
     @GetMapping("/all")
-    public ResponseEntity<List<Role>> getAllRoles(){
+    public ResponseEntity<?> getAllRoles(Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+            ApiResponse response = new ApiResponse("You are not authorized", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         List<Role> allRoles = roleService.getAllRoles();
         return ResponseEntity.ok(allRoles);
     }

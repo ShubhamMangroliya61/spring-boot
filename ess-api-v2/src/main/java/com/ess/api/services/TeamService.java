@@ -1,6 +1,7 @@
 package com.ess.api.services;
 
 import com.ess.api.entities.Team;
+import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,14 @@ public class TeamService {
     // Get all
     public List<Team> getAllTeams(){
         return teamRepository.findAll();
+    }
+
+    //Get by id
+    public Team GetTeamById(Long teamId) {
+        return teamRepository
+                .findById(teamId)
+                .orElseThrow(
+                        () ->
+                                new ResourceNotFoundException("Team", "teamId", teamId.toString()));
     }
 }

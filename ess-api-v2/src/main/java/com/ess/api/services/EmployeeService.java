@@ -1,12 +1,14 @@
 package com.ess.api.services;
 
 import com.ess.api.entities.Employee;
+import com.ess.api.exceptions.ResourceAlreadyExistsException;
 import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -16,6 +18,10 @@ public class EmployeeService {
 
     // Add Employee
     public Employee addEmployee(Employee employee){
+        Optional<Employee> existingEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if(existingEmployee.isPresent()){
+            throw new ResourceAlreadyExistsException("Employee", " Employee email ", employee.getEmail());
+        }
         return employeeRepository.save(employee);
     }
 
@@ -52,4 +58,5 @@ public class EmployeeService {
             throw new ResourceNotFoundException("Employee", "Email", empEmail);
         }
     }
+
 }

@@ -44,6 +44,7 @@ public class LeaveController {
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
         List<Leave> listOfLeaves = leaveService.getAllLeaves();
+//        System.out.println(listOfLeaves);
         return  ResponseEntity.ok(listOfLeaves);
     }
 
