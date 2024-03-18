@@ -1,20 +1,20 @@
-import DatesAndPunchInOutLog from "../DatesAndPunchInOutLog";
+import AttendanceDetailsPage from "../../pages/AttendanceDetailsPage";
 
 const options = [
   {
     id: 1,
-    text: "Punch Logs",
-    conponent: DatesAndPunchInOutLog,
+    text: "Attendance details",
+    link: "/attendanceDetails",
   },
   {
     id: 2,
-    text: "Leave management",
-    conponent: DatesAndPunchInOutLog,
+    text: "Leave request details",
+    link: "/leaveRequest",
   },
   {
     id: 3,
-    text: "Leave requests",
-    conponent: DatesAndPunchInOutLog,
+    text: "Dashboard",
+    link: "/",
   },
 ];
 

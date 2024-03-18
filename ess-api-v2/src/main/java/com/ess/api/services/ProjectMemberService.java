@@ -60,4 +60,8 @@ public class ProjectMemberService {
 
         return memberWithProject;
     }
+
+    public List<Employee> getListOfMembersFromProjectByRole(Project project, Project.RoleInProject role){
+        return projectMemberRepository.findListOfMembersFromProjectByRole(project, role);
+    }
 }

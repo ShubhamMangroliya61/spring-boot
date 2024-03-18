@@ -11,6 +11,8 @@ import {
 } from "react-router-dom";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProjectManagementDashboard from "./pages/ProjectManagementDashboard.jsx";
+import AttendanceDetailsPage from "./pages/AttendanceDetailsPage.jsx";
+import LeaveRequestPage from "./pages/LeaveRequestPage.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -51,6 +53,16 @@ function App() {
                 <Navigate to="/login" />
               )
             }
+          />
+          <Route
+            path="/attendanceDetails"
+            element={
+              jwtToken ? <AttendanceDetailsPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/leaveRequest"
+            element={jwtToken ? <LeaveRequestPage /> : <Navigate to="/login" />}
           />
         </Routes>
       </Router>

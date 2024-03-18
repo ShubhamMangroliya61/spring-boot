@@ -1,5 +1,6 @@
 import React from "react";
 import options from "./utils/SideBarOptions.js";
+import { Link } from "react-router-dom";
 
 function SideBar() {
   return (
@@ -7,12 +8,11 @@ function SideBar() {
       <div className="">
         <ul className="text-slate-100">
           {options.map((option) => (
-            <li
-              key={option.id}
-              className="text-center py-1 cursor-pointer duration-200 hover:text-slate-300"
-            >
-              {option.text}
-            </li>
+            <Link to={option.link} key={option.id}>
+              <li className="text-center py-1 cursor-pointer duration-200 hover:text-slate-300">
+                {option.text}
+              </li>
+            </Link>
           ))}
         </ul>
       </div>

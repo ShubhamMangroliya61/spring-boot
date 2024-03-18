@@ -13,12 +13,14 @@ const columns = [
   { id: "to", label: "to (yyyy/mm/dd)", maxWidth: 100 },
   { id: "days", label: "days", maxWidth: 100 },
   { id: "reason", label: "reason", maxWidth: 100 },
-  { id: "type", label: "type", maxWidth: 100 },
-  { id: "status", label: "status", maxWidth: 100 },
-  { id: "options", label: "options", maxWidth: 100 },
+  //   { id: "type", label: "type", maxWidth: 100 },
+  //   { id: "status", label: "status", maxWidth: 100 },
+  //   { id: "options", label: "options", maxWidth: 100 },
 ];
 
-export default function LeaveRequestTable({ allPreviousLeaveRequests }) {
+export default function DashboardLeaveRequestTable({
+  allPreviousLeaveRequests,
+}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
