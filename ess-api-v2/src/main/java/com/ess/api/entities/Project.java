@@ -1,9 +1,11 @@
 package com.ess.api.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -33,6 +35,14 @@ public class Project {
 
     @Column(name = "project_created_on")
     private LocalDateTime createdOn;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ProjectMember> members;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Task> tasks;
 
     public Project() {
         super();
@@ -77,6 +87,21 @@ public class Project {
         this.createdOn = createdOn;
     }
 
+    public List<ProjectMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<ProjectMember> members) {
+        this.members = members;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 
     @Override
     public String toString() {

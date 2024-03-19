@@ -1,12 +1,16 @@
 package com.ess.api.request;
 
 import com.ess.api.entities.Task;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AddTaskRequest {
     private String name;
 
+    private String description;
+
     private long projectId;
-    private long assignedBy;
+
     private long assignedTo;
 
     private Task.TaskStatus status;
@@ -17,37 +21,35 @@ public class AddTaskRequest {
         super();
     }
 
-    public AddTaskRequest(String name, long projectId, long assignedBy, long assignedTo, Task.TaskStatus status, Task.TaskPriority priority) {
+    @JsonCreator
+    public AddTaskRequest(@JsonProperty("name") String name, @JsonProperty("description") String description,@JsonProperty("projectId") long projectId,@JsonProperty("assignedTo") long assignedTo,@JsonProperty("status") Task.TaskStatus status,@JsonProperty("priority") Task.TaskPriority priority) {
         this.name = name;
+        this.description = (description != null) ? description : name.toUpperCase() + " DESCRIPTION";
         this.projectId = projectId;
-        this.assignedBy = assignedBy;
         this.assignedTo = assignedTo;
-        this.status = status;
-        this.priority = priority;
+        this.status = (status != null) ? status : Task.TaskStatus.TODO;
+        this.priority = (priority != null) ? priority : Task.TaskPriority.NONE;
     }
 
-    public AddTaskRequest(String name, long projectId, long assignedBy, long assignedTo) {
+    public AddTaskRequest(String name, long projectId, long assignedTo) {
         this.name = name;
         this.projectId = projectId;
-        this.assignedBy = assignedBy;
         this.assignedTo = assignedTo;
         this.status = Task.TaskStatus.TODO;
         this.priority = Task.TaskPriority.NONE;
     }
 
-    public AddTaskRequest(String name, long projectId, long assignedBy, long assignedTo, Task.TaskStatus status) {
+    public AddTaskRequest(String name, long projectId, long assignedTo, Task.TaskStatus status) {
         this.name = name;
         this.projectId = projectId;
-        this.assignedBy = assignedBy;
         this.assignedTo = assignedTo;
         this.status = status;
         this.priority = Task.TaskPriority.NONE;
     }
 
-    public AddTaskRequest(String name, long projectId, long assignedBy, long assignedTo, Task.TaskPriority priority) {
+    public AddTaskRequest(String name, long projectId, long assignedTo, Task.TaskPriority priority) {
         this.name = name;
         this.projectId = projectId;
-        this.assignedBy = assignedBy;
         this.assignedTo = assignedTo;
         this.status = Task.TaskStatus.TODO;
         this.priority = priority;
@@ -67,14 +69,6 @@ public class AddTaskRequest {
 
     public void setProjectId(long projectId) {
         this.projectId = projectId;
-    }
-
-    public long getAssignedBy() {
-        return assignedBy;
-    }
-
-    public void setAssignedBy(long assignedBy) {
-        this.assignedBy = assignedBy;
     }
 
     public long getAssignedTo() {
@@ -101,12 +95,20 @@ public class AddTaskRequest {
         this.priority = priority;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "AddTaskRequest{" +
                 "name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", projectId=" + projectId +
-                ", assignedBy=" + assignedBy +
                 ", assignedTo=" + assignedTo +
                 ", status=" + status +
                 ", priority=" + priority +

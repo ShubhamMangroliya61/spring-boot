@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProjectManagementDashboard from "./pages/ProjectManagementDashboard.jsx";
 import AttendanceDetailsPage from "./pages/AttendanceDetailsPage.jsx";
 import LeaveRequestPage from "./pages/LeaveRequestPage.jsx";
+import DisplayLeaveRequests from "./pages/DisplayLeaveRequests.jsx";
+import DisplayListOfProjects from "./pages/DisplayListOfProjects.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -63,6 +65,36 @@ function App() {
           <Route
             path="/leaveRequest"
             element={jwtToken ? <LeaveRequestPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/displayLeaveRequest"
+            element={
+              jwtToken && role === "admin" ? (
+                <DisplayLeaveRequests />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/projectManagementDashboard"
+            element={
+              jwtToken && role === "admin" ? (
+                <ProjectManagementDashboard />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/listOfProjects/:status"
+            element={
+              jwtToken && role === "admin" ? (
+                <DisplayListOfProjects />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
         </Routes>
       </Router>

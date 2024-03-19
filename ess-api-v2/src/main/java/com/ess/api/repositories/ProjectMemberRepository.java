@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ProjectMemberRepository extends JpaRepository<ProjectMember, Long> {
     public ProjectMember findByEmployeeAndProject(Employee employee, Project project);
-    public List<Employee> findListOfMembersFromProjectByRole(Project project, Project.RoleInProject role);
+//    public List<Employee> findListOfMembersFromProjectByRole(Project project, Project.RoleInProject role);
 }

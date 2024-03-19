@@ -3,6 +3,7 @@ import DisplayLeaveRequests from "./DisplayLeaveRequests.jsx";
 import CounterCard from "../components/CounterCard.jsx";
 import { useGlobalContext } from "../context/appContext.jsx";
 import ManagersWithProjectCntTable from "../components/ManagersWithProjectCntTable.jsx";
+import SideBar from "../components/SideBar.jsx";
 
 function ProjectManagementDashboard() {
   const { authFetch } = useGlobalContext();
@@ -108,39 +109,40 @@ function ProjectManagementDashboard() {
   const handleTypeChange = (type) => {};
 
   return (
-    <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black">
-      <div className="flex flex-row">
-        <div className="right w-[100%] h-screen">
-          <div className="relative top-20 text-white flex justify-center text-3xl">
-            <h1>Project management Dashboard</h1>
-          </div>
-          <div>
-            <div className="flex flex-wrap">
-              <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
-                <div className="w-[95%] flex justify-between text-center p-5 pb-10">
-                  {statusWithProjectCount.map((proj) => (
-                    <div
-                      onClick={() => handleTypeChange(proj.title)}
-                      key={proj.title}
-                    >
-                      <CounterCard
-                        countHeading={proj.title}
-                        count={proj.count}
-                        bg={proj.color}
-                      />
-                    </div>
-                  ))}
-                </div>
+    <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black flex flex-row">
+      <div className="left w-[15%] h-full">
+        <SideBar />
+      </div>
+      <div className="right w-[85%] m-auto h-screen">
+        <div className="relative top-20 text-white flex justify-center text-3xl">
+          <h1>Project management Dashboard</h1>
+        </div>
+        <div>
+          <div className="flex flex-wrap">
+            <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
+              <div className="w-[95%] flex justify-between text-center p-5 pb-10">
+                {statusWithProjectCount.map((proj) => (
+                  <div
+                    onClick={() => handleTypeChange(proj.title)}
+                    key={proj.title}
+                  >
+                    <CounterCard
+                      countHeading={proj.title}
+                      count={proj.count}
+                      bg={proj.color}
+                    />
+                  </div>
+                ))}
               </div>
-              <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
-                <div className="w-[95%] p-5 pb-10">
-                  <h1 className="text-lg text-gray-400 mb-5 pb-0">
-                    Project managers
-                  </h1>
-                  <ManagersWithProjectCntTable
-                    membersWithProjectCnt={managersWithProjectsCount}
-                  />
-                </div>
+            </div>
+            <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
+              <div className="w-[95%] p-5 pb-10">
+                <h1 className="text-lg text-gray-400 mb-5 pb-0">
+                  Project managers
+                </h1>
+                <ManagersWithProjectCntTable
+                  membersWithProjectCnt={managersWithProjectsCount}
+                />
               </div>
             </div>
           </div>

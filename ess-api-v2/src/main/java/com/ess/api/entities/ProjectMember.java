@@ -1,5 +1,6 @@
 package com.ess.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,8 +11,9 @@ public class ProjectMember{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     @ManyToOne

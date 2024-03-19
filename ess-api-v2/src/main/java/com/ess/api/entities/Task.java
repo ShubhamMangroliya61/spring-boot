@@ -1,5 +1,6 @@
 package com.ess.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,8 +23,12 @@ public class Task {
     @Column(name = "task_name")
     private String name;
 
+    @Column(name = "task_description")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     @ManyToOne
@@ -113,6 +118,14 @@ public class Task {
         this.priority = priority;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     // toString
 
     @Override
@@ -120,6 +133,7 @@ public class Task {
         return "Task{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", project=" + project +
                 ", assignBy=" + assignBy +
                 ", assignTo=" + assignTo +
