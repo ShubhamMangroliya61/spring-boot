@@ -7,35 +7,56 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { styled } from "@mui/material/styles";
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { Stack } from "@mui/material";
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor:
+      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+  },
+  flex: true,
+}));
+
+const demo = {
+  name: "Demo project",
+  status: "NEW",
+  manager: "Aditya Kaneriya",
+  progress: "0%",
+  createdOn: "2024-03-13T16:43:58.81827",
+};
 
 const columns = [
-  { id: "from", label: "from (yyyy/mm/dd)", maxWidth: 100 },
-  { id: "to", label: "to (yyyy/mm/dd)", maxWidth: 100 },
-  { id: "days", label: "days", maxWidth: 100 },
-  { id: "reason", label: "reason", maxWidth: 100 },
-  { id: "type", label: "type", maxWidth: 100 },
-  { id: "status", label: "status", maxWidth: 100 },
-  { id: "options", label: "options", maxWidth: 100 },
+  { id: "name", label: "PROJECT", maxWidth: 50 },
+  { id: "manager", label: "MANAGER", maxWidth: 50 },
+  { id: "status", label: "STATUS", maxWidth: 50 },
+  { id: "progress", label: "PROGRESS", minWidth: 200 },
+  { id: "createdOn", label: "CREATED ON", maxWidth: 50 },
 ];
 
-export default function LeaveRequestTable({ allPreviousLeaveRequests }) {
+export default function ProjectTable({ projectsToDisplay }) {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
     let temp = [];
-    for (let request in allPreviousLeaveRequests) {
-      if (allPreviousLeaveRequests[request].status.toString() === "PENDING") {
-        allPreviousLeaveRequests[request].options = true;
-      } else {
-        allPreviousLeaveRequests[request].options = false;
-      }
-      temp.push(allPreviousLeaveRequests[request]);
+    for (let project in projectsToDisplay) {
+      temp.push(projectsToDisplay[project]);
     }
     setRows(temp);
-  }, [allPreviousLeaveRequests]);
+  }, [projectsToDisplay]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,28 +101,31 @@ export default function LeaveRequestTable({ allPreviousLeaveRequests }) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow tabIndex={-1} key={row.id}>
+                  <TableRow tabIndex={-1} key={row.name}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {column.format && typeof value === "number" ? (
                             column.format(value)
-                          ) : column.id === "options" && value == true ? (
-                            <>
-                              <button
-                                className="bg-blue-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-blue-400/60"
-                                onClick={() => handleEdit(row)}
-                              >
-                                edit
-                              </button>{" "}
-                              <button
-                                className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
-                                onClick={() => handleDelete(row)}
-                              >
-                                delete
-                              </button>
-                            </>
+                          ) : column.id === "progress" ? (
+                            <Stack
+                              direction="row"
+                              spacing={2}
+                              className="items-center"
+                            >
+                              <CalendarTodayIcon
+                                fontSize="small"
+                                className="text-gray-800/80"
+                              />
+                              <div className="w-[50%]">
+                                <BorderLinearProgress
+                                  variant="determinate"
+                                  value={value}
+                                />
+                              </div>
+                              <span>{value + "%"}</span>
+                            </Stack>
                           ) : (
                             value
                           )}
@@ -115,7 +139,7 @@ export default function LeaveRequestTable({ allPreviousLeaveRequests }) {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[3]}
+        rowsPerPageOptions={[5, 10, 15]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

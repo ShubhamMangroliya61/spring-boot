@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
@@ -62,5 +63,13 @@ public class TaskController {
         ProjectLog newTaskLog = taskService.addTask(newTask);
 
         return ResponseEntity.ok(newTaskLog);
+    }
+
+    // get tasks by employee
+    @GetMapping("/assignedToMe")
+    public ResponseEntity<?> getTaskAssignedToCurrentEmployee(Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        List<Task> filteredTasks = taskService.getAllTasksByAssignedTo(currentEmployee);
+        return ResponseEntity.ok(filteredTasks);
     }
 }

@@ -23,8 +23,8 @@ function LeaveCount({ allPreviousLeaveRequests }) {
   }, [allPreviousLeaveRequests]);
 
   return (
-    <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
-      <div className="bg-gray-500 w-[70%] h-[50%] m-auto p-10 flex flex-row justify-between align-middle items-center">
+    <div className="relative top-24 w-[95%] mx-auto bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
+      <div className="flex flex-row align-middle items-center justify-between rounded-md w-[90%] h-[50%] mx-auto">
         <CounterCard
           countHeading={"Approved"}
           count={approvedLeavesCount}

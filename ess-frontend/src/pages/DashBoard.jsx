@@ -7,19 +7,26 @@ import DashboardLeaveRequestTable from "../components/DashboardLeaveRequestTable
 import moment from "moment";
 import Button from "@mui/material/Button";
 import BasicModal from "../components/BasicModal";
+import CounterCardWithIcon from "../components/CounterCardWithIcon";
+import EventIcon from "@mui/icons-material/Event";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import { Alert, AlertTitle, Slide } from "@mui/material";
 
 function DashBoard() {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, showAlert, alert, displayAlert } = useGlobalContext();
   const [datesWithNethovers, setDatesWithNethovers] = useState([]);
+  const [currentEmployee, setCurrentEmployee] = useState([]);
+  const [tasksAssignedToMe, setTasksAssignedToMe] = useState([]);
   const [pendingLeaves, setPendingLeaves] = useState([]);
   const [selectedDate, setSelectedDate] = useState({
     date: "0000-00-00",
     netHours: "00:00:00",
   });
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
 
   useEffect(() => {
     authFetch
@@ -39,11 +46,17 @@ function DashBoard() {
         setPendingLeaves(tempPending);
       })
       .catch((err) => console.log(err));
-  }, []);
 
-  useEffect(() => {
-    console.log(datesWithNethovers);
-  }, [datesWithNethovers]);
+    authFetch
+      .get("/employee/getCurrent")
+      .then((res) => setCurrentEmployee(res.data))
+      .catch((err) => console.log(err));
+
+    authFetch
+      .get("/task/assignedToMe")
+      .then((res) => setTasksAssignedToMe(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   const setAbsent = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
@@ -53,7 +66,7 @@ function DashBoard() {
     if (!dateWithNetHours && date < Date.now()) return "highlight";
   };
 
-  const getNetHoversOfSelectedDate = (date) => {
+  const getNetHouersOfSelectedDate = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     const selecteDateWithNetHours = datesWithNethovers.find(
       (x) => x.date === formattedDate
@@ -62,14 +75,38 @@ function DashBoard() {
     else setSelectedDate({ date: formattedDate, netHours: "00:00:00" });
   };
 
+  useEffect(() => {
+    console.log(currentEmployee);
+  }, [currentEmployee]);
+
+  const cardData = [
+    {
+      count: pendingLeaves.length,
+      heading: "Pending leave requests",
+      icon: <EditCalendarIcon fontSize="large" />,
+      color: "text-white",
+      bg: "bg-red-500/70",
+    },
+    {
+      count: currentEmployee.totalLeavesLeft,
+      heading: "Total leaves left",
+      icon: <EventIcon fontSize="large" />,
+      color: "text-white",
+      bg: "bg-green-600/80",
+    },
+    {
+      count: tasksAssignedToMe?.filter(
+        (task) => task.status.toLowerCase() !== "completed"
+      ).length,
+      heading: "Total task assigned",
+      icon: <AssignmentIcon fontSize="large" />,
+      color: "text-white",
+      bg: "bg-blue-600/70",
+    },
+  ];
+
   return (
     <>
-      <BasicModal
-        open={open}
-        setOpen={setOpen}
-        handleClose={handleClose}
-        handleOpen={handleOpen}
-      />
       <div className="absolute h-screen w-screen bg-black overflow-hidden">
         <div className="flex flex-row">
           <div className="left w-[15%]">
@@ -78,6 +115,23 @@ function DashBoard() {
           <div className="right w-[85%] h-screen">
             <div className="relative top-20 text-white flex justify-center text-xl">
               <h1>Dashboard</h1>
+              {/* ------ Display alert start ------ */}
+              {showAlert && (
+                <div className="absolute right-10 z-50">
+                  <Slide
+                    direction="left"
+                    in={"true"}
+                    mountOnEnter
+                    unmountOnExit
+                  >
+                    <Alert severity={alert.type}>
+                      {/* <AlertTitle>Error</AlertTitle> */}
+                      {alert.msg}
+                    </Alert>
+                  </Slide>
+                </div>
+              )}
+              {/* ------ Display alert end ------ */}
             </div>
             <div className="flex">
               <div className="relative mx-[10px] top-24 w-[50%] flex flex-col justify-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
@@ -89,7 +143,7 @@ function DashBoard() {
                   tileClassName={({ date }) => {
                     return setAbsent(date);
                   }}
-                  onClickDay={(date) => getNetHoversOfSelectedDate(date)}
+                  onClickDay={(date) => getNetHouersOfSelectedDate(date)}
                 />
                 <div className="flex justify-start text-left mt-5">
                   <div className="w-full">
@@ -108,19 +162,25 @@ function DashBoard() {
                     </div>
                   </div>
                 </div>
-                <Button onClick={handleOpen}>Open modal</Button>
+                {/* <Button onClick={handleOpen}>Open modal</Button> */}
               </div>
-              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col items-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
+              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
                 <h1 className="text-gray-200 mb-5 text-base">Holidays list</h1>
                 <Calendar />
               </div>
               <div className="relative mx-[10px] top-24 w-[50%] flex flex-col items-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
-                <h1 className="text-gray-200 mb-5 text-base">
-                  Pending leave requests
-                </h1>
-                <DashboardLeaveRequestTable
-                  allPreviousLeaveRequests={pendingLeaves}
-                />
+                <div className="bg-gray-100/30 p-5 w-full h-full rounded-md flex flex-col justify-center">
+                  {cardData.map((data) => (
+                    <CounterCardWithIcon
+                      count={data.count}
+                      heading={data.heading}
+                      icon={data.icon}
+                      color={data.color}
+                      bg={data.bg}
+                      key={Math.random()}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>

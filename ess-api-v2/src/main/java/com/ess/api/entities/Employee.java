@@ -52,6 +52,7 @@ public class Employee{
     private List<Leave> leaves;
 
 
+
     public Employee(String firstName, String lastName, String email, String password, Role role, Team team) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -153,14 +154,20 @@ public class Employee{
         if (leaves == null) {
             return 0;
         }
-        return leaves.size();
+        int approvedCnt = 0;
+        for (Leave leaf : leaves) {
+            if (leaf.getStatus().toString().equalsIgnoreCase("approved"))
+                approvedCnt++;
+        }
+        return approvedCnt;
     }
 
     public int getTotalLeavesLeft(){
         if(leaves == null){
             return leavesAllowed;
         }
-        return (leavesAllowed-leaves.size());
+
+        return (leavesAllowed-this.getTotalLeavesTaken());
     }
 
     @Override

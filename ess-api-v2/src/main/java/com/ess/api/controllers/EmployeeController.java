@@ -80,9 +80,17 @@ public class EmployeeController {
 
     // Get by id
     @GetMapping("/{empId}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long empId, @RequestBody Employee employee){
-        Employee employee1 = employeeService.getEmployee(empId);
-        return ResponseEntity.ok(employee1);
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long empId){
+        Employee employee = employeeService.getEmployee(empId);
+        return ResponseEntity.ok(employee);
+    }
+
+    // Get currentEmployee Data
+    @GetMapping("/getCurrent")
+    public ResponseEntity<Employee> getCurrentEmployee(Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        currentEmployee.setPassword("XXXXXXXX");
+        return ResponseEntity.ok(currentEmployee);
     }
 
     // Update by id

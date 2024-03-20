@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
 import { useParams } from "react-router-dom";
 import { useGlobalContext } from "../context/appContext";
+import ProjectTable from "../components/ProjectTable";
+import moment from "moment";
 
 function DisplayListOfProjects() {
   const { authFetch } = useGlobalContext();
@@ -13,17 +15,18 @@ function DisplayListOfProjects() {
     if (tasks.length == 0) return 0;
     let completedTasks = 0;
     tasks.forEach((task) => {
-      if (task.status.toLowerCase() === "completed") completedTasks++;
+      if (task.status.toLowerCase() === "done") completedTasks++;
     });
-    return (completedTasks / tasks.length) * 100;
+    return Math.floor((completedTasks / tasks.length) * 100);
   };
 
   const extractInfo = () => {
     const extrectedArray = [];
     listOfProjects.forEach((project) => {
       if (
-        status.toLowerCase() !== "all" &&
-        status.toLowerCase() === project.status.toLowerCase()
+        (status.toLowerCase() !== "all" &&
+          status.toLowerCase() === project.status.toLowerCase()) ||
+        status.toLowerCase() === "all"
       ) {
         const tempObj = {};
         tempObj.name = project.name;
@@ -38,8 +41,10 @@ function DisplayListOfProjects() {
               managers[0].employee.lastName
             : "";
         tempObj.status = project.status;
-        tempObj.progress = countProgress(project.tasks) + "%";
-        tempObj.createdOn = project.createdOn;
+        tempObj.progress = countProgress(project.tasks);
+        tempObj.createdOn = moment(project.createdOn).format(
+          "YYYY-MM-DD HH:MM"
+        );
         extrectedArray.push(tempObj);
       }
     });
@@ -57,6 +62,10 @@ function DisplayListOfProjects() {
     extractInfo();
   }, [listOfProjects]);
 
+  useEffect(() => {
+    console.log(listOfProjectsToDisplay);
+  }, [listOfProjectsToDisplay]);
+
   return (
     <div className="flex flex-wrap overflow-y-hidden">
       <div className="left w-[15%] h-svh">
@@ -66,9 +75,7 @@ function DisplayListOfProjects() {
         <div className="w-[95.5%] m-auto flex flex-row bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
           <div className="w-[95%] text-center p-5 pb-10">
             <p className="text-gray-200 text-lg pb-5">All the projects</p>
-            {/* <AdminLeaveRequestTable
-              allPreviousLeaveRequests={leavesToDisplay}
-            /> */}
+            <ProjectTable projectsToDisplay={listOfProjectsToDisplay} />
           </div>
         </div>
       </div>

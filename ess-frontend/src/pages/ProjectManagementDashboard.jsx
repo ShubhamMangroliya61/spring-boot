@@ -49,11 +49,11 @@ function ProjectManagementDashboard() {
 
     statusWithCnt.push({ title: "NEW", count: newCnt, color: "blue" });
     statusWithCnt.push({
-      title: "IN PROGRESS",
+      title: "IN_PROGRESS",
       count: inProgressCnt,
       color: "green",
     });
-    statusWithCnt.push({ title: "ON HOLD", count: onholdCnt, color: "gray" });
+    statusWithCnt.push({ title: "ON_HOLD", count: onholdCnt, color: "gray" });
     statusWithCnt.push({
       title: "COMPLETED",
       count: completedCnt,
@@ -106,7 +106,9 @@ function ProjectManagementDashboard() {
     setManagersWithProjectsCount(tempManagersWithProjectCnt);
   }, [membersWithProjects]);
 
-  const handleTypeChange = (type) => {};
+  const handleTypeChange = (type) => {
+    window.location = `/listOfProjects/${type}`;
+  };
 
   return (
     <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black flex flex-row">
@@ -119,8 +121,18 @@ function ProjectManagementDashboard() {
         </div>
         <div>
           <div className="flex flex-wrap">
-            <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
-              <div className="w-[95%] flex justify-between text-center p-5 pb-10">
+            <div className="relative top-32 w-[97.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
+              <div
+                onClick={() => handleTypeChange("all")}
+                className="w-[95%] px-5 my-5"
+              >
+                <CounterCard
+                  countHeading={"TOTAL PROJECTS"}
+                  count={allProjects.length}
+                  bg={"gray"}
+                />
+              </div>
+              <div className="w-[95%] flex flex-row align-middle items-center justify-between text-center p-5 pb-10">
                 {statusWithProjectCount.map((proj) => (
                   <div
                     onClick={() => handleTypeChange(proj.title)}

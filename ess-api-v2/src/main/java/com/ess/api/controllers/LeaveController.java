@@ -27,6 +27,7 @@ public class LeaveController {
     // Add request
     @PostMapping
     public ResponseEntity<Leave> addLeaveRequest(Authentication authentication, @RequestBody Leave leave){
+        System.out.println(leave);
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         leave.setEmployee(currentEmployee);
         long diffInDays = ChronoUnit.DAYS.between(leave.getFrom(), leave.getTo());
