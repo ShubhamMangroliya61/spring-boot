@@ -7,7 +7,7 @@ import moment from "moment";
 
 function DisplayListOfProjects() {
   const { authFetch } = useGlobalContext();
-  let { status } = useParams();
+  let { status, name } = useParams();
   const [listOfProjects, setListOfProjects] = useState([]);
   const [listOfProjectsToDisplay, setListOfProjectsToDisplay] = useState([]);
 
@@ -15,40 +15,66 @@ function DisplayListOfProjects() {
     if (tasks.length == 0) return 0;
     let completedTasks = 0;
     tasks.forEach((task) => {
-      if (task.status.toLowerCase() === "done") completedTasks++;
+      if (task.status?.toLowerCase() === "done") completedTasks++;
     });
     return Math.floor((completedTasks / tasks.length) * 100);
   };
 
   const extractInfo = () => {
     const extrectedArray = [];
-    listOfProjects.forEach((project) => {
-      if (
-        (status.toLowerCase() !== "all" &&
-          status.toLowerCase() === project.status.toLowerCase()) ||
-        status.toLowerCase() === "all"
-      ) {
-        const tempObj = {};
-        tempObj.name = project.name;
-        tempObj.status = project.status;
-        const managers = project.members.filter(
-          (member) => member.role.toLowerCase() === "manager"
-        );
-        tempObj.manager =
-          managers.length > 0
-            ? managers[0].employee.firstName +
-              " " +
-              managers[0].employee.lastName
-            : "";
-        tempObj.status = project.status;
-        tempObj.progress = countProgress(project.tasks);
-        tempObj.createdOn = moment(project.createdOn).format(
-          "YYYY-MM-DD HH:MM"
-        );
-        extrectedArray.push(tempObj);
-      }
-    });
+    if (status) {
+      listOfProjects.forEach((project) => {
+        console.log("in status");
+        if (
+          (status?.toLowerCase() !== "all" &&
+            status?.toLowerCase() === project.status?.toLowerCase()) ||
+          status?.toLowerCase() === "all"
+        ) {
+          const tempObj = createObject(project);
+          extrectedArray.push(tempObj);
+        }
+      });
+    } else {
+      const firstAndLastName = name.split(" ");
+      const firstName = firstAndLastName[0];
+      const lastName = firstAndLastName[1];
+
+      listOfProjects.forEach((project) => {
+        for (let i = 0; i < project.members.length; i++) {
+          if (
+            project.members[i].role.toLowerCase() === "manager" &&
+            project.members[i].employee.firstName.toLowerCase() ===
+              firstName.toLowerCase() &&
+            project.members[i].employee.lastName.toLowerCase() ===
+              lastName.toLowerCase()
+          ) {
+            const tempObj = createObject(project);
+            extrectedArray.push(tempObj);
+            break;
+          }
+        }
+      });
+    }
     setListOfProjectsToDisplay(extrectedArray);
+  };
+
+  const createObject = (project) => {
+    const tempObj = {};
+    tempObj.id = project.id;
+    tempObj.name = project.name;
+    tempObj.status = project.status;
+    const managers = project.members.filter(
+      (member) => member.role.toLowerCase() === "manager"
+    );
+    tempObj.manager =
+      managers.length > 0
+        ? managers[0].employee.firstName + " " + managers[0].employee.lastName
+        : "";
+    tempObj.status = project.status;
+    tempObj.progress = countProgress(project.tasks);
+    tempObj.createdOn = moment(project.createdOn).format("YYYY-MM-DD HH:MM");
+
+    return tempObj;
   };
 
   useEffect(() => {
@@ -61,10 +87,6 @@ function DisplayListOfProjects() {
   useEffect(() => {
     extractInfo();
   }, [listOfProjects]);
-
-  useEffect(() => {
-    console.log(listOfProjectsToDisplay);
-  }, [listOfProjectsToDisplay]);
 
   return (
     <div className="flex flex-wrap overflow-y-hidden">

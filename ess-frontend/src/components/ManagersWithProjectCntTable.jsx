@@ -49,6 +49,10 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
     setCurrentDate(key.date);
   };
 
+  const handleClick = (name) => {
+    window.location = `/listOfProjects/managers/${name}`;
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -75,7 +79,12 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          onClick={() => handleClick(row.name)}
+                          className="cursor-pointer"
+                        >
                           {column.format && typeof value === "number"
                             ? column.format(value)
                             : value}

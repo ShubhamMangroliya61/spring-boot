@@ -52,8 +52,9 @@ public class Task {
         super();
     }
 
-    public Task(String name, Project project, Employee assignBy, Employee assignTo, TaskStatus status, TaskPriority priority) {
+    public Task(String name, String description, Project project, Employee assignBy, Employee assignTo, TaskStatus status, TaskPriority priority) {
         this.name = name;
+        this.description = description;
         this.project = project;
         this.assignBy = assignBy;
         this.assignTo = assignTo;

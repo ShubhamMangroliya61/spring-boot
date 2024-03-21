@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/task")
@@ -59,7 +60,7 @@ public class TaskController {
         }
 
         Employee assignTo = employeeService.getEmployee(addTaskRequest.getAssignedTo());
-        Task newTask = new Task(addTaskRequest.getName(), project, assignedBy, assignTo, addTaskRequest.getStatus(), addTaskRequest.getPriority());
+        Task newTask = new Task(addTaskRequest.getName(), addTaskRequest.getDescription(), project, assignedBy, assignTo, addTaskRequest.getStatus(), addTaskRequest.getPriority());
         ProjectLog newTaskLog = taskService.addTask(newTask);
 
         return ResponseEntity.ok(newTaskLog);
@@ -71,5 +72,15 @@ public class TaskController {
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         List<Task> filteredTasks = taskService.getAllTasksByAssignedTo(currentEmployee);
         return ResponseEntity.ok(filteredTasks);
+    }
+
+    // Get tasks of project
+    @GetMapping("/{projectId}")
+    public ResponseEntity<?> getTasksAssignedInProject(@PathVariable long projectId){
+        Project project = projectService.getProjectById(projectId);
+        List<Task> allTasks = taskService.getAllTasks();
+
+        List<Task> listOfTasksAssignedInGivenProject = allTasks.stream().filter(task -> task.getProject() == project).toList();
+        return ResponseEntity.ok(listOfTasksAssignedInGivenProject);
     }
 }

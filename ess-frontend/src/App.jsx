@@ -15,6 +15,7 @@ import AttendanceDetailsPage from "./pages/AttendanceDetailsPage.jsx";
 import LeaveRequestPage from "./pages/LeaveRequestPage.jsx";
 import DisplayLeaveRequests from "./pages/DisplayLeaveRequests.jsx";
 import DisplayListOfProjects from "./pages/DisplayListOfProjects.jsx";
+import ProjectTaksPage from "./pages/ProjectTaksPage.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -95,6 +96,20 @@ function App() {
                 <Navigate to="/login" />
               )
             }
+          />
+          <Route
+            path="/listOfProjects/managers/:name"
+            element={
+              jwtToken && role === "admin" ? (
+                <DisplayListOfProjects />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/listOfTasks/:projectId"
+            element={jwtToken ? <ProjectTaksPage /> : <Navigate to="/login" />}
           />
         </Routes>
       </Router>

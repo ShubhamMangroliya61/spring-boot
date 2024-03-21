@@ -43,6 +43,13 @@ public class ProjectController {
         return ResponseEntity.ok(allProjects);
     }
 
+    // Get by id
+    @GetMapping("/{projectId}")
+    public ResponseEntity<?> getProjectById(@PathVariable long projectId){
+        Project project = projectService.getProjectById(projectId);
+        return ResponseEntity.ok(project);
+    }
+
     @PostMapping("/addMember")
     public ResponseEntity<?> addProjectMember(@RequestBody AddProjectMemberRequest addProjectMemberRequest){
         ProjectLog addMemberLog = projectService.addEmployeeToProject(addProjectMemberRequest.getProjectId(), addProjectMemberRequest.getEmployeeId(), addProjectMemberRequest.getRole());
