@@ -6,12 +6,12 @@ export const columnArray = [
   },
   {
     title: "IN PROGRESS",
-    column: "inProgress",
+    column: "in_Progress",
     headingColor: "text-blue-600",
   },
   {
     title: "IN REVIEW",
-    column: "inReview",
+    column: "in_Review",
     headingColor: "text-gray-600",
   },
   {

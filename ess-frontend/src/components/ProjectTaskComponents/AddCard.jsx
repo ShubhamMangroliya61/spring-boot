@@ -23,6 +23,7 @@ function AddCard({ column, setCards }) {
           handleOpen={handleOpen}
           open={adding}
           setOpen={setAdding}
+          column={column}
         />
       ) : (
         <motion.button

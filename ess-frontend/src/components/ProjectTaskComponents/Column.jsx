@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import Card from "./Card";
 import AddCard from "./AddCard";
+import { useGlobalContext } from "../../context/appContext";
 
-function Column({ title, headingColor, column, cards, setCards }) {
+function Column({
+  title,
+  headingColor,
+  column,
+  cards,
+  setCards,
+  setTaskUpdate,
+}) {
+  const { authFetch } = useGlobalContext();
   const [active, setActive] = useState(false);
 
   const filteredCards = cards?.filter(
@@ -22,10 +31,21 @@ function Column({ title, headingColor, column, cards, setCards }) {
     setActive(false);
   };
 
+  const handleTaskStatusUpdate = (taskId, task) => {
+    authFetch
+      .put(`/task/updateStatus/${taskId}`, task)
+      .then((res) => {
+        // console.log(res.data);
+        setTaskUpdate((prev) => !prev);
+      })
+      .catch((err) => console.log(err));
+  };
+
   const handleDragEnd = (e) => {
     setActive(false);
 
     const cardId = e.dataTransfer.getData("cardId");
+
     let copy = [...cards];
     copy = cards.filter((card) => card.id != cardId);
 
@@ -35,6 +55,8 @@ function Column({ title, headingColor, column, cards, setCards }) {
       card.status = column.toUpperCase();
       return card;
     });
+
+    handleTaskStatusUpdate(cardId, removedCards[0]);
 
     let finalCards = copy.concat(removedCards);
 

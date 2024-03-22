@@ -41,7 +41,7 @@ const allStatus = [
 const allPriorities = [
   {
     id: "NONE",
-    name: "Node",
+    name: "None",
   },
   {
     id: "LOW",
@@ -62,17 +62,26 @@ export default function AddTaskModal({
   setOpen,
   handleOpen,
   handleClose,
+  column,
 }) {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, displayAlert } = useGlobalContext();
   const { projectId } = useParams();
   const [selectedProject, setSelectedProject] = React.useState({});
-  const [newTask, setNewTask] = React.useState({});
+  const [newTask, setNewTask] = React.useState({
+    status: column.toUpperCase(),
+    projectId: projectId,
+    proprity: "NONE",
+  });
 
   React.useEffect(() => {
     authFetch(`/project/${projectId}`)
       .then((res) => setSelectedProject(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  React.useEffect(() => {
+    console.log(selectedProject);
+  }, [selectedProject]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -87,6 +96,21 @@ export default function AddTaskModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(newTask);
+    authFetch
+      .post("/task", newTask)
+      .then((res) => {
+        displayAlert(res.data.message, "success");
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err?.response?.data?.message) {
+          displayAlert(err?.response?.data?.message, "error");
+        } else {
+          displayAlert("something sent wrong", "error");
+        }
+        console.log(err);
+      });
   };
 
   return (
@@ -129,21 +153,25 @@ export default function AddTaskModal({
 
               <div className="my-4">
                 <label htmlFor="status">Status</label>
+                <br />
                 <select
                   name="status"
                   id="status"
                   className="rounded-sm text-black"
-                  defaultValue={""}
+                  defaultValue={column.toUpperCase()}
                   onChange={handleChange}
                 >
                   <option value="" disabled>
-                    --------------select status--------------
+                    -----------select status-----------
                   </option>
                   {allStatus.map((status) => (
                     <option
                       value={status.id}
                       key={status.id}
                       className="text-center"
+                      selected={
+                        column.toLowerCase() === status.name.toLowerCase()
+                      }
                     >
                       {status.name}
                     </option>
@@ -152,21 +180,23 @@ export default function AddTaskModal({
               </div>
               <div className="my-4">
                 <label htmlFor="priority">Priority</label>
+                <br />
                 <select
                   name="priority"
                   id="priority"
                   className="rounded-sm text-black"
-                  defaultValue={""}
+                  defaultValue={"NONE"}
                   onChange={handleChange}
                 >
                   <option value="" disabled>
-                    -------------select priority-------------
+                    ----------select priority----------
                   </option>
                   {allPriorities.map((priority) => (
                     <option
                       value={priority.id}
                       key={priority.id}
                       className="text-center"
+                      selected={priority.id.toLowerCase() === "none"}
                     >
                       {priority.name}
                     </option>
@@ -175,15 +205,16 @@ export default function AddTaskModal({
               </div>
               <div className="my-4">
                 <label htmlFor="assignTo">Assign To</label>
+                <br />
                 <select
-                  name="assignTo"
-                  id="assignTo"
+                  name="assignedTo"
+                  id="assignedTo"
                   className="rounded-sm text-black"
                   defaultValue={""}
                   onChange={handleChange}
                 >
                   <option value="" disabled>
-                    -------------select assignee-------------
+                    ---------select assignee---------
                   </option>
                   {selectedProject?.members?.map((member) => (
                     <option
