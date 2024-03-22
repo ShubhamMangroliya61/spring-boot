@@ -41,6 +41,7 @@ public class TaskController {
     // Add task
     @PostMapping
     public ResponseEntity<?> createNewTask(@RequestBody AddTaskRequest addTaskRequest, Authentication authentication){
+        System.out.println(addTaskRequest);
         Project project = projectService.getProjectById(addTaskRequest.getProjectId());
         Employee assignedBy = getCurrentEmployee.getCurrentEmployee(authentication);
 
@@ -82,5 +83,11 @@ public class TaskController {
 
         List<Task> listOfTasksAssignedInGivenProject = allTasks.stream().filter(task -> task.getProject() == project).toList();
         return ResponseEntity.ok(listOfTasksAssignedInGivenProject);
+    }
+
+    @PutMapping("/updateStatus/{taskId}")
+    public ResponseEntity<?> updateTaskStatus(@RequestBody Task task){
+        ProjectLog updateStatusLog = taskService.updateTaskStatus(task);
+        return ResponseEntity.ok(updateStatusLog);
     }
 }

@@ -35,9 +35,8 @@ public class Task {
     @JoinColumn(name = "assign_by")
     private Employee assignBy;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "assign_to")
-    @JsonBackReference
     private Employee assignTo;
 
     @Enumerated(EnumType.STRING)
