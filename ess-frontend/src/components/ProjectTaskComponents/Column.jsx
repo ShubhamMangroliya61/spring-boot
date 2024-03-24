@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import AddCard from "./AddCard";
 import { useGlobalContext } from "../../context/appContext";
@@ -10,9 +10,25 @@ function Column({
   cards,
   setCards,
   setTaskUpdate,
+  selectedProject,
 }) {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, userId, role } = useGlobalContext();
   const [active, setActive] = useState(false);
+  const [isAddButtomActive, setIsAddButtomActive] = useState(false);
+
+  useEffect(() => {
+    for (let i = 0; i < selectedProject?.members?.length; i++) {
+      if (
+        role === "admin" ||
+        ((selectedProject?.members[i].role.toLowerCase() === "manager" ||
+          selectedProject?.members[i].role.toLowerCase() === "owner") &&
+          selectedProject?.members[i].employee.id.toString() === userId)
+      ) {
+        setIsAddButtomActive(true);
+        break;
+      }
+    }
+  }, [cards, column]);
 
   const filteredCards = cards?.filter(
     (card) => card.status.toLowerCase() === column.toLowerCase()
@@ -80,9 +96,23 @@ function Column({
         onDrop={(e) => handleDragEnd(e)}
       >
         {filteredCards?.map((c) => {
-          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
+          return (
+            <Card
+              key={c.id}
+              {...c}
+              handleDragStart={handleDragStart}
+              setTaskUpdate={setTaskUpdate}
+              isAddButtomActive={isAddButtomActive}
+            />
+          );
         })}
-        <AddCard column={column} setCards={setCards} />
+        {isAddButtomActive && (
+          <AddCard
+            column={column}
+            setCards={setCards}
+            setTaskUpdate={setTaskUpdate}
+          />
+        )}
       </div>
     </div>
   );

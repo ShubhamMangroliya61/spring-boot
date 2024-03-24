@@ -41,6 +41,7 @@ const reducer = (state, action) => {
         isLoading: false,
         role: action.payload.role,
         jwtToken: action.payload.jwtToken,
+        userId: action.payload.userId,
       };
     case SETUP_USER_ERROR:
       return {
@@ -48,12 +49,14 @@ const reducer = (state, action) => {
         isLoading: false,
         role: null,
         jwtToken: null,
+        userId: null,
       };
     case LOGOUT_USER:
       return {
         ...state,
         role: null,
         jwtToken: null,
+        userId: null,
       };
     case DISPLAY_PASS_ERROR:
       return {

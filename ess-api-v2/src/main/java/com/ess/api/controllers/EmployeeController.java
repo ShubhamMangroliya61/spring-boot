@@ -49,28 +49,35 @@ public class EmployeeController {
 
     // Add
     @PostMapping
-    public ResponseEntity<?> addEmployee(@RequestBody AddEmployeeRequest newEmployee){
+    public ResponseEntity<?> addEmployee(@RequestBody AddEmployeeRequest newEmployee) {
         newEmployee.setPassword(passwordEncoder.encode(newEmployee.getPassword()));
-        Role role =  roleService.getRoleById(newEmployee.getRoleId());
+        Role role = roleService.getRoleById(newEmployee.getRoleId());
         Team team = teamService.GetTeamById(newEmployee.getTeamId());
-        Employee employeeToAdd = new Employee(newEmployee.getFirstName(), newEmployee.getLastName(), newEmployee.getEmail(), newEmployee.getPassword(), role, team);
+        Employee employeeToAdd = new Employee(newEmployee.getFirstName(), newEmployee.getLastName(),
+                newEmployee.getEmail(), newEmployee.getPassword(), role, team);
 
         Employee newAddedEmployee = employeeService.addEmployee(employeeToAdd);
+
         return ResponseEntity.ok(newAddedEmployee);
     }
 
     // Get all
     @GetMapping("/all")
-    public ResponseEntity<?> getAllEmployees(HttpSession session, Authentication authentication){
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetailsImpl userDetails =  (UserDetailsImpl) authentication.getPrincipal();
-            String useremail = userDetails.getEmail();
-        } else {
-            System.out.println("No user logged in.");
-        }*/
+    public ResponseEntity<?> getAllEmployees(HttpSession session, Authentication authentication) {
+        /*
+         * Authentication authentication =
+         * SecurityContextHolder.getContext().getAuthentication();
+         * if (authentication != null && authentication.getPrincipal() instanceof
+         * UserDetails) {
+         * UserDetailsImpl userDetails = (UserDetailsImpl)
+         * authentication.getPrincipal();
+         * String useremail = userDetails.getEmail();
+         * } else {
+         * System.out.println("No user logged in.");
+         * }
+         */
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
-        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+        if (!currentEmployee.getRole().getName().equalsIgnoreCase("admin")) {
             ApiResponse response = new ApiResponse("You are not authorized", false);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -80,14 +87,14 @@ public class EmployeeController {
 
     // Get by id
     @GetMapping("/{empId}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long empId){
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long empId) {
         Employee employee = employeeService.getEmployee(empId);
         return ResponseEntity.ok(employee);
     }
 
     // Get currentEmployee Data
     @GetMapping("/getCurrent")
-    public ResponseEntity<Employee> getCurrentEmployee(Authentication authentication){
+    public ResponseEntity<Employee> getCurrentEmployee(Authentication authentication) {
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         currentEmployee.setPassword("XXXXXXXX");
         return ResponseEntity.ok(currentEmployee);
@@ -95,7 +102,8 @@ public class EmployeeController {
 
     // Update by id
     @PutMapping("/{empId}")
-    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long empId, @RequestBody Employee employee, HttpSession session){
+    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long empId, @RequestBody Employee employee,
+            HttpSession session) {
         System.out.println(session.getAttribute("LoggedInUser") + ": ");
         Employee updatedEmployee = employeeService.updateEmployee(empId, employee);
         return ResponseEntity.ok(updatedEmployee);
@@ -103,9 +111,9 @@ public class EmployeeController {
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<?> loginEmployee(@RequestBody Employee employee, HttpSession session){
+    public ResponseEntity<?> loginEmployee(@RequestBody Employee employee, HttpSession session) {
         Employee employeeByEmail = employeeService.getEmployeeByEmail(employee.getEmail());
-        if(employeeByEmail == null || !Objects.equals(employeeByEmail.getPassword(), employee.getPassword())){
+        if (employeeByEmail == null || !Objects.equals(employeeByEmail.getPassword(), employee.getPassword())) {
             ApiResponse response = new ApiResponse("Wrong email or password", false);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }

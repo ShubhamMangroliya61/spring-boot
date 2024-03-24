@@ -14,6 +14,7 @@ import {
 
 const jwtToken = localStorage.getItem("jwtToken");
 const role = localStorage.getItem("role");
+const userId = localStorage.getItem("userId");
 
 const initialState = {
   isLoading: false,
@@ -24,6 +25,7 @@ const initialState = {
   },
   role: role || null,
   jwtToken: jwtToken || null,
+  userId: userId || null,
 };
 
 const AppContext = React.createContext();
@@ -95,10 +97,12 @@ const AppProvider = ({ children }) => {
             payload: {
               role: res.data.role.toString().toLowerCase(),
               jwtToken: res.data.token,
+              userId: res.data.id.toString().toLowerCase(),
             },
           });
           localStorage.setItem("jwtToken", res.data.token);
           localStorage.setItem("role", res.data.role.toString().toLowerCase());
+          localStorage.setItem("userId", res.data.id.toString().toLowerCase());
           displayAlert("Login Successful", "success");
         })
         .catch((error) => {
@@ -122,6 +126,7 @@ const AppProvider = ({ children }) => {
     });
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("role");
+    localStorage.removeItem("userId");
     displayAlert("Logged out successfully", "success");
     clearAlert();
   };

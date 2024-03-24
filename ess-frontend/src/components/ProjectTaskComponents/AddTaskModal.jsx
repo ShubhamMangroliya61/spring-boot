@@ -63,6 +63,7 @@ export default function AddTaskModal({
   handleOpen,
   handleClose,
   column,
+  setTaskUpdate,
 }) {
   const { authFetch, displayAlert } = useGlobalContext();
   const { projectId } = useParams();
@@ -79,9 +80,9 @@ export default function AddTaskModal({
       .catch((err) => console.log(err));
   }, []);
 
-  React.useEffect(() => {
-    console.log(selectedProject);
-  }, [selectedProject]);
+  // React.useEffect(() => {
+  //   console.log(selectedProject);
+  // }, [selectedProject]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -95,11 +96,12 @@ export default function AddTaskModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(newTask);
+    // console.log(newTask);
     authFetch
       .post("/task", newTask)
       .then((res) => {
         displayAlert(res.data.message, "success");
+        setTaskUpdate((prev) => !prev);
         handleClose();
       })
       .catch((err) => {

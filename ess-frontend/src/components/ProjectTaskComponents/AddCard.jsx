@@ -4,7 +4,7 @@ import BasicModal from "../BasicModal";
 import { motion } from "framer-motion";
 import AddTaskModal from "./AddTaskModal";
 
-function AddCard({ column, setCards }) {
+function AddCard({ column, setCards, setTaskUpdate }) {
   const [adding, setAdding] = useState(false);
   const [text, setText] = useState("");
 
@@ -24,6 +24,7 @@ function AddCard({ column, setCards }) {
           open={adding}
           setOpen={setAdding}
           column={column}
+          setTaskUpdate={setTaskUpdate}
         />
       ) : (
         <motion.button

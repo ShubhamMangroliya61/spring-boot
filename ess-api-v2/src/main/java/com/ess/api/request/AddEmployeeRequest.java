@@ -1,5 +1,10 @@
 package com.ess.api.request;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+// Lombok
 public class AddEmployeeRequest {
 
     private String firstName;
@@ -12,7 +17,8 @@ public class AddEmployeeRequest {
 
     private long teamId;
 
-    public AddEmployeeRequest(String firstName, String lastName, String email, String password, long roleId, long teamId) {
+    public AddEmployeeRequest(String firstName, String lastName, String email, String password, long roleId,
+            long teamId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

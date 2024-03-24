@@ -49,9 +49,9 @@ public class Project {
     }
 
     @JsonCreator
-    public Project(@JsonProperty("name") String name,@JsonProperty("status") ProjectStatus status){
+    public Project(@JsonProperty("name") String name, @JsonProperty("status") ProjectStatus status) {
         this.name = name;
-        this.status = status;
+        this.status = (status == null) ? ProjectStatus.NEW : status;
         this.createdOn = LocalDateTime.now();
     }
 

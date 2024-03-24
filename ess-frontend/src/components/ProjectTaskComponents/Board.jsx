@@ -6,9 +6,11 @@ import { useGlobalContext } from "../../context/appContext";
 import { useParams } from "react-router-dom";
 import CustomAlert from "../utils/CustomAlert";
 
-function Board() {
-  const { authFetch, showAlert } = useGlobalContext();
+function Board({ selectedProject }) {
+  const { authFetch, showAlert, role, userId } = useGlobalContext();
   const { projectId } = useParams();
+
+  const [isMember, setIsMember] = useState(false);
   //   const [cards, setCards] = useState(dummyCards);
   const [cards, setCards] = useState([]);
   const [taskUpdate, setTaskUpdate] = useState(false);
@@ -32,6 +34,7 @@ function Board() {
         </div>
       )}
       {/* ------ Display alert end ------ */}
+      {/* {role === "admin" || isMember ? ( */}
       {columnArray.map((clm) => (
         <Column
           column={clm.column}
@@ -41,9 +44,14 @@ function Board() {
           setCards={setCards}
           key={clm.title}
           setTaskUpdate={setTaskUpdate}
+          selectedProject={selectedProject}
         />
       ))}
-      <Column />
+      {/* // ) : (
+      //   <div className="relative top-20 text-red-500 flex align-middle text-center justify-center text-3xl">
+      //     <h1>You are not member of this project</h1>
+      //   </div>
+      // )} */}
     </div>
   );
 }
