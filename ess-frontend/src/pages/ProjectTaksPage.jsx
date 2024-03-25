@@ -8,6 +8,7 @@ import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ProjectActivity from "../components/ProjectActivity/ProjectActivity";
+import AddProjectMemberModal from "../components/ProjectActivity/AddProjectMemberModal";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,6 +58,8 @@ function ProjectTaksPage() {
   const [adding, setAdding] = useState(false);
   const [displayLogs, setDisplayLogs] = useState(false);
 
+  const [searchInput, setSearchInput] = useState("");
+
   const handleClose = () => {
     setAdding(false);
   };
@@ -87,6 +90,12 @@ function ProjectTaksPage() {
 
   return (
     <div className="h-full overflow-x-hidden overflow-y-scroll w-full bg-black">
+      <AddProjectMemberModal
+        open={adding}
+        setOpen={setAdding}
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+      />
       <div className="flex flex-row">
         <div className="left relative w-[15%]">
           <AdminSideBar />
@@ -94,15 +103,16 @@ function ProjectTaksPage() {
         <div className="right w-[85%] h-screen">
           <div className="relative top-20 text-white flex mx-5 justify-between align-middle items-center">
             <div>
-              <h1
-                className="text-xl pt-2 mt-5 cursor-pointer"
-                onClick={() => setDisplayLogs((prev) => !prev)}
-              >
+              <h1 className="text-xl my-5 cursor-pointer">
                 {selectedProject.name}
+                <span
+                  className="pl-2 cursor-pointer"
+                  onClick={() => setDisplayLogs((prev) => !prev)}
+                >
+                  /&nbsp;{!displayLogs ? "tasks" : "logs"}
+                </span>
               </h1>
-              {/* <span className="pl-2 text-neutral-100/35 cursor-pointer">
-                projects
-              </span>
+              {/*
               <span className="cursor-pointer text-neutral-100/45">
                 /{selectedProject.name}
               </span> */}
@@ -115,7 +125,7 @@ function ProjectTaksPage() {
                 <StyledInputBase
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
-                  onChange={(e) => console.log(e.target.value)}
+                  onChange={(e) => setSearchInput(e.target.value)}
                 />
               </Search>
               {isButtonEnable && (
@@ -130,7 +140,10 @@ function ProjectTaksPage() {
           </div>
           <div className="mt-20 h-full ml-5 overflow-scroll mb-40">
             {!displayLogs ? (
-              <Board selectedProject={selectedProject} />
+              <Board
+                selectedProject={selectedProject}
+                searchInput={searchInput}
+              />
             ) : (
               <ProjectActivity />
             )}

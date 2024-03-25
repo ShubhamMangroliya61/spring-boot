@@ -6,7 +6,7 @@ import { useGlobalContext } from "../../context/appContext";
 import { useParams } from "react-router-dom";
 import CustomAlert from "../utils/CustomAlert";
 
-function Board({ selectedProject }) {
+function Board({ selectedProject, searchInput }) {
   const { authFetch, showAlert, role, userId } = useGlobalContext();
   const { projectId } = useParams();
 
@@ -14,16 +14,30 @@ function Board({ selectedProject }) {
   //   const [cards, setCards] = useState(dummyCards);
   const [cards, setCards] = useState([]);
   const [taskUpdate, setTaskUpdate] = useState(false);
+  const [allCards, setAllCards] = useState(cards);
 
   const getAllTasksOfCurrentProject = () => {
     authFetch(`/task/${projectId}`)
-      .then((res) => setCards(res.data))
+      .then((res) => {
+        setCards(res.data);
+        setAllCards(res.data);
+      })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     getAllTasksOfCurrentProject();
   }, [taskUpdate]);
+
+  /*useEffect(() => {
+    if(searchInput.length >= 3){
+      for(let i = 0; i < allCards.length; i++){
+        if(allCards[i].title.toLowerCase().includes(searchInput.toLowerCase())){
+          setCards([allCards[i]]);
+        }
+      }
+    }
+  }, [searchInput]);*/
 
   return (
     <div className="h-full w-full flex gap-3 overflow-scroll">

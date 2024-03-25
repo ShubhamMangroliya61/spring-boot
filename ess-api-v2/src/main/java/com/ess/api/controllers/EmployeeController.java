@@ -77,10 +77,13 @@ public class EmployeeController {
          * }
          */
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
-        if (!currentEmployee.getRole().getName().equalsIgnoreCase("admin")) {
-            ApiResponse response = new ApiResponse("You are not authorized", false);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+        /*
+         * 
+         * if (!currentEmployee.getRole().getName().equalsIgnoreCase("admin")) {
+         * ApiResponse response = new ApiResponse("You are not authorized", false);
+         * return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+         * }
+         */
         List<Employee> allEmployees = employeeService.getAllEmployees();
         return ResponseEntity.ok(allEmployees);
     }
