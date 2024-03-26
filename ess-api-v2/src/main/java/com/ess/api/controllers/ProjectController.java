@@ -35,10 +35,10 @@ public class ProjectController {
     @GetMapping("/all")
     public ResponseEntity<?> getALlProjects(Authentication authentication){
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
-        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+        /*if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
             ApiResponse response = new ApiResponse("You are not authorized", false);
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        }*/
         List<Project> allProjects = projectService.getAllProjects();
         return ResponseEntity.ok(allProjects);
     }

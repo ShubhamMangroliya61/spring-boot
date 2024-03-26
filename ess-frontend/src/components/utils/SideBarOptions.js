@@ -1,21 +1,85 @@
-import AttendanceDetailsPage from "../../pages/AttendanceDetailsPage";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PersonIcon from "@mui/icons-material/Person";
+import GroupsIcon from "@mui/icons-material/Groups";
+import BadgeIcon from "@mui/icons-material/Badge";
 
-const options = [
+export const options = [
   {
     id: 1,
-    text: "Attendance details",
-    link: "/attendanceDetails",
+    text: "Dashboard",
+    pathName: "/",
+    icon: DashboardIcon,
+    role: "any",
   },
   {
     id: 2,
-    text: "Leave request details",
-    link: "/leaveRequest",
+    text: "Project dashboard",
+    pathName: "/projectManagement/dashdoard",
+    icon: AccountTreeIcon,
+    role: "any",
   },
   {
     id: 3,
-    text: "Dashboard",
-    link: "/",
+    text: "Attendace details",
+    pathName: "/attendanceDetails",
+    icon: CalendarMonthIcon,
+    role: "any",
+  },
+  {
+    id: 4,
+    text: "Leave request",
+    pathName: "/leaveRequest",
+    icon: EditCalendarIcon,
+    role: "any",
+  },
+  {
+    id: 5,
+    text: "My team",
+    pathName: "",
+    icon: SupervisorAccountIcon,
+    role: "any",
+  },
+  {
+    id: 6,
+    text: "Admin options",
+    pathName: "",
+    icon: ManageAccountsIcon,
+    role: "admin",
   },
 ];
 
-export default options;
+export const subOptions = [
+  {
+    id: 1,
+    text: "Employees",
+    pathName: "/employees",
+    icon: PersonIcon,
+    role: "admin",
+  },
+  {
+    id: 2,
+    text: "Teams",
+    pathName: "/teams",
+    icon: GroupsIcon,
+    role: "admin",
+  },
+  {
+    id: 3,
+    text: "Roles",
+    pathName: "",
+    icon: BadgeIcon,
+    role: "admin",
+  },
+  {
+    id: 4,
+    text: "Holidays",
+    pathName: "",
+    icon: CalendarMonthIcon,
+    role: "admin",
+  },
+];

@@ -124,4 +124,16 @@ public class EmployeeController {
         session.setAttribute("LoggedInUser", employeeByEmail);
         return ResponseEntity.ok(employeeByEmail);
     }
+
+    // get all employees from given team
+    @GetMapping("/{teamId}/all")
+    public ResponseEntity<?> getAllTheEmployeesInGivenTeam(@PathVariable long teamId, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+            ApiResponse response = new ApiResponse("You are not authorized", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        List<Employee> employeesWithGivenTeam = employeeService.getEmployeesFromGivenTeam(teamId);
+        return ResponseEntity.ok(employeesWithGivenTeam);
+    }
 }

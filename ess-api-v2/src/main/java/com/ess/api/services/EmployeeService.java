@@ -1,6 +1,7 @@
 package com.ess.api.services;
 
 import com.ess.api.entities.Employee;
+import com.ess.api.entities.Team;
 import com.ess.api.exceptions.ResourceAlreadyExistsException;
 import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.EmployeeRepository;
@@ -15,6 +16,9 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private TeamService teamService;
 
     // Add Employee
     public Employee addEmployee(Employee employee){
@@ -59,4 +63,9 @@ public class EmployeeService {
         }
     }
 
+    // Get employees from given team
+    public List<Employee> getEmployeesFromGivenTeam(Long teamId){
+        Team teamOfGivenId = teamService.GetTeamById(teamId);
+        return employeeRepository.findAllEmployeesByTeam(teamOfGivenId);
+    }
 }

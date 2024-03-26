@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import AdminSideBar from "../components/AdminSideBar";
 import Board from "../components/ProjectTaskComponents/Board";
 import { useParams } from "react-router-dom";
 import { useGlobalContext } from "../context/appContext";
@@ -9,6 +8,7 @@ import InputBase from "@mui/material/InputBase";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ProjectActivity from "../components/ProjectActivity/ProjectActivity";
 import AddProjectMemberModal from "../components/ProjectActivity/AddProjectMemberModal";
+import SideBar from "../components/SideBar";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -98,7 +98,7 @@ function ProjectTaksPage() {
       />
       <div className="flex flex-row">
         <div className="left relative w-[15%]">
-          <AdminSideBar />
+          <SideBar />
         </div>
         <div className="right w-[85%] h-screen">
           <div className="relative top-20 text-white flex mx-5 justify-between align-middle items-center">

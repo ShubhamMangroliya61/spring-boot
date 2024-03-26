@@ -28,10 +28,10 @@ public class ProjectMemberController {
     @GetMapping("/{role}")
     public ResponseEntity<?> getProjectMembersWithRoleInProject(Authentication authentication, @PathVariable Project.RoleInProject role){
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
-        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+        /*if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
             ApiResponse response = new ApiResponse("You are not authorized", false);
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
+        }*/
         Map<String, ArrayList<Project>> memberWithProject = projectMemberService.getProjectMembersWithRoleInProject(role);
         return ResponseEntity.ok(memberWithProject);
     }

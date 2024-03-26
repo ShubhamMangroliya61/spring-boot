@@ -16,6 +16,8 @@ import LeaveRequestPage from "./pages/LeaveRequestPage.jsx";
 import DisplayLeaveRequests from "./pages/DisplayLeaveRequests.jsx";
 import DisplayListOfProjects from "./pages/DisplayListOfProjects.jsx";
 import ProjectTaksPage from "./pages/ProjectTaksPage.jsx";
+import ListOfEmplyeesPage from "./pages/AdminPages/ListOfEmplyeesPage.jsx";
+import ListOfTeamsPage from "./pages/AdminPages/ListOfTeamsPage.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -47,11 +49,7 @@ function App() {
             path="/projectManagement/dashdoard"
             element={
               jwtToken ? (
-                role === "admin" ? (
-                  <ProjectManagementDashboard />
-                ) : (
-                  <DashBoard />
-                )
+                <ProjectManagementDashboard />
               ) : (
                 <Navigate to="/login" />
               )
@@ -80,7 +78,7 @@ function App() {
           <Route
             path="/projectManagementDashboard"
             element={
-              jwtToken && role === "admin" ? (
+              jwtToken ? (
                 <ProjectManagementDashboard />
               ) : (
                 <Navigate to="/login" />
@@ -90,26 +88,38 @@ function App() {
           <Route
             path="/listOfProjects/:status"
             element={
-              jwtToken && role === "admin" ? (
-                <DisplayListOfProjects />
-              ) : (
-                <Navigate to="/login" />
-              )
+              jwtToken ? <DisplayListOfProjects /> : <Navigate to="/login" />
             }
           />
           <Route
             path="/listOfProjects/managers/:name"
             element={
+              jwtToken ? <DisplayListOfProjects /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/listOfTasks/:projectId"
+            element={jwtToken ? <ProjectTaksPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/employees"
+            element={
               jwtToken && role === "admin" ? (
-                <DisplayListOfProjects />
+                <ListOfEmplyeesPage />
               ) : (
                 <Navigate to="/login" />
               )
             }
           />
           <Route
-            path="/listOfTasks/:projectId"
-            element={jwtToken ? <ProjectTaksPage /> : <Navigate to="/login" />}
+            path="/teams"
+            element={
+              jwtToken && role === "admin" ? (
+                <ListOfTeamsPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
         </Routes>
       </Router>

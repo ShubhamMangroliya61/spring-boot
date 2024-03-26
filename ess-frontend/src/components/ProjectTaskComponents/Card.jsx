@@ -50,7 +50,7 @@ function Card({
       <motion.div
         layout
         layoutId={id}
-        draggable={isAddButtomActive}
+        draggable={isAddButtomActive || assignTo.id.toString() === userId}
         className="cursor-grab rounded border border-neutral-700 p-3 bg-neutral-800 active:cursor-grabbing"
         onDragStart={(e) =>
           handleDragStart(e, { name, id, column, description })
