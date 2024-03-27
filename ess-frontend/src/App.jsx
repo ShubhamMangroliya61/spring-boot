@@ -18,6 +18,10 @@ import DisplayListOfProjects from "./pages/DisplayListOfProjects.jsx";
 import ProjectTaksPage from "./pages/ProjectTaksPage.jsx";
 import ListOfEmplyeesPage from "./pages/AdminPages/ListOfEmplyeesPage.jsx";
 import ListOfTeamsPage from "./pages/AdminPages/ListOfTeamsPage.jsx";
+import ListOfRolesPage from "./pages/AdminPages/ListOfRolesPage.jsx";
+import ListOfHolidaysPage from "./pages/AdminPages/ListOfHolidaysPage.jsx";
+import EmployeeProjectManagementDashboard from "./pages/EmployeeProjectManagementDashboard.jsx";
+import MyTeamPage from "./pages/MyTeamPage.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -49,7 +53,11 @@ function App() {
             path="/projectManagement/dashdoard"
             element={
               jwtToken ? (
-                <ProjectManagementDashboard />
+                role === "admin" ? (
+                  <ProjectManagementDashboard />
+                ) : (
+                  <EmployeeProjectManagementDashboard />
+                )
               ) : (
                 <Navigate to="/login" />
               )
@@ -120,6 +128,26 @@ function App() {
                 <Navigate to="/login" />
               )
             }
+          />
+          <Route
+            path="/roles"
+            element={
+              jwtToken && role === "admin" ? (
+                <ListOfRolesPage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/holidays"
+            element={
+              jwtToken ? <ListOfHolidaysPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/myTeam"
+            element={jwtToken ? <MyTeamPage /> : <Navigate to="/login" />}
           />
         </Routes>
       </Router>

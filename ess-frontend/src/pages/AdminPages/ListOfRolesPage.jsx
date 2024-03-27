@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import ListOfTeamsTable from "../../components/Teams/ListOfTeamsTable";
-import { useGlobalContext } from "../../context/appContext";
-import AddTeamModal from "../../components/Teams/AddTeamModal";
+import AddRoleModal from "../../components/Roles/AddRoleModal";
 import SideBar from "../../components/SideBar";
 import CustomAlert from "../../components/utils/CustomAlert";
+import ListOfRolesTable from "../../components/Roles/ListOfRolesTable";
+import { useGlobalContext } from "../../context/appContext";
 
-function ListOfTeamsPage() {
+function ListOfRolesPage() {
   const { authFetch, showAlert, alert } = useGlobalContext();
-  const [listOfAllTeams, setListOfAllTeams] = useState([]);
-  const [listOfTeamsToDisplay, setListOfTeamsToDisplay] = useState([]);
+  const [listOfAllRoles, setListOfAllRoles] = useState([]);
+  const [listOfRolesToDisplay, setListOfRolesToDisplay] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const [employeesInTeam, setEmployeesInTeam] = useState({ map: new Map() });
+  const [employeesWithRole, setEmployeesWithRole] = useState({
+    map: new Map(),
+  });
 
   const handleOpen = () => {
     setIsAdding(true);
@@ -23,52 +25,44 @@ function ListOfTeamsPage() {
 
   useEffect(() => {
     authFetch
-      .get("/team/all")
-      .then((res) => setListOfAllTeams(res.data))
+      .get("/role/all")
+      .then((res) => setListOfAllRoles(res.data))
       .catch((err) => console.log(err));
   }, [isChanged]);
 
   useEffect(() => {
-    listOfAllTeams.forEach((team) => {
+    listOfAllRoles.forEach((role) => {
       authFetch
-        .get(`/employee/team/${team.id}/all`)
+        .get(`/employee/role/${role.id}/all`)
         .then((res) => {
-          setEmployeesInTeam(({ map }) => ({
-            map: map.set(team.id, res.data),
+          setEmployeesWithRole(({ map }) => ({
+            map: map.set(role.id, res.data),
           }));
         })
         .catch((err) => {
           console.log(err);
         });
     });
-  }, [listOfAllTeams]);
+  }, [listOfAllRoles]);
 
   useEffect(() => {
+    console.log(employeesWithRole);
     const tempArray = [];
-    listOfAllTeams.forEach((team) => {
+    listOfAllRoles.forEach((role) => {
       const tempObj = {};
-      const members = employeesInTeam.map.get(team.id) || [];
-      tempObj.name = team.name;
-      tempObj.members = members.length;
-      let managers = members.filter(
-        (member) =>
-          member.role.name.toLowerCase() === "admin" ||
-          member.role.name.toLowerCase() === "manager"
-      );
-      // console.log("managers:", managers);
-      tempObj.manager =
-        managers.length > 0
-          ? managers[0].firstName + " " + managers[0].lastName + " "
-          : "Not assigned";
-
+      tempObj.id = role.id;
+      tempObj.name = role.name;
+      tempObj.employees = employeesWithRole.map.get(role.id)
+        ? employeesWithRole.map.get(role.id).length
+        : 0;
       tempArray.push(tempObj);
     });
-    setListOfTeamsToDisplay(tempArray);
-  }, [employeesInTeam]);
+    setListOfRolesToDisplay(tempArray);
+  }, [employeesWithRole]);
 
   return (
     <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black flex flex-row">
-      <AddTeamModal
+      <AddRoleModal
         open={isAdding}
         setOpen={setIsAdding}
         handleClose={handleClose}
@@ -87,7 +81,7 @@ function ListOfTeamsPage() {
           )}
           <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
             <div className="w-[95%] py-8">
-              <ListOfTeamsTable listOfTeams={listOfTeamsToDisplay} />
+              <ListOfRolesTable listOfRoles={listOfRolesToDisplay} />
               <button
                 className="bg-blue-400/70 p-2 mt-4 text-sm text-black rounded-md hover:bg-blue-200 duration-300"
                 onClick={handleOpen}
@@ -102,4 +96,4 @@ function ListOfTeamsPage() {
   );
 }
 
-export default ListOfTeamsPage;
+export default ListOfRolesPage;

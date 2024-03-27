@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddTeamModal({
+export default function AddRoleModal({
   open,
   setOpen,
   handleOpen,
@@ -25,24 +25,24 @@ export default function AddTeamModal({
   setIsChanged,
 }) {
   const { authFetch, displayAlert } = useGlobalContext();
-  const [newTeam, setNewTeam] = React.useState({});
+  const [newRole, setNewRole] = React.useState({});
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setNewTeam((team) => ({
-      ...team,
+    setNewRole((role) => ({
+      ...role,
       [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(newTeam);
+    console.log(newRole);
     authFetch
-      .post("/team", newTeam)
+      .post("/role", newRole)
       .then((res) => {
-        displayAlert(res.data.name + " team added successfully", "success");
+        displayAlert(res.data.name + " role added successfully", "success");
         setIsChanged((prev) => !prev);
         handleClose();
       })
@@ -69,22 +69,22 @@ export default function AddTeamModal({
           <div className="w-[95%] flex justify-between p-5 pb-10">
             <div className="w-[100%] m-auto">
               <h1 className="text-xl text-gray-100 align-middle font-medium text-center mb-8">
-                Add new Team
+                Add new Role
               </h1>
               <form className="w-[100%]">
                 <div className="flex flex-row justify-between">
                   <div>
                     <label
-                      htmlFor="teamName"
+                      htmlFor="name"
                       className="block text-sm font-medium leading-6 text-gray-300"
                     >
-                      Team name
+                      Role name
                     </label>
                     <div className="mt-2 mb-2">
                       <input
                         type="text"
                         name="name"
-                        id="teamName"
+                        id="name"
                         onChange={handleChange}
                       />
                     </div>
@@ -96,12 +96,12 @@ export default function AddTeamModal({
                       htmlFor="teamDescription"
                       className="block text-sm font-medium leading-6 text-gray-300"
                     >
-                      Team discription
+                      Role discription
                     </label>
                     <div className="mt-2 mb-2">
                       <textarea
                         name="description"
-                        id="escription"
+                        id=""
                         cols="30"
                         onChange={handleChange}
                       />
@@ -114,7 +114,7 @@ export default function AddTeamModal({
                     className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
                     onClick={handleSubmit}
                   >
-                    Add Team
+                    Add Role
                   </button>
                   <button
                     type="close"

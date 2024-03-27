@@ -7,19 +7,15 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useGlobalContext } from "../context/appContext";
+import { useGlobalContext } from "../../context/appContext";
 
 const columns = [
-  { label: "NAME", id: "name", maxWidth: 100 },
-  { label: "NEW", id: "newCnt", maxWidth: 100 },
-  { label: "IN PROGRESS", id: "inProgressCnt", maxWidth: 100 },
-  { label: "ON HOLD", id: "onholdCnt", maxWidth: 100 },
-  { label: "COMPLETED", id: "completedCnt", maxWidth: 100 },
-  { label: "CANCELED", id: "canceledCnt", maxWidth: 100 },
-  { label: "TOTAL", id: "totalProjCnt", maxWidth: 100 },
+  { id: "name", label: "Name", maxWidth: 100 },
+  { id: "employees", label: "Employees", maxWidth: 100 },
+  { id: "options", label: "Options", maxWidth: 100 },
 ];
 
-export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
+export default function ListOfRolesTable({ listOfRoles }) {
   const { authFetch } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
@@ -28,13 +24,13 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
   const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
-    // console.log("From table", membersWithProjectCnt);
     let temp = [];
-    for (let member in membersWithProjectCnt) {
-      temp.push(membersWithProjectCnt[member]);
+    for (let role in listOfRoles) {
+      console.log(listOfRoles[role]);
+      temp.push(listOfRoles[role]);
     }
     setRows(temp);
-  }, [membersWithProjectCnt]);
+  }, [listOfRoles]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -49,9 +45,9 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
     setCurrentDate(key.date);
   };
 
-  const handleClick = (name) => {
-    window.location = `/listOfProjects/managers/${name}`;
-  };
+  const handleUpdate = (role) => {};
+
+  const handleDelete = (role) => {};
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -75,19 +71,31 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow tabIndex={-1} key={row.name}>
+                  <TableRow tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          onClick={() => handleClick(row.name)}
-                          className="cursor-pointer"
-                        >
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === "number" ? (
+                            column.format(value)
+                          ) : column.id === "options" ? (
+                            <>
+                              <button
+                                className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
+                                onClick={() => handleUpdate(row)}
+                              >
+                                update
+                              </button>{" "}
+                              <button
+                                className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
+                                onClick={() => handleDelete(row)}
+                              >
+                                delete
+                              </button>
+                            </>
+                          ) : (
+                            value
+                          )}
                         </TableCell>
                       );
                     })}

@@ -40,12 +40,19 @@ export const options = [
   {
     id: 5,
     text: "My team",
-    pathName: "",
+    pathName: "/myTeam",
     icon: SupervisorAccountIcon,
     role: "any",
   },
   {
     id: 6,
+    text: "Holidays",
+    pathName: "/holidays",
+    icon: CalendarMonthIcon,
+    role: "any",
+  },
+  {
+    id: 7,
     text: "Admin options",
     pathName: "",
     icon: ManageAccountsIcon,
@@ -71,14 +78,14 @@ export const subOptions = [
   {
     id: 3,
     text: "Roles",
-    pathName: "",
+    pathName: "/roles",
     icon: BadgeIcon,
     role: "admin",
   },
   {
     id: 4,
     text: "Holidays",
-    pathName: "",
+    pathName: "/holidays",
     icon: CalendarMonthIcon,
     role: "admin",
   },

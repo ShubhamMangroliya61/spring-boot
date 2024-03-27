@@ -48,12 +48,12 @@ export default function AddEmployeeMoal({
           res.data.firstName + " " + res.data.lastName + " added successfully",
           "success"
         );
+        setIsChanged((prev) => !prev);
         handleClose();
       })
       .catch((err) => {
         if (err?.response?.data?.message) {
           displayAlert(err?.response?.data?.message, "error");
-          setIsChanged((prev) => !prev);
         } else {
           displayAlert("something sent wrong", "error");
         }

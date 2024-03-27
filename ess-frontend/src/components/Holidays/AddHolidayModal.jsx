@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddTeamModal({
+export default function AddHolidayModal({
   open,
   setOpen,
   handleOpen,
@@ -25,24 +25,31 @@ export default function AddTeamModal({
   setIsChanged,
 }) {
   const { authFetch, displayAlert } = useGlobalContext();
-  const [newTeam, setNewTeam] = React.useState({});
+  const [newHoliday, setNewHoliday] = React.useState({});
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setNewTeam((team) => ({
-      ...team,
+    setNewHoliday((holiday) => ({
+      ...holiday,
       [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(newTeam);
+    console.log(newHoliday);
     authFetch
-      .post("/team", newTeam)
+      .post("/holiday", newHoliday)
       .then((res) => {
-        displayAlert(res.data.name + " team added successfully", "success");
+        displayAlert(
+          res.data.name +
+            " holiday " +
+            " on " +
+            res.data.date +
+            " added successfully",
+          "success"
+        );
         setIsChanged((prev) => !prev);
         handleClose();
       })
@@ -75,16 +82,16 @@ export default function AddTeamModal({
                 <div className="flex flex-row justify-between">
                   <div>
                     <label
-                      htmlFor="teamName"
+                      htmlFor="name"
                       className="block text-sm font-medium leading-6 text-gray-300"
                     >
-                      Team name
+                      Holiday name
                     </label>
                     <div className="mt-2 mb-2">
                       <input
                         type="text"
                         name="name"
-                        id="teamName"
+                        id="name"
                         onChange={handleChange}
                       />
                     </div>
@@ -93,16 +100,16 @@ export default function AddTeamModal({
                 <div className="flex flex-row justify-between">
                   <div>
                     <label
-                      htmlFor="teamDescription"
+                      htmlFor="date"
                       className="block text-sm font-medium leading-6 text-gray-300"
                     >
-                      Team discription
+                      Holiday leave
                     </label>
                     <div className="mt-2 mb-2">
-                      <textarea
-                        name="description"
-                        id="escription"
-                        cols="30"
+                      <input
+                        type="date"
+                        name="date"
+                        id="date"
                         onChange={handleChange}
                       />
                     </div>
@@ -114,7 +121,7 @@ export default function AddTeamModal({
                     className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
                     onClick={handleSubmit}
                   >
-                    Add Team
+                    Add Holiday
                   </button>
                   <button
                     type="close"

@@ -7,20 +7,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useGlobalContext } from "../context/appContext";
+import { useGlobalContext } from "../../context/appContext";
 
 const columns = [
-  { label: "NAME", id: "name", maxWidth: 100 },
-  { label: "NEW", id: "newCnt", maxWidth: 100 },
-  { label: "IN PROGRESS", id: "inProgressCnt", maxWidth: 100 },
-  { label: "ON HOLD", id: "onholdCnt", maxWidth: 100 },
-  { label: "COMPLETED", id: "completedCnt", maxWidth: 100 },
-  { label: "CANCELED", id: "canceledCnt", maxWidth: 100 },
-  { label: "TOTAL", id: "totalProjCnt", maxWidth: 100 },
+  { id: "date", label: "Date", maxWidth: 100 },
+  { id: "name", label: "Name", maxWidth: 100 },
+  { id: "options", label: "Options", maxWidth: 100 },
 ];
 
-export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
-  const { authFetch } = useGlobalContext();
+export default function ListOfHolidaysTable({ listOfHolidays }) {
+  const { role } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -28,13 +24,14 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
   const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
-    // console.log("From table", membersWithProjectCnt);
+    console.log(listOfHolidays);
     let temp = [];
-    for (let member in membersWithProjectCnt) {
-      temp.push(membersWithProjectCnt[member]);
+    for (let holiday in listOfHolidays) {
+      console.log(listOfHolidays[holiday]);
+      temp.push(listOfHolidays[holiday]);
     }
     setRows(temp);
-  }, [membersWithProjectCnt]);
+  }, [listOfHolidays]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -49,9 +46,9 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
     setCurrentDate(key.date);
   };
 
-  const handleClick = (name) => {
-    window.location = `/listOfProjects/managers/${name}`;
-  };
+  const handleUpdate = (holiday) => {};
+
+  const handleDelete = (holiday) => {};
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -75,19 +72,32 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow tabIndex={-1} key={row.name}>
+                  <TableRow tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          onClick={() => handleClick(row.name)}
-                          className="cursor-pointer"
-                        >
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === "number" ? (
+                            column.format(value)
+                          ) : column.id === "options" &&
+                            role.toLowerCase() === "admin" ? (
+                            <>
+                              <button
+                                className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
+                                onClick={() => handleUpdate(row)}
+                              >
+                                update
+                              </button>{" "}
+                              <button
+                                className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
+                                onClick={() => handleDelete(row)}
+                              >
+                                delete
+                              </button>
+                            </>
+                          ) : (
+                            value
+                          )}
                         </TableCell>
                       );
                     })}

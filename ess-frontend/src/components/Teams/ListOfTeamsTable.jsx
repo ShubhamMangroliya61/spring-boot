@@ -13,6 +13,7 @@ const columns = [
   { id: "name", label: "Name", maxWidth: 100 },
   { id: "members", label: "Members", maxWidth: 100 },
   { id: "manager", label: "Manager", maxWidth: 100 },
+  { id: "options", label: "Options", maxWidth: 100 },
 ];
 
 export default function ListOfTeamsTable({ listOfTeams }) {

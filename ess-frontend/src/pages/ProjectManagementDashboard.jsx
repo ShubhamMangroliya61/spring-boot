@@ -6,13 +6,20 @@ import ManagersWithProjectCntTable from "../components/ManagersWithProjectCntTab
 import SideBar from "../components/SideBar.jsx";
 
 function ProjectManagementDashboard() {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, userId } = useGlobalContext();
   const [allProjects, setAllProjects] = useState([]);
   const [membersWithProjects, setMembersWithProjects] = useState([]);
   const [statusWithProjectCount, setStatusWithProjectCount] = useState([]);
   const [managersWithProjectsCount, setManagersWithProjectsCount] = useState(
     []
   );
+
+  useEffect(() => {
+    authFetch
+      .get(`/projectMember/${userId}/allProjects`)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     authFetch
