@@ -126,14 +126,26 @@ public class EmployeeController {
     }
 
     // get all employees from given team
-    @GetMapping("/{teamId}/all")
+    @GetMapping("/team/{teamId}/all")
     public ResponseEntity<?> getAllTheEmployeesInGivenTeam(@PathVariable long teamId, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        /*if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
+            ApiResponse response = new ApiResponse("You are not authorized", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }*/
+        List<Employee> employeesWithGivenTeam = employeeService.getEmployeesFromGivenTeam(teamId);
+        return ResponseEntity.ok(employeesWithGivenTeam);
+    }
+
+    // get all employees with given role
+    @GetMapping("/role/{roleId}/all")
+    public ResponseEntity<?> getALlEmployeesWithGivenRole(@PathVariable long roleId, Authentication authentication){
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
             ApiResponse response = new ApiResponse("You are not authorized", false);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        List<Employee> employeesWithGivenTeam = employeeService.getEmployeesFromGivenTeam(teamId);
-        return ResponseEntity.ok(employeesWithGivenTeam);
+        List<Employee> employeesWithGivenRole = employeeService.getEmployeesWithGivenRole(roleId);
+        return ResponseEntity.ok(employeesWithGivenRole);
     }
 }

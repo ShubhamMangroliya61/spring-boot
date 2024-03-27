@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,5 +35,12 @@ public class ProjectMemberController {
         }*/
         Map<String, ArrayList<Project>> memberWithProject = projectMemberService.getProjectMembersWithRoleInProject(role);
         return ResponseEntity.ok(memberWithProject);
+    }
+
+    // Get all projects of given employee
+    @GetMapping("/{employeeId}/allProjects")
+    public ResponseEntity<?> getAllProjectsOfEmployee(@PathVariable long employeeId){
+        List<Project> listOfProjects = projectMemberService.getAllTheProjectsWithGivenEmployee(employeeId);
+        return ResponseEntity.ok(listOfProjects);
     }
 }

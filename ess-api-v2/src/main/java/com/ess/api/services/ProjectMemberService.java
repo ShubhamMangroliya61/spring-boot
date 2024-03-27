@@ -3,6 +3,7 @@ package com.ess.api.services;
 import com.ess.api.entities.*;
 import com.ess.api.exceptions.ResourceAlreadyExistsException;
 import com.ess.api.repositories.ProjectMemberRepository;
+import com.ess.api.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,12 @@ public class ProjectMemberService {
 
     @Autowired
     private ProjectLogService projectLogService;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     // Add Project Member
     public ProjectLog addMember(Project project, Employee employee, Project.RoleInProject role){
@@ -61,9 +68,17 @@ public class ProjectMemberService {
         return memberWithProject;
     }
 
-    // Get project from member and role
+    // Get list of projects of given employee
+    public List<Project> getAllTheProjectsWithGivenEmployee(long employeeId){
+        Employee givenEmployee = employeeService.getEmployee(employeeId);
+        List<Project> allProjects = projectRepository.findAll();
 
-//    public List<Employee> getListOfMembersFromProjectByRole(Project project, Project.RoleInProject role){
-//        return projectMemberRepository.findListOfMembersFromProjectByRole(project, role);
-//    }
+        List<Project> projectsWithGivenEmployee = new ArrayList<>();
+        allProjects.forEach(project -> project.getMembers().forEach(projectMember -> {
+            if(projectMember.getEmployee().getId() == employeeId){
+                projectsWithGivenEmployee.add(project);
+            }
+        }));
+        return projectsWithGivenEmployee;
+    }
 }

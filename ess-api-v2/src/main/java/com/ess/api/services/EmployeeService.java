@@ -1,10 +1,12 @@
 package com.ess.api.services;
 
 import com.ess.api.entities.Employee;
+import com.ess.api.entities.Role;
 import com.ess.api.entities.Team;
 import com.ess.api.exceptions.ResourceAlreadyExistsException;
 import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.EmployeeRepository;
+import com.ess.api.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,9 @@ public class EmployeeService {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     // Add Employee
     public Employee addEmployee(Employee employee){
@@ -67,5 +72,11 @@ public class EmployeeService {
     public List<Employee> getEmployeesFromGivenTeam(Long teamId){
         Team teamOfGivenId = teamService.GetTeamById(teamId);
         return employeeRepository.findAllEmployeesByTeam(teamOfGivenId);
+    }
+
+    // Get employees with given role
+    public List<Employee> getEmployeesWithGivenRole(Long roleId){
+        Role roleWithGivenId = roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Role", "RoleId", roleId.toString()));
+        return employeeRepository.findAllEmployeesByRole(roleWithGivenId);
     }
 }
