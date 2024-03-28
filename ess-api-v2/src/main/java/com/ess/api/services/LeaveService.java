@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,6 +16,12 @@ public class LeaveService {
 
     @Autowired
     private LeaveRepository leaveRepository;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     // Add request
     public Leave addLeaveRequest(Leave leave){
@@ -47,5 +54,16 @@ public class LeaveService {
         leaveReq.setReason(leave.getReason());
         leaveReq.setType(leave.getType());
         return leaveRepository.save(leaveReq);
+    }
+
+    // Get requests according to team
+    public List<Leave> getLeaveRequestsFromGivenTeam(Long teamId){
+        List<Employee> allEmployees = employeeService.getAllEmployees();
+        List<Employee> employeesWithGivenTeam = allEmployees.stream().filter(employee -> employee.getTeam().getId() == teamId).toList();
+        List<Leave> allTheLeaveRequestsInTeam = new ArrayList<>();
+        employeesWithGivenTeam.forEach(employee -> {
+            allTheLeaveRequestsInTeam.addAll(employee.getLeaves());
+        });
+        return allTheLeaveRequestsInTeam;
     }
 }

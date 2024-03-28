@@ -5,14 +5,18 @@ import com.ess.api.entities.Project;
 import com.ess.api.entities.ProjectLog;
 import com.ess.api.request.AddProjectMemberRequest;
 import com.ess.api.response.ApiResponse;
+import com.ess.api.services.EmployeeService;
 import com.ess.api.services.ProjectService;
 import com.ess.api.utils.GetCurrentEmployee;
+import com.ess.api.utils.SendMail;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,6 +29,12 @@ public class ProjectController {
 
     @Autowired
     private GetCurrentEmployee getCurrentEmployee;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private SendMail sendMail;
 
     @PostMapping
     public ResponseEntity<?> createProject(@RequestBody Project project){
@@ -51,8 +61,12 @@ public class ProjectController {
     }
 
     @PostMapping("/addMember")
-    public ResponseEntity<?> addProjectMember(@RequestBody AddProjectMemberRequest addProjectMemberRequest){
+    public ResponseEntity<?> addProjectMember(@RequestBody AddProjectMemberRequest addProjectMemberRequest, Authentication authentication) throws MessagingException, IOException {
         ProjectLog addMemberLog = projectService.addEmployeeToProject(addProjectMemberRequest.getProjectId(), addProjectMemberRequest.getEmployeeId(), addProjectMemberRequest.getRole());
+        Employee assignBy = getCurrentEmployee.getCurrentEmployee(authentication);
+        Employee assignTo = employeeService.getEmployee(addProjectMemberRequest.getEmployeeId());
+
+        sendMail.sedNewMemberMail(assignTo.getEmail(), assignBy.getFirstName() + " " + assignBy.getLastName(), addMemberLog.getProject().getName(), addMemberLog.getProject().getId());
         return ResponseEntity.ok(addMemberLog);
     }
 }

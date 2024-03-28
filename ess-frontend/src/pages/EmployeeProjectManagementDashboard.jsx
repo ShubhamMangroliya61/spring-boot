@@ -62,8 +62,7 @@ function EmployeeProjectManagementDashboard() {
       const tempObj = {};
       tempObj.id = task.id;
       tempObj.name = task.name;
-      tempObj.assignBy =
-        task.assignBy.firstName + " " + task.assignBy.firstName;
+      tempObj.assignBy = task.assignBy.firstName + " " + task.assignBy.lastName;
       tempObj.status = task.status;
       tempObj.priority = task.priority;
       filteredArray.push(tempObj);

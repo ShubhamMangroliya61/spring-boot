@@ -7,75 +7,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useGlobalContext } from "../context/appContext";
+import { useGlobalContext } from "../../context/appContext";
 
 const columns = [
-  { id: "from", label: "from (yyyy/mm/dd)", maxWidth: 100 },
-  { id: "to", label: "to (yyyy/mm/dd)", maxWidth: 100 },
-  { id: "reason", label: "reason", maxWidth: 100 },
-  { id: "days", label: "days", maxWidth: 100 },
-  { id: "type", label: "type", maxWidth: 100 },
-  { id: "status", label: "status", maxWidth: 100 },
-  { id: "employee name", label: "employee name", maxWidth: 100 },
-  { id: "options", label: "options", maxWidth: 100 },
+  { id: "name", label: "name", maxWidth: 100 },
+  { id: "role", label: "role", maxWidth: 100 },
 ];
 
-export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
-  const { authFetch } = useGlobalContext();
+export default function ListOfMembersTable({ listOfMembers }) {
+  const { role } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [rows, setRows] = React.useState([]);
 
-  const [listOfAllEmployees, setListOfAllEmployees] = React.useState([]);
-  const [mapOfEmployeeAndLeaveRequest, setMapOfEmployeeAndLeaveRequest] =
-    React.useState(new Map());
-
   React.useEffect(() => {
-    authFetch
-      .get(`/employee/all`)
-      .then((res) => {
-        setListOfAllEmployees(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  React.useEffect(() => {
-    let map = new Map();
-    listOfAllEmployees.forEach((employee) =>
-      employee.leaves.forEach((leave) =>
-        map.set(
-          leave.id,
-          employee.firstName.toString() + " " + employee.lastName.toString()
-        )
-      )
-    );
-    setMapOfEmployeeAndLeaveRequest(map);
-  }, [listOfAllEmployees]);
-
-  const addEmployeeInfo = () => {
-    allPreviousLeaveRequests.forEach((leaveRequest) => {
-      leaveRequest["employee name"] = mapOfEmployeeAndLeaveRequest.get(
-        leaveRequest.id
-      );
-    });
-  };
-
-  React.useEffect(() => {
-    addEmployeeInfo();
-    console.log("allPrev: ", allPreviousLeaveRequests);
+    console.log(listOfMembers);
     let temp = [];
-    for (let request in allPreviousLeaveRequests) {
-      if (allPreviousLeaveRequests[request].status.toString() === "PENDING") {
-        allPreviousLeaveRequests[request].options = true;
-      } else {
-        allPreviousLeaveRequests[request].options = false;
-      }
-      temp.push(allPreviousLeaveRequests[request]);
+    for (let member in listOfMembers) {
+      console.log(listOfMembers[member]);
+      temp.push(listOfMembers[member]);
     }
     setRows(temp);
-  }, [mapOfEmployeeAndLeaveRequest, allPreviousLeaveRequests]);
+  }, [listOfMembers]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -90,21 +45,9 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
     setCurrentDate(key.date);
   };
 
-  const handleApprove = (leave) => {
-    leave.status = "APPROVED";
-    authFetch
-      .put(`/leave/${leave.id}`, leave)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.data));
-  };
+  const handleUpdate = (member) => {};
 
-  const handleReject = (leave) => {
-    leave.status = "REJECTED";
-    authFetch
-      .put(`/leave/${leave.id}`, leave)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.data));
-  };
+  const handleDelete = (member) => {};
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -135,19 +78,20 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
                         <TableCell key={column.id} align={column.align}>
                           {column.format && typeof value === "number" ? (
                             column.format(value)
-                          ) : column.id === "options" && value == true ? (
+                          ) : column.id === "options" &&
+                            role.toLowerCase() === "admin" ? (
                             <>
                               <button
                                 className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
-                                onClick={() => handleApprove(row)}
+                                onClick={() => handleUpdate(row)}
                               >
-                                approve
+                                update
                               </button>{" "}
                               <button
                                 className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
-                                onClick={() => handleReject(row)}
+                                onClick={() => handleDelete(row)}
                               >
-                                reject
+                                delete
                               </button>
                             </>
                           ) : (

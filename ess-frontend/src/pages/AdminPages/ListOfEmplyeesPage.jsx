@@ -51,6 +51,7 @@ function ListOfEmplyeesPage() {
       const tempObj = {};
       tempObj.id = employee.id;
       tempObj.name = employee.firstName + " " + employee.lastName;
+      tempObj.email = employee.email;
       tempObj.totalLeavesTaken = employee.totalLeavesTaken;
       tempObj.totalLeavesLeft = employee.totalLeavesLeft;
       tempObj.role = employee.role.name;

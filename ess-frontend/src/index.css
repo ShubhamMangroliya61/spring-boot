@@ -35,3 +35,9 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.css-kotfqe-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root.Mui-disabled {
+  color: rgb(255, 0, 0);
+  box-shadow: none;
+  background-color: rgb(255 255 255);
+}

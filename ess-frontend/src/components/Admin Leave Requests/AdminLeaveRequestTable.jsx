@@ -8,18 +8,20 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useGlobalContext } from "../../context/appContext";
+import AddNoteModal from "./AddNoteModal";
 
 const columns = [
-  { id: "name", label: "Name", maxWidth: 100 },
-  { id: "team", label: "Team", maxWidth: 100 },
-  { id: "email", label: "Email", maxWidth: 100 },
-  { id: "role", label: "Role", maxWidth: 100 },
-  { id: "totalLeavesTaken", label: "Leaves Taken", maxWidth: 100 },
-  { id: "totalLeavesLeft", label: "Leaves Left", maxWidth: 100 },
+  { id: "from", label: "from (yyyy/mm/dd)", maxWidth: 100 },
+  { id: "to", label: "to (yyyy/mm/dd)", maxWidth: 100 },
+  { id: "reason", label: "reason", maxWidth: 100 },
+  { id: "days", label: "days", maxWidth: 100 },
+  { id: "type", label: "type", maxWidth: 100 },
+  { id: "status", label: "status", maxWidth: 100 },
+  { id: "employee name", label: "employee name", maxWidth: 100 },
   { id: "options", label: "options", maxWidth: 100 },
 ];
 
-export default function ListOfEmployeesTable({ listOfEmployees }) {
+export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
   const { authFetch } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
@@ -27,14 +29,65 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
 
   const [rows, setRows] = React.useState([]);
 
+  const [listOfAllEmployees, setListOfAllEmployees] = React.useState([]);
+  const [mapOfEmployeeAndLeaveRequest, setMapOfEmployeeAndLeaveRequest] =
+    React.useState(new Map());
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [option, setOption] = React.useState("");
+  const [leaveToPass, setLeaveToPass] = React.useState({});
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   React.useEffect(() => {
+    authFetch
+      .get(`/employee/all`)
+      .then((res) => {
+        setListOfAllEmployees(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  React.useEffect(() => {
+    let map = new Map();
+    listOfAllEmployees.forEach((employee) =>
+      employee.leaves.forEach((leave) =>
+        map.set(
+          leave.id,
+          employee.firstName.toString() + " " + employee.lastName.toString()
+        )
+      )
+    );
+    setMapOfEmployeeAndLeaveRequest(map);
+  }, [listOfAllEmployees]);
+
+  const addEmployeeInfo = () => {
+    allPreviousLeaveRequests.forEach((leaveRequest) => {
+      leaveRequest["employee name"] = mapOfEmployeeAndLeaveRequest.get(
+        leaveRequest.id
+      );
+    });
+  };
+
+  React.useEffect(() => {
+    addEmployeeInfo();
+    // console.log("allPrev: ", allPreviousLeaveRequests);
     let temp = [];
-    for (let employee in listOfEmployees) {
-      console.log(listOfEmployees[employee]);
-      temp.push(listOfEmployees[employee]);
+    for (let request in allPreviousLeaveRequests) {
+      if (allPreviousLeaveRequests[request].status.toString() === "PENDING") {
+        allPreviousLeaveRequests[request].options = true;
+      } else {
+        allPreviousLeaveRequests[request].options = false;
+      }
+      temp.push(allPreviousLeaveRequests[request]);
     }
     setRows(temp);
-  }, [listOfEmployees]);
+  }, [mapOfEmployeeAndLeaveRequest, allPreviousLeaveRequests]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -49,12 +102,36 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
     setCurrentDate(key.date);
   };
 
-  const handleUpdate = (employee) => {};
+  const handleApprove = (leave) => {
+    setOption("approve");
+    handleOpen();
+    leave.status = "APPROVED";
+    authFetch
+      .put(`/leave/${leave.id}`, leave)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err.data));
+  };
 
-  const handleDelete = (employee) => {};
+  const handleReject = (leave) => {
+    setOption("reject");
+    handleOpen();
+    leave.status = "REJECTED";
+    authFetch
+      .put(`/leave/${leave.id}`, leave)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err.data));
+  };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <AddNoteModal
+        handleOpen={handleOpen}
+        handleClose={handleClose}
+        open={isOpen}
+        setOpen={setIsOpen}
+        option={option}
+        leave={leaveToPass}
+      />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -82,19 +159,19 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
                         <TableCell key={column.id} align={column.align}>
                           {column.format && typeof value === "number" ? (
                             column.format(value)
-                          ) : column.id === "options" ? (
+                          ) : column.id === "options" && value == true ? (
                             <>
                               <button
                                 className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
-                                onClick={() => handleUpdate(row)}
+                                onClick={() => handleApprove(row)}
                               >
-                                update
+                                approve
                               </button>{" "}
                               <button
                                 className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
-                                onClick={() => handleDelete(row)}
+                                onClick={() => handleReject(row)}
                               >
-                                delete
+                                reject
                               </button>
                             </>
                           ) : (

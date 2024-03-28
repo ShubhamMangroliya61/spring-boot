@@ -14,12 +14,9 @@ const columns = [
   { id: "team", label: "Team", maxWidth: 100 },
   { id: "email", label: "Email", maxWidth: 100 },
   { id: "role", label: "Role", maxWidth: 100 },
-  { id: "totalLeavesTaken", label: "Leaves Taken", maxWidth: 100 },
-  { id: "totalLeavesLeft", label: "Leaves Left", maxWidth: 100 },
-  { id: "options", label: "options", maxWidth: 100 },
 ];
 
-export default function ListOfEmployeesTable({ listOfEmployees }) {
+export default function MyTeamEmployeesTable({ listOfEmployees }) {
   const { authFetch } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
@@ -30,7 +27,7 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
   React.useEffect(() => {
     let temp = [];
     for (let employee in listOfEmployees) {
-      console.log(listOfEmployees[employee]);
+      //   console.log(listOfEmployees[employee]);
       temp.push(listOfEmployees[employee]);
     }
     setRows(temp);
@@ -48,10 +45,6 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
   const handleDateChange = (key) => {
     setCurrentDate(key.date);
   };
-
-  const handleUpdate = (employee) => {};
-
-  const handleDelete = (employee) => {};
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -80,26 +73,9 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number" ? (
-                            column.format(value)
-                          ) : column.id === "options" ? (
-                            <>
-                              <button
-                                className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
-                                onClick={() => handleUpdate(row)}
-                              >
-                                update
-                              </button>{" "}
-                              <button
-                                className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
-                                onClick={() => handleDelete(row)}
-                              >
-                                delete
-                              </button>
-                            </>
-                          ) : (
-                            value
-                          )}
+                          {column.format && typeof value === "number"
+                            ? column.format(value)
+                            : value}
                         </TableCell>
                       );
                     })}

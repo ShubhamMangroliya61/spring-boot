@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../context/appContext";
-import AdminLeaveRequestTable from "../components/AdminLeaveRequestTable";
+import AdminLeaveRequestTable from "../components/Admin Leave Requests/AdminLeaveRequestTable";
 import CounterCard from "../components/CounterCard";
 import SideBar from "../components/SideBar";
 
-function DisplayLeaveRequests() {
+function DisplayLeaveRequests({
+  allLeaveRequestsProps = [],
+  heading,
+  displayReq,
+}) {
   const { authFetch } = useGlobalContext();
 
   const [allLeaveRequests, setAllLeaveRequests] = useState([]);
@@ -37,18 +41,15 @@ function DisplayLeaveRequests() {
   };
 
   useEffect(() => {
-    authFetch
-      .get("/leave/getAll")
-      .then((res) => {
-        setLeavesToDisplay(res.data);
-        setAllLeaveRequests(res.data);
-      })
-      .catch((err) => console.log(err.data));
-  }, []);
+    const tempArray = allLeaveRequestsProps;
+
+    setLeavesToDisplay(tempArray);
+    setAllLeaveRequests(tempArray);
+  }, [allLeaveRequestsProps, displayReq]);
 
   useEffect(() => {
     filterLeaveRequests();
-  }, [allLeaveRequests]);
+  }, [allLeaveRequests, allLeaveRequestsProps]);
 
   const handleTypeChange = (type) => {
     setTypeToDisplay(type);
@@ -66,7 +67,14 @@ function DisplayLeaveRequests() {
   return (
     <div className="flex flex-wrap justify-items-center overflow-y-hidden">
       <div className="right w-[100%] mx-auto">
-        <div className="relative top-10 w-[95.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
+        <div className="relative top-10 w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
+          <div onClick={() => handleTypeChange("all")} className="w-[95%] p-5">
+            <CounterCard
+              countHeading={heading}
+              count={allLeaveRequests.length}
+              bg={"gray"}
+            />
+          </div>
           <div className="w-[95%] flex justify-between text-center p-5 pb-10">
             <div onClick={() => handleTypeChange("all")}>
               <CounterCard

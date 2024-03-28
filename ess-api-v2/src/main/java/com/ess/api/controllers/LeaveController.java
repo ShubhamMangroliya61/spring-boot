@@ -64,4 +64,11 @@ public class LeaveController {
         Leave updateDLeaveRequest = leaveService.updateLeaveRequest(leaveId , leave);
         return ResponseEntity.ok(updateDLeaveRequest);
     }
+
+    // Get requests according to team
+    @GetMapping("/team/{teamId}/getAll")
+    public ResponseEntity<?> getAllTheRequestFromGivenTeam(@PathVariable long teamId){
+        List<Leave> allTheLeaveRequestsInTeam = leaveService.getLeaveRequestsFromGivenTeam(teamId);
+        return ResponseEntity.ok(allTheLeaveRequestsInTeam);
+    }
 }

@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 import { useGlobalContext } from "../../context/appContext";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 const style = {
   position: "absolute",
@@ -28,6 +30,7 @@ export default function AddEmployeeMoal({
 }) {
   const { authFetch, displayAlert } = useGlobalContext();
   const [newEmployee, setNewEmployee] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -39,6 +42,7 @@ export default function AddEmployeeMoal({
   };
 
   const handleSubmit = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     console.log(newEmployee);
     authFetch
@@ -50,6 +54,7 @@ export default function AddEmployeeMoal({
         );
         setIsChanged((prev) => !prev);
         handleClose();
+        setIsLoading(false);
       })
       .catch((err) => {
         if (err?.response?.data?.message) {
@@ -58,6 +63,7 @@ export default function AddEmployeeMoal({
           displayAlert("something sent wrong", "error");
         }
         console.log(err);
+        setIsLoading(false);
       });
   };
 
@@ -205,21 +211,59 @@ export default function AddEmployeeMoal({
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-between">
-                  <button
+                <div className="flex justify-between mt-5">
+                  {/* <button
                     type="submit"
-                    className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
+                    className={`bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400 ${
+                      isLoading ? "bg-gray-500 hover:bg-gray-500" : ""
+                    }`}
                     onClick={handleSubmit}
+                    disabled={isLoading}
                   >
-                    Add Employee
+                    {!isLoading ? "Add Employee" : "Loading.."}
                   </button>
                   <button
                     type="close"
                     className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
                     onClick={handleClose}
+                    disabled={isLoading}
                   >
-                    Close
-                  </button>
+                    {!isLoading ? "Close" : "Loading.."}
+                  </button> */}
+                  <Box
+                    sx={{
+                      "& > button": { m: 1 },
+                    }}
+                  >
+                    <div className="bg-white rounded-md">
+                      <LoadingButton
+                        loading={isLoading}
+                        loadingPosition="start"
+                        variant="contained"
+                        className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
+                        onClick={handleSubmit}
+                      >
+                        <span>Add Employee</span>
+                      </LoadingButton>
+                    </div>
+                  </Box>
+                  <Box
+                    sx={{
+                      "& > button": { m: 1 },
+                    }}
+                  >
+                    <div className="bg-white rounded-md">
+                      <LoadingButton
+                        loading={isLoading}
+                        loadingPosition="start"
+                        variant="contained"
+                        className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
+                        onClick={handleClose}
+                      >
+                        <span>Close</span>
+                      </LoadingButton>
+                    </div>
+                  </Box>
                 </div>
               </form>
             </div>

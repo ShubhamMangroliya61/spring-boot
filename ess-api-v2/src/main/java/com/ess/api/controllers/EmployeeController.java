@@ -12,6 +12,8 @@ import com.ess.api.services.EmployeeService;
 import com.ess.api.services.RoleService;
 import com.ess.api.services.TeamService;
 import com.ess.api.utils.GetCurrentEmployee;
+import com.ess.api.utils.SendMail;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,9 +50,13 @@ public class EmployeeController {
     @Autowired
     private GetCurrentEmployee getCurrentEmployee;
 
+    @Autowired
+    private SendMail sendMail;
+
     // Add
     @PostMapping
-    public ResponseEntity<?> addEmployee(@RequestBody AddEmployeeRequest newEmployee) {
+    public ResponseEntity<?> addEmployee(@RequestBody AddEmployeeRequest newEmployee) throws MessagingException, IOException {
+        String password = newEmployee.getPassword();
         newEmployee.setPassword(passwordEncoder.encode(newEmployee.getPassword()));
         Role role = roleService.getRoleById(newEmployee.getRoleId());
         Team team = teamService.GetTeamById(newEmployee.getTeamId());
@@ -58,6 +65,10 @@ public class EmployeeController {
 
         Employee newAddedEmployee = employeeService.addEmployee(employeeToAdd);
 
+        String fullName = newAddedEmployee.getFirstName() + " " + newAddedEmployee.getLastName();
+        String email = newAddedEmployee.getEmail();
+
+        sendMail.sendWelcomeMail(fullName, email, password);
         return ResponseEntity.ok(newAddedEmployee);
     }
 

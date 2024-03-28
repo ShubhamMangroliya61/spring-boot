@@ -9,6 +9,8 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ProjectActivity from "../components/ProjectActivity/ProjectActivity";
 import AddProjectMemberModal from "../components/ProjectActivity/AddProjectMemberModal";
 import SideBar from "../components/SideBar";
+import ProjectMembersModal from "../components/ProjectTaskComponents/ProjectMembersModal";
+import { Person } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,6 +59,7 @@ function ProjectTaksPage() {
   const [isButtonEnable, setIsButtonEnable] = useState(false);
   const [adding, setAdding] = useState(false);
   const [displayLogs, setDisplayLogs] = useState(false);
+  const [memberModalOpen, setMemberModalOpen] = useState(false);
 
   const [searchInput, setSearchInput] = useState("");
 
@@ -67,16 +70,27 @@ function ProjectTaksPage() {
     setAdding(true);
   };
 
+  const handleMemberModalOpen = () => {
+    setMemberModalOpen(true);
+  };
+  const handleMemberModalClose = () => {
+    setMemberModalOpen(false);
+  };
+
   useEffect(() => {
-    for (let i = 0; i < selectedProject?.members?.length; i++) {
-      if (
-        role === "admin" ||
-        ((selectedProject?.members[i].role.toLowerCase() === "manager" ||
-          selectedProject?.members[i].role.toLowerCase() === "owner") &&
-          selectedProject?.members[i].employee.id.toString() === userId)
-      ) {
-        setIsButtonEnable(true);
-        break;
+    if (role.toLowerCase() === "admin") {
+      setIsButtonEnable(true);
+    } else {
+      for (let i = 0; i < selectedProject?.members?.length; i++) {
+        if (
+          role.toLowerCase() === "admin" ||
+          ((selectedProject?.members[i].role.toLowerCase() === "manager" ||
+            selectedProject?.members[i].role.toLowerCase() === "owner") &&
+            selectedProject?.members[i].employee.id.toString() === userId)
+        ) {
+          setIsButtonEnable(true);
+          break;
+        }
       }
     }
   }, [selectedProject]);
@@ -95,6 +109,12 @@ function ProjectTaksPage() {
         setOpen={setAdding}
         handleClose={handleClose}
         handleOpen={handleOpen}
+      />
+      <ProjectMembersModal
+        handleClose={handleMemberModalClose}
+        handleOpen={handleMemberModalOpen}
+        open={memberModalOpen}
+        setOpen={setMemberModalOpen}
       />
       <div className="flex flex-row">
         <div className="left relative w-[15%]">
@@ -136,6 +156,12 @@ function ProjectTaksPage() {
                   <PersonAddAltIcon fontSize="small" />
                 </div>
               )}
+              <div
+                className="rounded-[50%] p-2 bg-blue-600 flex justify-center items-center cursor-pointer ml-3"
+                onClick={() => setMemberModalOpen(true)}
+              >
+                <Person fontSize="small" />
+              </div>
             </div>
           </div>
           <div className="mt-20 h-full ml-5 overflow-scroll mb-40">

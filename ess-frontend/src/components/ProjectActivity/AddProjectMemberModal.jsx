@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 import { useGlobalContext } from "../../context/appContext";
 import { useParams } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const style = {
   position: "absolute",
@@ -50,6 +51,7 @@ export default function AddProjectMemberModal({
   const [newMember, setNewMember] = React.useState({
     projectId: projectId,
   });
+  const [isLoading, setIsloading] = React.useState(false);
 
   React.useEffect(() => {
     authFetch
@@ -69,6 +71,7 @@ export default function AddProjectMemberModal({
   };
 
   const handleSubmit = (e) => {
+    setIsloading(true);
     e.preventDefault();
     // console.log(newTask);
     authFetch
@@ -76,8 +79,10 @@ export default function AddProjectMemberModal({
       .then((res) => {
         displayAlert(res.data.message, "success");
         handleClose();
+        setIsloading(false);
       })
       .catch((err) => {
+        setIsloading(false);
         if (err?.response?.data?.message) {
           displayAlert(err?.response?.data?.message, "error");
         } else {
@@ -150,9 +155,43 @@ export default function AddProjectMemberModal({
               </div>
             </form>
           </div>
-          <div className="flex justify-between">
-            <Button onClick={handleClose}>Close</Button>
-            <Button onClick={handleSubmit}>Add employee</Button>
+          <div className="flex justify-between mt-3">
+            {/* <Button onClick={handleClose}>Close</Button>
+            <Button onClick={handleSubmit}>Add employee</Button> */}
+            <Box
+              sx={{
+                "& > button": { m: 1 },
+              }}
+            >
+              <div className="bg-white rounded-md">
+                <LoadingButton
+                  loading={isLoading}
+                  loadingPosition="start"
+                  variant="contained"
+                  className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
+                  onClick={handleSubmit}
+                >
+                  <span>Add Member</span>
+                </LoadingButton>
+              </div>
+            </Box>
+            <Box
+              sx={{
+                "& > button": { m: 1 },
+              }}
+            >
+              <div className="bg-white rounded-md">
+                <LoadingButton
+                  loading={isLoading}
+                  loadingPosition="start"
+                  variant="contained"
+                  className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
+                  onClick={handleClose}
+                >
+                  <span>Close</span>
+                </LoadingButton>
+              </div>
+            </Box>
           </div>
         </Box>
       </Modal>
