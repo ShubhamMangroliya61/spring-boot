@@ -13,7 +13,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "clack",
+  bgcolor: "black",
   border: "2px solid gray",
   borderRadius: "10px",
   boxShadow: 24,
@@ -100,7 +100,12 @@ export default function AddProjectMemberModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            className="text-white"
+          >
             Add member
           </Typography>
           <div className="">

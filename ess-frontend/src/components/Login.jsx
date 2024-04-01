@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ListStyleRight from "./utils/ListStyleRight.jsx";
 import axios from "axios";
 import { useGlobalContext } from "../context/appContext.jsx";
+import CustomAlert from "./utils/CustomAlert.jsx";
 
 function Login() {
   const [employee, setEmployee] = useState({});
@@ -71,10 +72,15 @@ function Login() {
       <div className="right items-center justify-center bg-black w-[100%] h-screen">
         <div className="flex min-h-full flex-col justify-center">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            {showAlert && (
+              <div className="absolute right-10 z-50">
+                <CustomAlert />
+              </div>
+            )}
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
               Sign in to continue
             </h2>
-            {showAlert && <p>{alert.msg}</p>}
+            {/* {showAlert && <p>{alert.msg}</p>} */}
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

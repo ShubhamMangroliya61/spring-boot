@@ -15,6 +15,7 @@ function MyTeamPage() {
   const [listOfLeaveRequestToDisplay, setListOfLeaveRequestToDisplay] =
     useState([]);
   const [displayReq, setDisplayReq] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
     authFetch
@@ -24,7 +25,7 @@ function MyTeamPage() {
         // console.log("Req:", res.data);
       })
       .catch((err) => console.log(err));
-  }, [currentEmployee]);
+  }, [currentEmployee, isChanged]);
 
   useEffect(() => {
     authFetch
@@ -81,17 +82,20 @@ function MyTeamPage() {
               />
             </div>
           </div>
-          {displayReq && (
-            <div className="w-full mx-auto flex flex-col align-middle items-center justify-center backdrop-blur-md rounded-md mb-5">
-              <div className="w-full py-8">
-                <DisplayLeaveRequests
-                  allLeaveRequestsProps={listOfLeaveRequestToDisplay}
-                  heading={"All the leave requests in team"}
-                  displayReq
-                />
+          {role.toLowerCase() === "admin" ||
+            (role.toLowerCase() === "manager" ? (
+              <div className="w-full mx-auto flex flex-col align-middle items-center justify-center backdrop-blur-md rounded-md mb-5">
+                <div className="w-full py-8">
+                  <DisplayLeaveRequests
+                    allLeaveRequestsProps={listOfLeaveRequestToDisplay}
+                    heading={"All the leave requests in team"}
+                    setIsChanged
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            ) : (
+              ""
+            ))}
         </div>
       </div>
     </div>

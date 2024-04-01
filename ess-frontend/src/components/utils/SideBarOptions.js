@@ -32,7 +32,7 @@ export const options = [
   },
   {
     id: 4,
-    text: "Leave request",
+    text: "Request leave",
     pathName: "/leaveRequest",
     icon: EditCalendarIcon,
     role: "any",

@@ -7,7 +7,7 @@ import SideBar from "../components/SideBar";
 function DisplayLeaveRequests({
   allLeaveRequestsProps = [],
   heading,
-  displayReq,
+  setIsChanged,
 }) {
   const { authFetch } = useGlobalContext();
 
@@ -45,7 +45,7 @@ function DisplayLeaveRequests({
 
     setLeavesToDisplay(tempArray);
     setAllLeaveRequests(tempArray);
-  }, [allLeaveRequestsProps, displayReq]);
+  }, [allLeaveRequestsProps]);
 
   useEffect(() => {
     filterLeaveRequests();
@@ -113,6 +113,7 @@ function DisplayLeaveRequests({
             </p>
             <AdminLeaveRequestTable
               allPreviousLeaveRequests={leavesToDisplay}
+              setIsChanged
             />
           </div>
         </div>

@@ -21,7 +21,10 @@ const columns = [
   { id: "options", label: "options", maxWidth: 100 },
 ];
 
-export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
+export default function AdminLeaveRequestTable({
+  allPreviousLeaveRequests,
+  setIsChanged,
+}) {
   const { authFetch } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
@@ -31,6 +34,8 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
 
   const [listOfAllEmployees, setListOfAllEmployees] = React.useState([]);
   const [mapOfEmployeeAndLeaveRequest, setMapOfEmployeeAndLeaveRequest] =
+    React.useState(new Map());
+  const [mapOfRequestAndEmployeeId, setMapOfRequestAndEmployeeId] =
     React.useState(new Map());
   const [isOpen, setIsOpen] = React.useState(false);
   const [option, setOption] = React.useState("");
@@ -55,20 +60,26 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
 
   React.useEffect(() => {
     let map = new Map();
+    let mapOfIds = new Map();
     listOfAllEmployees.forEach((employee) =>
-      employee.leaves.forEach((leave) =>
+      employee.leaves.forEach((leave) => {
         map.set(
           leave.id,
           employee.firstName.toString() + " " + employee.lastName.toString()
-        )
-      )
+        );
+        mapOfIds.set(leave.id, employee.id);
+      })
     );
     setMapOfEmployeeAndLeaveRequest(map);
+    setMapOfRequestAndEmployeeId(mapOfIds);
   }, [listOfAllEmployees]);
 
   const addEmployeeInfo = () => {
     allPreviousLeaveRequests.forEach((leaveRequest) => {
       leaveRequest["employee name"] = mapOfEmployeeAndLeaveRequest.get(
+        leaveRequest.id
+      );
+      leaveRequest["requestEmployeeId"] = mapOfRequestAndEmployeeId.get(
         leaveRequest.id
       );
     });
@@ -105,21 +116,23 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
   const handleApprove = (leave) => {
     setOption("approve");
     handleOpen();
-    leave.status = "APPROVED";
-    authFetch
-      .put(`/leave/${leave.id}`, leave)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.data));
+    setLeaveToPass(leave);
+    // leave.status = "APPROVED";
+    // authFetch
+    //   .put(`/leave/${leave.id}`, leave)
+    //   .then((res) => console.log(res.data))
+    //   .catch((err) => console.log(err.data));
   };
 
   const handleReject = (leave) => {
     setOption("reject");
     handleOpen();
-    leave.status = "REJECTED";
-    authFetch
-      .put(`/leave/${leave.id}`, leave)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.data));
+    setLeaveToPass(leave);
+    // leave.status = "REJECTED";
+    // authFetch
+    //   .put(`/leave/${leave.id}`, leave)
+    //   .then((res) => console.log(res.data))
+    //   .catch((err) => console.log(err.data));
   };
 
   return (
@@ -131,6 +144,7 @@ export default function AdminLeaveRequestTable({ allPreviousLeaveRequests }) {
         setOpen={setIsOpen}
         option={option}
         leave={leaveToPass}
+        setIsChanged
       />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">

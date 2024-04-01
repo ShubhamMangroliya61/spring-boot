@@ -109,13 +109,13 @@ const AppProvider = ({ children }) => {
           dispatch({
             type: SETUP_USER_ERROR,
           });
-          displayAlert("Incorrect email or password", "danger");
+          displayAlert("Incorrect email or password", "error");
         });
     } catch (error) {
       dispatch({
         type: SETUP_USER_ERROR,
       });
-      displayAlert("Something went wrong", "danger");
+      displayAlert("Something went wrong", "error");
     }
     clearAlert();
   };

@@ -3,10 +3,12 @@ import DisplayLeaveRequests from "./DisplayLeaveRequests";
 import CreateNewPage from "./CreateNewPage";
 import SideBar from "../components/SideBar";
 import { useGlobalContext } from "../context/appContext";
+import CustomAlert from "../components/utils/CustomAlert";
 
 function AdminDashboard() {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, showAlert } = useGlobalContext();
   const [allLeaveRequests, setAllLeaveRequests] = useState([]);
+  const [isChanged, setIsChanged] = useState(false);
 
   // useEffect(() => {
   //   authFetch
@@ -24,7 +26,7 @@ function AdminDashboard() {
         setAllLeaveRequests(res.data);
       })
       .catch((err) => console.log(err.data));
-  }, []);
+  }, [isChanged]);
 
   return (
     <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black">
@@ -34,9 +36,15 @@ function AdminDashboard() {
         </div>
         <div className="right w-[85%] h-screen">
           <div className="relative top-12">
+            {showAlert && (
+              <div className="absolute right-10 z-50">
+                <CustomAlert />
+              </div>
+            )}
             <DisplayLeaveRequests
               allLeaveRequestsProps={allLeaveRequests}
               heading={"Toal leave requests"}
+              setIsChanged
             />
             {/* <CreateNewPage /> */}
           </div>
