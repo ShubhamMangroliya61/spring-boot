@@ -3,6 +3,7 @@ package com.ess.api.services;
 import com.ess.api.entities.Employee;
 import com.ess.api.entities.Project;
 import com.ess.api.entities.ProjectLog;
+import com.ess.api.entities.Task;
 import com.ess.api.exceptions.ResourceAlreadyExistsException;
 import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.ProjectLogRepository;
@@ -56,6 +57,27 @@ public class ProjectService {
     // Get all
     public List<Project> getAllProjects(){
         return projectRepository.findAll();
+    }
+
+    // Get project from task id
+    public Project getProjectFromProjectTask(long taskId){
+        List<Project> allProjects = this.getAllProjects();
+        Project projectOfGivenTask = null;
+
+        boolean isProjectFound = false;
+        for(int i=0;i<allProjects.size();i++){
+            List<Task> listOfTasksInProjectI = allProjects.get(i).getTasks();
+            for(int j=0;j< listOfTasksInProjectI.size();j++){
+                if(listOfTasksInProjectI.get(j).getId() == taskId){
+                    projectOfGivenTask = listOfTasksInProjectI.get(j).getProject();
+                    isProjectFound = true;
+                    break;
+                }
+                if(isProjectFound) break;
+            }
+        }
+        if(!isProjectFound) throw new ResourceNotFoundException("Project with task", "TaskId", ""+taskId);
+        return projectOfGivenTask;
     }
 
 }

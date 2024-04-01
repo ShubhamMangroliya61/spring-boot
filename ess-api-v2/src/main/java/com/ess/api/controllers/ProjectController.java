@@ -60,6 +60,7 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
 
+    // Add project member
     @PostMapping("/addMember")
     public ResponseEntity<?> addProjectMember(@RequestBody AddProjectMemberRequest addProjectMemberRequest, Authentication authentication) throws MessagingException, IOException {
         ProjectLog addMemberLog = projectService.addEmployeeToProject(addProjectMemberRequest.getProjectId(), addProjectMemberRequest.getEmployeeId(), addProjectMemberRequest.getRole());
@@ -68,5 +69,12 @@ public class ProjectController {
 
         sendMail.sedNewMemberMail(assignTo.getEmail(), assignBy.getFirstName() + " " + assignBy.getLastName(), addMemberLog.getProject().getName(), addMemberLog.getProject().getId());
         return ResponseEntity.ok(addMemberLog);
+    }
+
+    // Get project from given taskId
+    @GetMapping("/getProjectWithTask/{taskId}")
+    public ResponseEntity<?> getProjectFromGivenTaskId(@PathVariable long taskId){
+        Project projectWithGivenTask = projectService.getProjectFromProjectTask(taskId);
+        return ResponseEntity.ok(projectWithGivenTask);
     }
 }

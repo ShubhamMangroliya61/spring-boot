@@ -50,4 +50,11 @@ public class HolidayController {
         List<Holiday> listOfHolidaysOfGivenYear = holidayService.getByGivenYear(year);
         return ResponseEntity.ok(listOfHolidaysOfGivenYear);
     }
+
+    // Get all
+    @GetMapping
+    public ResponseEntity<?> getAllHolidays(){
+        List<Holiday> listOfAllHolidays = holidayService.getAllHoliDays();
+        return ResponseEntity.ok(listOfAllHolidays);
+    }
 }

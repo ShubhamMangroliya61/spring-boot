@@ -52,4 +52,9 @@ public class HolidayService {
 
         return mapOfYearAndHolidays;
     }
+
+    // Get all holidays
+    public List<Holiday> getAllHoliDays(){
+        return holidayRepository.findAll();
+    }
 }

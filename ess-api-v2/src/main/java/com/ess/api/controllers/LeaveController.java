@@ -2,15 +2,21 @@ package com.ess.api.controllers;
 
 import com.ess.api.entities.Employee;
 import com.ess.api.entities.Leave;
+import com.ess.api.request.AddNote;
+import com.ess.api.request.ApproveOrRejectRequest;
 import com.ess.api.response.ApiResponse;
+import com.ess.api.services.EmployeeService;
 import com.ess.api.services.LeaveService;
 import com.ess.api.utils.GetCurrentEmployee;
+import com.ess.api.utils.SendMail;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -24,6 +30,12 @@ public class LeaveController {
 
     @Autowired
     private GetCurrentEmployee getCurrentEmployee;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private SendMail sendMail;
     // Add request
     @PostMapping
     public ResponseEntity<Leave> addLeaveRequest(Authentication authentication, @RequestBody Leave leave){
@@ -62,6 +74,18 @@ public class LeaveController {
     @PutMapping("/{leaveId}")
     public ResponseEntity<Leave> updateLeaveRequest(@PathVariable Long leaveId, @RequestBody Leave leave){
         Leave updateDLeaveRequest = leaveService.updateLeaveRequest(leaveId , leave);
+        return ResponseEntity.ok(updateDLeaveRequest);
+    }
+
+    // Approve or Reject leave
+    @PutMapping("/changeStatus/{leaveId}")
+    public ResponseEntity<?> changeStatus(@PathVariable Long leaveId, @RequestBody ApproveOrRejectRequest approveOrRejectRequest, Authentication authentication) throws MessagingException, IOException {
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        Employee requester = employeeService.getEmployee(approveOrRejectRequest.getRequestEmployeeId());
+        String note = approveOrRejectRequest.getNote().getNote();
+        Leave updateDLeaveRequest = leaveService.updateLeaveRequest(leaveId , approveOrRejectRequest.getLeave());
+
+        sendMail.sendApproveOrRejectedRequestMail(requester.getEmail(), updateDLeaveRequest.getStatus().toString(), currentEmployee.getFirstName() + " " + currentEmployee.getLastName(), note);
         return ResponseEntity.ok(updateDLeaveRequest);
     }
 

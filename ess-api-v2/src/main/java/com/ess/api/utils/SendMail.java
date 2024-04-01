@@ -55,6 +55,23 @@ public class SendMail {
         mailSender.send(message);
     }
 
+    public void sendApproveOrRejectedRequestMail(String email, String status, String doneBy, String note) throws MessagingException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        message.setFrom(new InternetAddress("aditya@demomailtrap.com"));
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+        message.setSubject("Your leave request " + status.toLowerCase());
+
+        String htmlTemplate = getTemplate(basePath+"/approveOrReject.html");
+        String htmlContent = htmlTemplate.replace("${status}", status);
+        htmlContent = htmlContent.replace("${doneBy}", doneBy);
+        htmlContent = htmlContent.replace("${note}", note);
+        htmlContent = htmlContent.replace("${pageUrl}", baseUrl+"/");
+
+        message.setContent(htmlContent, "text/html; charset=utf-8");
+        mailSender.send(message);
+    }
+
     private String getTemplate(String filePath) throws IOException {
         Path path = Paths.get(filePath);
         return Files.readString(path, StandardCharsets.UTF_8);
