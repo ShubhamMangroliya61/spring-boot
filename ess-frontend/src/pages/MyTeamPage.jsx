@@ -59,8 +59,14 @@ function MyTeamPage() {
 
   useEffect(() => {
     setListOfLeaveRequestToDisplay(listOfLeaveRequest);
-    setDisplayReq(true);
+    // setDisplayReq(true);
   }, [listOfLeaveRequest, role]);
+
+  useEffect(() => {
+    if (role.toLowerCase() === "admin" || role.toLowerCase() === "manager") {
+      setDisplayReq(true);
+    }
+  }, []);
 
   return (
     <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black flex flex-row">
@@ -82,20 +88,19 @@ function MyTeamPage() {
               />
             </div>
           </div>
-          {role.toLowerCase() === "admin" ||
-            (role.toLowerCase() === "manager" ? (
-              <div className="w-full mx-auto flex flex-col align-middle items-center justify-center backdrop-blur-md rounded-md mb-5">
-                <div className="w-full py-8">
-                  <DisplayLeaveRequests
-                    allLeaveRequestsProps={listOfLeaveRequestToDisplay}
-                    heading={"All the leave requests in team"}
-                    setIsChanged
-                  />
-                </div>
+          {displayReq ? (
+            <div className="w-full mx-auto flex flex-col align-middle items-center justify-center backdrop-blur-md rounded-md mb-5">
+              <div className="w-full py-8">
+                <DisplayLeaveRequests
+                  allLeaveRequestsProps={listOfLeaveRequestToDisplay}
+                  heading={"All the leave requests in team"}
+                  setIsChanged
+                />
               </div>
-            ) : (
-              ""
-            ))}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

@@ -165,13 +165,13 @@ function ProjectTaksPage() {
             </div>
           </div>
           <div className="mt-20 h-full ml-5 overflow-scroll mb-40">
-            {!displayLogs ? (
+            {displayLogs ? (
+              <ProjectActivity />
+            ) : (
               <Board
                 selectedProject={selectedProject}
                 searchInput={searchInput}
               />
-            ) : (
-              <ProjectActivity />
             )}
           </div>
         </div>

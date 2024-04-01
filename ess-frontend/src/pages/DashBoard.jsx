@@ -23,6 +23,8 @@ function DashBoard() {
     date: "0000-00-00",
     netHours: "00:00:00",
   });
+  const [holidays, setHolidays] = useState([]);
+  const [selectedHoliday, setSelectedHoliday] = useState({});
 
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -56,6 +58,11 @@ function DashBoard() {
       .get("/task/assignedToMe")
       .then((res) => setTasksAssignedToMe(res.data))
       .catch((err) => console.log(err));
+
+    authFetch
+      .get("/holiday")
+      .then((res) => setHolidays(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   const setAbsent = (date) => {
@@ -64,6 +71,13 @@ function DashBoard() {
       (x) => x.date === formattedDate
     );
     if (!dateWithNetHours && date < Date.now()) return "highlight";
+  };
+
+  const setHoliday = (date) => {
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    const dateWithHolidays = holidays.find((x) => x.date === formattedDate);
+    console.log(dateWithHolidays);
+    if (dateWithHolidays) return "holiday";
   };
 
   const getNetHouersOfSelectedDate = (date) => {
@@ -75,9 +89,21 @@ function DashBoard() {
     else setSelectedDate({ date: formattedDate, netHours: "00:00:00" });
   };
 
-  useEffect(() => {
-    console.log(currentEmployee);
-  }, [currentEmployee]);
+  const getHolidayOfSelectedDate = (date) => {
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    const selectedHolidayData = holidays.find((x) => x.date === formattedDate);
+    if (holidays) setSelectedHoliday(selectedHolidayData);
+    else
+      setSelectedHoliday({
+        name: "",
+        date: formattedDate,
+        day: formattedDate.getDay(),
+      });
+  };
+
+  // useEffect(() => {
+  //   console.log(currentEmployee);
+  // }, [currentEmployee]);
 
   const cardData = [
     {
@@ -166,7 +192,12 @@ function DashBoard() {
               </div>
               <div className="relative mx-[10px] top-24 w-[50%] flex flex-col bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
                 <h1 className="text-gray-200 mb-5 text-base">Holidays list</h1>
-                <Calendar />
+                <Calendar
+                  showNeighboringMonth={false}
+                  tileClassName={({ date }) => {
+                    return setHoliday(date);
+                  }}
+                />
               </div>
               <div className="relative mx-[10px] top-24 w-[50%] flex flex-col items-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
                 <div className="bg-gray-100/30 p-5 w-full h-full rounded-md flex flex-col justify-center">

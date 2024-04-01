@@ -38,6 +38,7 @@ function Card({
   handleDragStart,
   setTaskUpdate,
   isAddButtomActive,
+  handleOpen,
 }) {
   const { role, userId } = useGlobalContext();
   const [expanded, setExpanded] = useState(false);
@@ -117,11 +118,13 @@ function Card({
             })}
           </select>
           {isAddButtomActive ? (
-            <BorderColorIcon
-              color="text-neutral-100/70"
-              className="text-neutral-100/70 cursor-pointer duration-300 hover:text-neutral-50"
-              fontSize="small"
-            />
+            <div onClick={handleOpen}>
+              <BorderColorIcon
+                color="text-neutral-100/70"
+                className="text-neutral-100/70 cursor-pointer duration-300 hover:text-neutral-50"
+                fontSize="small"
+              />
+            </div>
           ) : (
             ""
           )}

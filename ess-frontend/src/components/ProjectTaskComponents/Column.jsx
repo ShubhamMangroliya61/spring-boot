@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import AddCard from "./AddCard";
 import { useGlobalContext } from "../../context/appContext";
+import UpdateTaskModal from "./UpdateTaskModal";
 
 function Column({
   title,
@@ -15,6 +16,14 @@ function Column({
   const { authFetch, userId, role } = useGlobalContext();
   const [active, setActive] = useState(false);
   const [isAddButtomActive, setIsAddButtomActive] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleOpen = () => {
+    setIsUpdating(true);
+  };
+  const handleClose = () => {
+    setIsUpdating(false);
+  };
 
   useEffect(() => {
     for (let i = 0; i < selectedProject?.members?.length; i++) {
@@ -97,13 +106,25 @@ function Column({
       >
         {filteredCards?.map((c) => {
           return (
-            <Card
-              key={c.id}
-              {...c}
-              handleDragStart={handleDragStart}
-              setTaskUpdate={setTaskUpdate}
-              isAddButtomActive={isAddButtomActive}
-            />
+            <>
+              <UpdateTaskModal
+                handleClose={handleClose}
+                handleOpen={handleOpen}
+                open={isUpdating}
+                setOpen={setIsUpdating}
+                setTaskUpdate={setTaskUpdate}
+                task={{ ...c }}
+                key={c.id}
+              />
+              <Card
+                key={c.id}
+                {...c}
+                handleDragStart={handleDragStart}
+                setTaskUpdate={setTaskUpdate}
+                isAddButtomActive={isAddButtomActive}
+                handleOpen={handleOpen}
+              />
+            </>
           );
         })}
         {isAddButtomActive && (

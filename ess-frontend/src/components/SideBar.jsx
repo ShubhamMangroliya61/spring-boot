@@ -10,7 +10,7 @@ function SideBar() {
   const path = useLocation();
   const [isSuboptionOpened, setIsSuboptionOpened] = useState(false);
   return (
-    <div className="relative top-20 h-full bg-slate-800 w-full text-gray-800 backdrop-blur-md rounded-md">
+    <div className="fixed top-20 h-full w-[15%] bg-slate-800 text-gray-800 backdrop-blur-md rounded-md">
       <div className="">
         <ul className="text-gray-400">
           {options.map((option) => {

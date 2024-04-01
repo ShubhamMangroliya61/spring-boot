@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import AddTaskModal from "./AddTaskModal";
 
 function AddCard({ column, setCards, setTaskUpdate }) {
-  const [adding, setAdding] = useState(false);
   const [text, setText] = useState("");
+  const [adding, setAdding] = useState(false);
 
   const handleClose = () => {
     setAdding(false);

@@ -9,8 +9,8 @@
   div
   .react-calendar__month-view__days
   button.holiday {
-  background-color: red;
-  color: black;
+  background-color: red !important;
+  color: black !important;
 }
 
 /* width */
@@ -39,5 +39,5 @@
 .css-kotfqe-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root.Mui-disabled {
   color: rgb(255, 0, 0);
   box-shadow: none;
-  background-color: rgb(255 255 255);
+  background-color: rgb(0, 0, 0);
 }

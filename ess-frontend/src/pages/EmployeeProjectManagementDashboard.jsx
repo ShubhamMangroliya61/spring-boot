@@ -12,6 +12,9 @@ function EmployeeProjectManagementDashboard() {
   const [listOfProjectsToDisplay, setListOfProjectsToDisplay] = useState([]);
   const [listOfTaskAssignToMe, setListOfTaskAssignToMe] = useState([]);
   const [listOfTasksToDisplay, setListOfTasksToDisplay] = useState([]);
+  const [taskWithProjectId, setTaskWithProjectId] = useState({
+    map: new Map(),
+  });
 
   useEffect(() => {
     authFetch
@@ -57,6 +60,20 @@ function EmployeeProjectManagementDashboard() {
   }, [listOfProjects]);
 
   useEffect(() => {
+    listOfTaskAssignToMe?.forEach((task) => {
+      authFetch
+        .get(`/project/getProjectWithTask/${task?.id}`)
+        .then((res) => {
+          setTaskWithProjectId(({ map }) => ({
+            map: map.set(task.id, res.data),
+          }));
+        })
+        .catch((err) => console.log(err));
+    });
+  }, [listOfTaskAssignToMe]);
+
+  useEffect(() => {
+    // console.log(taskWithProjectId);
     const filteredArray = [];
     listOfTaskAssignToMe.forEach((task) => {
       const tempObj = {};
@@ -65,10 +82,12 @@ function EmployeeProjectManagementDashboard() {
       tempObj.assignBy = task.assignBy.firstName + " " + task.assignBy.lastName;
       tempObj.status = task.status;
       tempObj.priority = task.priority;
+      tempObj.projectName = taskWithProjectId.map.get(task.id)?.name;
+      tempObj.projectId = taskWithProjectId.map.get(task.id)?.id;
       filteredArray.push(tempObj);
     });
     setListOfTasksToDisplay(filteredArray);
-  }, [listOfTaskAssignToMe]);
+  }, [taskWithProjectId]);
 
   return (
     <div className="absolute overflow-x-hidden overflow-y-scroll h-full w-full bg-black flex flex-row">
