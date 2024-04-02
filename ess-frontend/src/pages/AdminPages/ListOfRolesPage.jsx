@@ -4,6 +4,8 @@ import SideBar from "../../components/SideBar";
 import CustomAlert from "../../components/utils/CustomAlert";
 import ListOfRolesTable from "../../components/Roles/ListOfRolesTable";
 import { useGlobalContext } from "../../context/appContext";
+import UpdateRoleModal from "../../components/Roles/UpdateRoleModal";
+import { SettingsPower } from "@mui/icons-material";
 
 function ListOfRolesPage() {
   const { authFetch, showAlert, alert } = useGlobalContext();
@@ -15,12 +17,23 @@ function ListOfRolesPage() {
     map: new Map(),
   });
 
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [currentRole, setCurrentRole] = useState({});
+
   const handleOpen = () => {
     setIsAdding(true);
   };
 
   const handleClose = () => {
     setIsAdding(false);
+  };
+
+  const handleUpdateOpen = () => {
+    setIsUpdating(true);
+  };
+
+  const handleUpdateClose = () => {
+    setIsUpdating(false);
   };
 
   useEffect(() => {
@@ -69,6 +82,14 @@ function ListOfRolesPage() {
         handleOpen={handleOpen}
         setIsChanged={setIsChanged}
       />
+      <UpdateRoleModal
+        handleClose={handleUpdateClose}
+        handleOpen={handleUpdateOpen}
+        open={isUpdating}
+        role={currentRole}
+        setIsChanged={setIsChanged}
+        setOpen={setIsUpdating}
+      />
       <div className="left relative w-[15%]">
         <SideBar />
       </div>
@@ -81,7 +102,12 @@ function ListOfRolesPage() {
           )}
           <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
             <div className="w-[95%] py-8">
-              <ListOfRolesTable listOfRoles={listOfRolesToDisplay} />
+              <ListOfRolesTable
+                listOfRoles={listOfRolesToDisplay}
+                setCurrentRole={setCurrentRole}
+                setIsChanged={setIsChanged}
+                handleOpen={handleUpdateOpen}
+              />
               <button
                 className="bg-blue-400/70 p-2 mt-4 text-sm text-black rounded-md hover:bg-blue-200 duration-300"
                 onClick={handleOpen}

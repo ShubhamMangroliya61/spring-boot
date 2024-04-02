@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../context/appContext";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import CustomAlert from "./utils/CustomAlert";
 
 function Navbar() {
-  const { authFetch, logoutUser } = useGlobalContext();
+  const { authFetch, logoutUser, displayAlert, showAlert } = useGlobalContext();
 
   const [punchOptions, setPunchOptions] = useState(false);
   const [subOptions, setSubOptions] = useState(false);
   const [profileOptions, setProfileOptions] = useState(false);
+  const [currentEmployee, setCurrentEmployee] = useState({});
+
+  useEffect(() => {
+    authFetch
+      .get("/employee/getCurrent")
+      .then((res) => setCurrentEmployee(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   const handleOptionsClick = () => {
     if (subOptions) {
@@ -46,14 +57,24 @@ function Navbar() {
   const handlePunchIn = () => {
     authFetch
       .post("/punchIn")
-      .then((res) => console.log(res.data))
+      .then((res) =>
+        displayAlert(
+          res?.data?.message,
+          res?.data?.success ? "success" : "error"
+        )
+      )
       .catch((err) => console.log(err));
   };
 
   const handlePunchOut = () => {
     authFetch
       .post("/punchOut")
-      .then((res) => console.log(res.data))
+      .then((res) =>
+        displayAlert(
+          res?.data?.message,
+          res?.data?.success ? "success" : "error"
+        )
+      )
       .catch((err) => console.log(err));
   };
 
@@ -66,6 +87,11 @@ function Navbar() {
       <div className="w-[95%] m-auto flex flex-row text-center justify-between items-center">
         <div className="left">TruFlux</div>
         <div className="right">
+          {showAlert && (
+            <div className="absolute right-10 z-50">
+              <CustomAlert />
+            </div>
+          )}
           <ul>
             <div className="relative flex flex-row px-[-20px] items-center">
               <li
@@ -81,42 +107,27 @@ function Navbar() {
               >
                 <ul>
                   <li
-                    className="cursor-pointer duration-200 hover:text-gray-300"
+                    className="cursor-pointer duration-200 text-green-400  hover:text-green-600"
                     onClick={handlePunchIn}
                   >
-                    Punch in
+                    <span className="mx-2">Punch in</span>
+                    <LoginIcon />
                   </li>
                   <li
-                    className="cursor-pointer duration-200 hover:text-gray-300"
+                    className="cursor-pointer flex justify-center align-middle duration-200 text-red-400  hover:text-red-600"
                     onClick={handlePunchOut}
                   >
-                    Punch out
+                    <span className="mx-2">Punch out</span>
+                    <LogoutIcon />
                   </li>
                 </ul>
               </div>
               <li
-                className="px-[10px] cursor-pointer duration-200 hover:text-gray-300"
+                className="px-[10px] cursor-pointer text-gray-300"
                 onClick={handleOptionsClick}
               >
-                Options
+                {currentEmployee?.firstName + " " + currentEmployee?.lastName}
               </li>
-              <div
-                className={`${
-                  subOptions ? "" : "hidden"
-                } absolute top-14  w-[150px] h-[100px] rounded-md  backdrop-blur-md bg-gray-950/30 z-10`}
-              >
-                <ul>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
-                    Sub-op-1
-                  </li>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
-                    Sub-op-2
-                  </li>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
-                    Sub-op-3
-                  </li>
-                </ul>
-              </div>
               <li className="px-[10px] w-[50px] h-[30px] box-border rounded-[50%]">
                 <img
                   src="https://media.stage.truflux.drcsystems.ooo/uploads/user/profile/1_2024_02_14_07_35_19.jpg"

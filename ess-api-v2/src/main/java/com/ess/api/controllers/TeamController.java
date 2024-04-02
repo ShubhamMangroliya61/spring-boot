@@ -40,4 +40,22 @@ public class TeamController {
         List<Team> allTeams = teamService.getAllTeams();
         return ResponseEntity.ok(allTeams);
     }
+
+    @GetMapping("/{teamId}")
+    public ResponseEntity<?> getTeamById(@PathVariable long teamId){
+        Team teamWithId = teamService.GetTeamById(teamId);
+        return ResponseEntity.ok(teamWithId);
+    }
+
+    @PutMapping("/{teamId}")
+    public ResponseEntity<?> updateTeamById(@PathVariable long teamId, @RequestBody Team team){
+        Team updatedTeam = teamService.updateTeamById(teamId, team);
+        return ResponseEntity.ok(updatedTeam);
+    }
+
+    @DeleteMapping("/{teamId}")
+    public ResponseEntity<?> deleteTeamById(@PathVariable long teamId){
+        Team deletedTeam = teamService.deleteById(teamId);
+        return ResponseEntity.ok(deletedTeam);
+    }
 }

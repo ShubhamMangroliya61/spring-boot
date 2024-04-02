@@ -2,6 +2,7 @@ package com.ess.api.services;
 
 import com.ess.api.entities.Holiday;
 import com.ess.api.exceptions.ResourceAlreadyExistsException;
+import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.HolidayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,28 @@ public class HolidayService {
     // Get all holidays
     public List<Holiday> getAllHoliDays(){
         return holidayRepository.findAll();
+    }
+
+    // Get by id
+    public Holiday getHolidayById(long holidayId){
+        return holidayRepository.findById(holidayId).orElseThrow(() -> new ResourceNotFoundException("Holiday", "HolidayId", ""+holidayId));
+    }
+
+    // Update by id
+    public Holiday updateHolidayById(long holidayId, Holiday holiday){
+        Holiday holidayToUpdate = this.getHolidayById(holidayId);
+        if(holiday.getName() != null) holidayToUpdate.setName(holiday.getName());
+        if(holiday.getDate() != null){
+            holidayToUpdate.setDate(holiday.getDate());
+            holidayToUpdate.setDay(holiday.getDate().getDayOfWeek());
+        }
+        return holidayRepository.save(holidayToUpdate);
+    }
+
+    // Delete by id
+    public Holiday deleteHolidayById(Long holidayId){
+        Holiday holidayToDelete = this.getHolidayById(holidayId);
+        holidayRepository.deleteById(holidayId);
+        return holidayToDelete;
     }
 }

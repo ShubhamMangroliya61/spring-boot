@@ -57,4 +57,22 @@ public class HolidayController {
         List<Holiday> listOfAllHolidays = holidayService.getAllHoliDays();
         return ResponseEntity.ok(listOfAllHolidays);
     }
+
+    @GetMapping("/withId/{holidayId}")
+    public ResponseEntity<?> getHolidayById(@PathVariable long holidayId){
+        Holiday holiday = holidayService.getHolidayById(holidayId);
+        return ResponseEntity.ok(holiday);
+    }
+
+    @DeleteMapping("/{holidayId}")
+    public ResponseEntity<?> deleteHoliday(@PathVariable long holidayId){
+        Holiday holidayToDelete = holidayService.deleteHolidayById(holidayId);
+        return ResponseEntity.ok(holidayToDelete);
+    }
+
+    @PutMapping("/{holidayId}")
+    public ResponseEntity<?> updateHoliday(@PathVariable long holidayId, @RequestBody Holiday holiday){
+        Holiday holidayToUpdate = holidayService.updateHolidayById(holidayId, holiday);
+        return ResponseEntity.ok(holidayToUpdate);
+    }
 }

@@ -144,7 +144,5 @@ public class PunchInAndOutService {
         return allDates;
     }
 
-    public void getAllDatesWithNetHours(Employee employee){
 
-    }
 }

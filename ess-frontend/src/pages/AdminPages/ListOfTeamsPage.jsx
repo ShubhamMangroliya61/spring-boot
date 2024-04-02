@@ -4,6 +4,7 @@ import { useGlobalContext } from "../../context/appContext";
 import AddTeamModal from "../../components/Teams/AddTeamModal";
 import SideBar from "../../components/SideBar";
 import CustomAlert from "../../components/utils/CustomAlert";
+import UpdateTeamModal from "../../components/Teams/UpdateTeamModal";
 
 function ListOfTeamsPage() {
   const { authFetch, showAlert, alert } = useGlobalContext();
@@ -11,6 +12,8 @@ function ListOfTeamsPage() {
   const [listOfTeamsToDisplay, setListOfTeamsToDisplay] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [currentTeam, setCurrentTeam] = useState({});
   const [employeesInTeam, setEmployeesInTeam] = useState({ map: new Map() });
 
   const handleOpen = () => {
@@ -19,6 +22,14 @@ function ListOfTeamsPage() {
 
   const handleClose = () => {
     setIsAdding(false);
+  };
+
+  const handleUpdateOpen = () => {
+    setIsUpdating(true);
+  };
+
+  const handleUpdateClose = () => {
+    setIsUpdating(false);
   };
 
   useEffect(() => {
@@ -48,6 +59,7 @@ function ListOfTeamsPage() {
     listOfAllTeams.forEach((team) => {
       const tempObj = {};
       const members = employeesInTeam.map.get(team.id) || [];
+      tempObj.id = team.id;
       tempObj.name = team.name;
       tempObj.members = members.length;
       let managers = members.filter(
@@ -75,6 +87,14 @@ function ListOfTeamsPage() {
         handleOpen={handleOpen}
         setIsChanged={setIsChanged}
       />
+      <UpdateTeamModal
+        handleClose={handleUpdateClose}
+        handleOpen={handleUpdateOpen}
+        open={isUpdating}
+        setIsChanged={setIsChanged}
+        setOpen={setIsUpdating}
+        team={currentTeam}
+      />
       <div className="left relative w-[15%]">
         <SideBar />
       </div>
@@ -87,7 +107,12 @@ function ListOfTeamsPage() {
           )}
           <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
             <div className="w-[95%] py-8">
-              <ListOfTeamsTable listOfTeams={listOfTeamsToDisplay} />
+              <ListOfTeamsTable
+                listOfTeams={listOfTeamsToDisplay}
+                handleOpen={handleUpdateOpen}
+                setCurrentTeam={setCurrentTeam}
+                setIsChanged={setIsChanged}
+              />
               <button
                 className="bg-blue-400/70 p-2 mt-4 text-sm text-black rounded-md hover:bg-blue-200 duration-300"
                 onClick={handleOpen}

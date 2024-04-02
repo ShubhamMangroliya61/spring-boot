@@ -6,6 +6,7 @@ import SideBar from "../../components/SideBar";
 import CustomAlert from "../../components/utils/CustomAlert";
 import AddHolidayModal from "../../components/Holidays/AddHolidayModal";
 import ListOfHolidaysTable from "../../components/Holidays/ListOfHolidaysTable";
+import UpdateHolidayModal from "../../components/Holidays/UpdateHolidayModal";
 
 function ListOfHolidaysPage() {
   const { authFetch, showAlert, alert, role } = useGlobalContext();
@@ -18,12 +19,22 @@ function ListOfHolidaysPage() {
     useState([]);
   const [listOfHolidaysToDisplay, setListOfHolidaysToDisplay] = useState([]);
 
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [currentHoliday, setCurrentHoliday] = useState({});
+
   const handleOpen = () => {
     setIsAdding(true);
   };
 
   const handleClose = () => {
     setIsAdding(false);
+  };
+
+  const handleUpdateOpen = () => {
+    setIsUpdating(true);
+  };
+  const handleUpdateClose = () => {
+    setIsUpdating(false);
   };
 
   useEffect(() => {
@@ -57,6 +68,7 @@ function ListOfHolidaysPage() {
 
     listOfHolidaysInSelectedYear.forEach((holiday) => {
       const tempObj = {};
+      tempObj.id = holiday.id;
       tempObj.date = holiday.date + " " + "(" + holiday.day + ")";
       tempObj.name = holiday.name;
       tempArr.push(tempObj);
@@ -77,6 +89,14 @@ function ListOfHolidaysPage() {
         handleClose={handleClose}
         handleOpen={handleOpen}
         setIsChanged={setIsChanged}
+      />
+      <UpdateHolidayModal
+        handleClose={handleUpdateClose}
+        handleOpen={handleUpdateOpen}
+        holiday={currentHoliday}
+        open={isUpdating}
+        setIsChanged={setIsChanged}
+        setOpen={setIsUpdating}
       />
       <div className="left relative w-[15%]">
         <SideBar />
@@ -105,7 +125,12 @@ function ListOfHolidaysPage() {
               </select>
             </div>
             <div className="w-[95%] py-8">
-              <ListOfHolidaysTable listOfHolidays={listOfHolidaysToDisplay} />
+              <ListOfHolidaysTable
+                listOfHolidays={listOfHolidaysToDisplay}
+                handleOpen={handleUpdateOpen}
+                setCurrentHoliday={setCurrentHoliday}
+                setIsChanged={setIsChanged}
+              />
               {role.toLowerCase() === "admin" && (
                 <button
                   className="bg-blue-400/70 p-2 mt-4 text-sm text-black rounded-md hover:bg-blue-200 duration-300"

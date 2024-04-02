@@ -15,8 +15,13 @@ const columns = [
   { id: "options", label: "Options", maxWidth: 100 },
 ];
 
-export default function ListOfRolesTable({ listOfRoles }) {
-  const { authFetch } = useGlobalContext();
+export default function ListOfRolesTable({
+  listOfRoles,
+  setIsChanged,
+  setCurrentRole,
+  handleOpen,
+}) {
+  const { authFetch, displayAlert } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -45,9 +50,27 @@ export default function ListOfRolesTable({ listOfRoles }) {
     setCurrentDate(key.date);
   };
 
-  const handleUpdate = (role) => {};
+  const handleUpdate = (role) => {
+    setCurrentRole(role);
+    handleOpen();
+  };
 
-  const handleDelete = (role) => {};
+  const handleDelete = (role) => {
+    authFetch
+      .delete(`/role/${role.id}`)
+      .then((res) => {
+        displayAlert(res.data.name + " role deleted successfully", "success");
+        setIsChanged((prev) => !prev);
+      })
+      .catch((err) => {
+        if (err?.response?.data?.message) {
+          displayAlert(err?.response?.data?.message, "error");
+        } else {
+          displayAlert("something sent wrong", "error");
+        }
+        console.log(err);
+      });
+  };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>

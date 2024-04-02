@@ -34,9 +34,7 @@ public class RoleService {
         if(role.getClearance() != null) roleWithId.setClearance(role.getClearance());
         if(role.getDescription() != null) roleWithId.setDescription(role.getDescription());
 
-        Role updateRole = roleRepository.save(roleWithId);
-
-        return updateRole;
+        return roleRepository.save(roleWithId);
     }
 
     // Get all roles

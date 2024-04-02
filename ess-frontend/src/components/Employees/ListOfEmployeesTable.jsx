@@ -19,7 +19,11 @@ const columns = [
   { id: "options", label: "options", maxWidth: 100 },
 ];
 
-export default function ListOfEmployeesTable({ listOfEmployees }) {
+export default function ListOfEmployeesTable({
+  listOfEmployees,
+  setSelectedEmployee,
+  handleOpen,
+}) {
   const { authFetch } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
@@ -30,7 +34,7 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
   React.useEffect(() => {
     let temp = [];
     for (let employee in listOfEmployees) {
-      console.log(listOfEmployees[employee]);
+      // console.log(listOfEmployees[employee]);
       temp.push(listOfEmployees[employee]);
     }
     setRows(temp);
@@ -49,7 +53,10 @@ export default function ListOfEmployeesTable({ listOfEmployees }) {
     setCurrentDate(key.date);
   };
 
-  const handleUpdate = (employee) => {};
+  const handleUpdate = (employee) => {
+    handleOpen();
+    setSelectedEmployee(employee);
+  };
 
   const handleDelete = (employee) => {};
 

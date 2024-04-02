@@ -43,7 +43,7 @@ public class ProjectController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getALlProjects(Authentication authentication){
+    public ResponseEntity<?> getALlProjects(Authentication authentication) throws InterruptedException {
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         /*if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
             ApiResponse response = new ApiResponse("You are not authorized", false);

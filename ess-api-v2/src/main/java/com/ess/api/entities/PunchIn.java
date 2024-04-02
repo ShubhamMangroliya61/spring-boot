@@ -42,7 +42,7 @@ public class PunchIn {
     public PunchIn(Employee employee){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         this.date = LocalDate.now();
-        this.time = LocalTime.parse(LocalTime.now().format(formatter));
+        this.time = LocalTime.now();
         this.employee = employee;
     }
 

@@ -32,4 +32,19 @@ public class TeamService {
                         () ->
                                 new ResourceNotFoundException("Team", "teamId", teamId.toString()));
     }
+
+    // Update By id
+    public Team updateTeamById(long teamId, Team team){
+        Team teamWithId = this.GetTeamById(teamId);
+        if(team.getName() != null) teamWithId.setName(team.getName());
+        if(team.getDescription() != null) teamWithId.setDescription(team.getDescription());
+        return teamRepository.save(teamWithId);
+    }
+
+    // Delete by id
+    public Team deleteById(long teamId){
+        Team teamToDelete = this.GetTeamById(teamId);
+        teamRepository.deleteById(teamId);
+        return teamToDelete;
+    }
 }

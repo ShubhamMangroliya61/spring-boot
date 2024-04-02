@@ -4,6 +4,7 @@ import SideBar from "../../components/SideBar";
 import ListOfEmployeesTable from "../../components/Employees/ListOfEmployeesTable";
 import AddEmployeeMoal from "../../components/Employees/AddEmployeeMoal";
 import CustomAlert from "../../components/utils/CustomAlert";
+import UpdateEmployeeModal from "../../components/Employees/UpdateEmployeeModal";
 
 function ListOfEmplyeesPage() {
   const { authFetch, showAlert, alert } = useGlobalContext();
@@ -13,6 +14,8 @@ function ListOfEmplyeesPage() {
   const [allTeams, setAllTeams] = useState([]);
   const [allRoles, setAllRoles] = useState([]);
   const [isChanged, setIsChanged] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleOpen = () => {
     setIsAdding(true);
@@ -20,6 +23,14 @@ function ListOfEmplyeesPage() {
 
   const handleClose = () => {
     setIsAdding(false);
+  };
+
+  const handleUpdateOpen = () => {
+    setIsUpdating(true);
+  };
+
+  const handleUpdateClose = () => {
+    setIsUpdating(false);
   };
 
   useEffect(() => {
@@ -72,6 +83,16 @@ function ListOfEmplyeesPage() {
         allTeams={allTeams}
         setIsChanged={setIsChanged}
       />
+      <UpdateEmployeeModal
+        allRoles={allRoles}
+        allTeams={allTeams}
+        employee={selectedEmployee}
+        handleClose={handleUpdateClose}
+        handleOpen={handleUpdateOpen}
+        open={isUpdating}
+        setIsChanged={setIsChanged}
+        setOpen={setIsUpdating}
+      />
       <div className="left relative w-[15%]">
         <SideBar />
       </div>
@@ -86,6 +107,8 @@ function ListOfEmplyeesPage() {
             <div className="w-[95%] py-8">
               <ListOfEmployeesTable
                 listOfEmployees={listOfEmployeesToDisplay}
+                setSelectedEmployee={setSelectedEmployee}
+                handleOpen={handleUpdateOpen}
               />
               <button
                 className="bg-blue-400/70 p-2 mt-4 text-sm text-black rounded-md hover:bg-blue-200 duration-300"

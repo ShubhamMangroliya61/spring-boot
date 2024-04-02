@@ -70,7 +70,8 @@ function DashBoard() {
     const dateWithNetHours = datesWithNethovers.find(
       (x) => x.date === formattedDate
     );
-    if (!dateWithNetHours && date < Date.now()) return "highlight";
+    if (!dateWithNetHours && date < Date.now()) return "highlightRed";
+    else if (date < Date.now()) return "highlightGreen";
   };
 
   const setHoliday = (date) => {

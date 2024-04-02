@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Punch {
     private long id;
@@ -25,9 +26,10 @@ public class Punch {
     }
 
     public Punch(long id, LocalDate date, LocalTime time, Employee employee, boolean isPunchIn, boolean isPunchOut) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         this.id = id;
         this.date = date;
-        this.time = time;
+        this.time = LocalTime.parse(time.format(formatter));
         this.employee = employee;
         this.isPunchIn = isPunchIn;
         this.isPunchOut = isPunchOut;

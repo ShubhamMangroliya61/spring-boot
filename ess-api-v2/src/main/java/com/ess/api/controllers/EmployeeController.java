@@ -116,10 +116,14 @@ public class EmployeeController {
 
     // Update by id
     @PutMapping("/{empId}")
-    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long empId, @RequestBody Employee employee,
+    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long empId, @RequestBody AddEmployeeRequest employee,
             HttpSession session) {
-        System.out.println(session.getAttribute("LoggedInUser") + ": ");
-        Employee updatedEmployee = employeeService.updateEmployee(empId, employee);
+        Employee employeeWithId = employeeService.getEmployee(empId);
+        Team team = teamService.GetTeamById(employee.getTeamId());
+        Role role = roleService.getRoleById(employee.getRoleId());
+        employeeWithId.setTeam(team);
+        employeeWithId.setRole(role);
+        Employee updatedEmployee = employeeService.updateEmployee(empId, employeeWithId);
         return ResponseEntity.ok(updatedEmployee);
     }
 

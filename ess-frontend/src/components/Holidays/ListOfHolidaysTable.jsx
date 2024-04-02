@@ -15,8 +15,13 @@ const columns = [
   { id: "options", label: "Options", maxWidth: 100 },
 ];
 
-export default function ListOfHolidaysTable({ listOfHolidays }) {
-  const { role } = useGlobalContext();
+export default function ListOfHolidaysTable({
+  listOfHolidays,
+  setIsChanged,
+  setCurrentHoliday,
+  handleOpen,
+}) {
+  const { authFetch, role, displayAlert } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -46,9 +51,32 @@ export default function ListOfHolidaysTable({ listOfHolidays }) {
     setCurrentDate(key.date);
   };
 
-  const handleUpdate = (holiday) => {};
+  const handleUpdate = (holiday) => {
+    setCurrentHoliday(holiday);
+    console.log("Updating........");
+    handleOpen();
+  };
 
-  const handleDelete = (holiday) => {};
+  const handleDelete = (holiday) => {
+    console.log(holiday);
+    authFetch
+      .delete(`/holiday/${holiday.id}`)
+      .then((res) => {
+        displayAlert(
+          res.data.name + " holiday deleted successfully",
+          "success"
+        );
+        setIsChanged((prev) => !prev);
+      })
+      .catch((err) => {
+        if (err?.response?.data?.message) {
+          displayAlert(err?.response?.data?.message, "error");
+        } else {
+          displayAlert("something sent wrong", "error");
+        }
+        console.log(err);
+      });
+  };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>

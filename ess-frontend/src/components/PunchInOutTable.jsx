@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { split } from "postcss/lib/list";
 
 const columns = [
   { id: "date", label: "date(yyyy/mm/dd)", minWidth: 170 },
@@ -32,6 +33,8 @@ export default function PunchInOutTable({ todaysPunches = [] }) {
       todaysPunches[punch].punchIn
         ? (todaysPunches[punch]["I/Ooperation"] = "Punch In")
         : (todaysPunches[punch]["I/Ooperation"] = "Punch Out");
+      const splitted = todaysPunches[punch]?.time?.split(":");
+      todaysPunches[punch].time = splitted[0] + ":" + splitted[1];
       temp.push(todaysPunches[punch]);
     }
     setRows(temp);

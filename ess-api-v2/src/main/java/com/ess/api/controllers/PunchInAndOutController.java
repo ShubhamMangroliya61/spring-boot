@@ -71,4 +71,12 @@ public class PunchInAndOutController {
 
         return ResponseEntity.ok(dateAndNetMinutes);
     }
+
+    // Get today's punches of current employee
+    @GetMapping("/today")
+    public ResponseEntity<?> getTodayAllPunchesOfCurrentEmployee(Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        List<Punch> todayPunches = punchInAndOutService.getAllPunchesByDateAndEmployee(currentEmployee, LocalDate.now());
+        return ResponseEntity.ok(todayPunches);
+    }
 }

@@ -151,12 +151,19 @@
   background-color: #e6e6e6;
 }
 
-.highlight {
+.highlightRed {
   background-color: #d1000065 !important;
+  margin: 2px !important;
+}
+
+.highlightGreen {
+  background-color: #33dc0081 !important;
+  margin: 2px !important;
 }
 
 .holiday {
   background-color: #33dc0081 !important;
+  margin: 2px !important;
 }
 
 .react-calendar__month-view__days__day--weekend {

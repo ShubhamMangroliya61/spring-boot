@@ -40,10 +40,10 @@ public class RoleController {
 
     //Delete
     @DeleteMapping("/{roleId}")
-    public ResponseEntity<ApiResponse> deleteRole(@PathVariable Long roleId){
+    public ResponseEntity<?> deleteRole(@PathVariable Long roleId){
+        Role roleToDelete = roleService.getRoleById(roleId);
         roleService.deleteRole(roleId);
-        ApiResponse deleteResponse = new ApiResponse("Role deleted successfully", true);
-        return new ResponseEntity<ApiResponse>(deleteResponse, HttpStatus.ACCEPTED);
+        return ResponseEntity.ok(roleToDelete);
     }
 
     //Get all Roles
