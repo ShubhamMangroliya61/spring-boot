@@ -46,7 +46,7 @@ function DatesAndPunchInOutLog() {
   }, [currentDate]);
 
   return (
-    <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-300/40 backdrop-blur-md rounded-md pb-5 mb-6">
+    <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-800 backdrop-blur-md rounded-md pb-5 mb-6">
       <div className="w-[60%] px-[20px] text-center">
         <p className="py-4 text-gray-200 text-lg">
           Punch logs of {currentDate}

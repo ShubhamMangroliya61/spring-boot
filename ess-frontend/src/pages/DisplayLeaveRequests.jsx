@@ -67,7 +67,7 @@ function DisplayLeaveRequests({
   return (
     <div className="flex flex-wrap justify-items-center overflow-y-hidden">
       <div className="right w-[100%] mx-auto">
-        <div className="relative top-10 w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
+        <div className="relative top-10 w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
           <div onClick={() => handleTypeChange("all")} className="w-[95%] p-5">
             <CounterCard
               countHeading={heading}
@@ -106,7 +106,7 @@ function DisplayLeaveRequests({
             </div>
           </div>
         </div>
-        <div className="relative top-10 w-[95.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
+        <div className="relative top-10 w-[95.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
           <div className="w-[95%] text-center p-5 pb-10">
             <p className="text-gray-200 text-lg pb-5">
               All the {typeToDisplay === "all" ? "" : typeToDisplay} requests

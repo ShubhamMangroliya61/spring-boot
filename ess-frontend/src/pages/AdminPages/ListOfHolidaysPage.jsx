@@ -108,7 +108,7 @@ function ListOfHolidaysPage() {
               <CustomAlert />
             </div>
           )}
-          <div className="w-[60%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
+          <div className="w-[60%] m-auto flex flex-col align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
             <div className="flex text-base justify-between w-[95%] pt-8">
               <p className="text-white">List of holidays</p>
               <select

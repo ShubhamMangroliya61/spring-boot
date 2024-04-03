@@ -16,14 +16,6 @@ function Column({
   const { authFetch, userId, role } = useGlobalContext();
   const [active, setActive] = useState(false);
   const [isAddButtomActive, setIsAddButtomActive] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  const handleOpen = () => {
-    setIsUpdating(true);
-  };
-  const handleClose = () => {
-    setIsUpdating(false);
-  };
 
   useEffect(() => {
     for (let i = 0; i < selectedProject?.members?.length; i++) {
@@ -107,22 +99,12 @@ function Column({
         {filteredCards?.map((c) => {
           return (
             <>
-              <UpdateTaskModal
-                handleClose={handleClose}
-                handleOpen={handleOpen}
-                open={isUpdating}
-                setOpen={setIsUpdating}
-                setTaskUpdate={setTaskUpdate}
-                task={{ ...c }}
-                key={c.id}
-              />
               <Card
                 key={c.id}
                 {...c}
                 handleDragStart={handleDragStart}
                 setTaskUpdate={setTaskUpdate}
                 isAddButtomActive={isAddButtomActive}
-                handleOpen={handleOpen}
               />
             </>
           );

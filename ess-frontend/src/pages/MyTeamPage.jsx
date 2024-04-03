@@ -80,7 +80,7 @@ function MyTeamPage() {
               <CustomAlert />
             </div>
           )}
-          <div className="w-[95.5%] mx-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md">
+          <div className="w-[95.5%] mx-auto flex flex-col align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md">
             <div className="w-[95%] py-8">
               <p className="text-white text-base font-semibold mb-3">My team</p>
               <MyTeamEmployeesTable

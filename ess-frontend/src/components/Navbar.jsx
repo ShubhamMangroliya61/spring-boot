@@ -3,14 +3,24 @@ import { useGlobalContext } from "../context/appContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import CustomAlert from "./utils/CustomAlert";
+import EmployeePersonalDetailsModal from "./EmployeePersonalDetails/EmployeePersonalDetailsModal";
 
 function Navbar() {
-  const { authFetch, logoutUser, displayAlert, showAlert } = useGlobalContext();
+  const { authFetch, logoutUser, displayAlert, showAlert, userId } =
+    useGlobalContext();
 
   const [punchOptions, setPunchOptions] = useState(false);
   const [subOptions, setSubOptions] = useState(false);
   const [profileOptions, setProfileOptions] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState({});
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     authFetch
@@ -84,6 +94,13 @@ function Navbar() {
 
   return (
     <div className="fixed bg-slate-800 w-full text-gray-400 py-6">
+      <EmployeePersonalDetailsModal
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+        open={open}
+        setOpen={setOpen}
+        employeeId={userId}
+      />
       <div className="w-[95%] m-auto flex flex-row text-center justify-between items-center">
         <div className="left">TruFlux</div>
         <div className="right">
@@ -124,7 +141,7 @@ function Navbar() {
               </div>
               <li
                 className="px-[10px] cursor-pointer text-gray-300"
-                onClick={handleOptionsClick}
+                onClick={handleOpen}
               >
                 {currentEmployee?.firstName + " " + currentEmployee?.lastName}
               </li>

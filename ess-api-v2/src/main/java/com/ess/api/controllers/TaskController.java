@@ -85,9 +85,31 @@ public class TaskController {
         return ResponseEntity.ok(listOfTasksAssignedInGivenProject);
     }
 
+    //Get task by id
+    @GetMapping("/withId/{taskId}")
+    public ResponseEntity<?> getTaskById(@PathVariable long taskId){
+        Task taskById = taskService.getTaskById(taskId);
+        return ResponseEntity.ok(taskById);
+    }
+
     @PutMapping("/updateStatus/{taskId}")
-    public ResponseEntity<?> updateTaskStatus(@RequestBody Task task){
-        ProjectLog updateStatusLog = taskService.updateTaskStatus(task);
+    public ResponseEntity<?> updateTaskStatus(@PathVariable long taskId, @RequestBody Task task, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        ProjectLog updateStatusLog = taskService.updateTaskStatus(taskId, task, currentEmployee);
         return ResponseEntity.ok(updateStatusLog);
+    }
+
+    @PutMapping("/updatePriority/{taskId}")
+    public ResponseEntity<?> updateTaskPriority(@PathVariable long taskId, @RequestBody Task task, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        ProjectLog updatePriorityLog = taskService.updateTaskPriority(taskId, task, currentEmployee);
+        return ResponseEntity.ok(updatePriorityLog);
+    }
+
+    @PutMapping("/updateTask/{taskId}")
+    public ResponseEntity<?> updateTask(@RequestBody Task task, @PathVariable long taskId, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        ProjectLog updateTaskLog = taskService.updateTask(taskId, task, currentEmployee);
+        return ResponseEntity.ok(updateTaskLog);
     }
 }

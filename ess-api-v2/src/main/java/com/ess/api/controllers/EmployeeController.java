@@ -1,13 +1,11 @@
 package com.ess.api.controllers;
 
-import com.ess.api.entities.Leave;
-import com.ess.api.entities.Role;
-import com.ess.api.entities.Team;
+import com.ess.api.entities.*;
 import com.ess.api.request.AddEmployeeRequest;
 import com.ess.api.response.ApiResponse;
-import com.ess.api.entities.Employee;
 import com.ess.api.security.services.UserDetailsImpl;
 import com.ess.api.security.services.UserDetailsServiceImpl;
+import com.ess.api.services.EmployeePersonalDetailsService;
 import com.ess.api.services.EmployeeService;
 import com.ess.api.services.RoleService;
 import com.ess.api.services.TeamService;
@@ -52,6 +50,9 @@ public class EmployeeController {
 
     @Autowired
     private SendMail sendMail;
+
+    @Autowired
+    private EmployeePersonalDetailsService employeePersonalDetailsService;
 
     // Add
     @PostMapping
@@ -162,5 +163,29 @@ public class EmployeeController {
         }
         List<Employee> employeesWithGivenRole = employeeService.getEmployeesWithGivenRole(roleId);
         return ResponseEntity.ok(employeesWithGivenRole);
+    }
+
+    // Add personal details
+    @PostMapping("/personalDetails")
+    public ResponseEntity<?> addEmployeePersonalDetails(@RequestBody EmployeePersonalDetails employeePersonalDetails, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        EmployeePersonalDetails addedPersonalDetails = employeePersonalDetailsService.addDetails(currentEmployee, employeePersonalDetails);
+        return ResponseEntity.ok(addedPersonalDetails);
+    }
+
+    // Get personal details of current employee
+    @GetMapping("/personalDetails/me")
+    public ResponseEntity<?> geTPersonalDetailsOfCurrentEmployee(Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        EmployeePersonalDetails existingEmployeePersonalDetails = employeePersonalDetailsService.getByEmployee(currentEmployee);
+        return ResponseEntity.ok(existingEmployeePersonalDetails);
+    }
+
+    // Get personal details from employeeId
+    @GetMapping("/personalDetails/givenId/{employeeId}")
+    public ResponseEntity<?> geTPersonalDetailsFromEmployeeId(@PathVariable long employeeId){
+        Employee employeeWithId = employeeService.getEmployee(employeeId);
+        EmployeePersonalDetails existingEmployeePersonalDetails = employeePersonalDetailsService.getByEmployee(employeeWithId);
+        return ResponseEntity.ok(existingEmployeePersonalDetails);
     }
 }

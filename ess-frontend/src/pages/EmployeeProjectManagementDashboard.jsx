@@ -101,7 +101,7 @@ function EmployeeProjectManagementDashboard() {
               <CustomAlert />
             </div>
           )}
-          <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
+          <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
             <div className="w-[95%] py-8">
               <p className="text-white text-base font-semibold mb-3">
                 Projects
@@ -109,7 +109,7 @@ function EmployeeProjectManagementDashboard() {
               <ProjectTable projectsToDisplay={listOfProjectsToDisplay} />
             </div>
           </div>
-          <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
+          <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
             <div className="w-[95%] py-8">
               <p className="text-white text-base font-semibold mb-3">
                 Assign to me

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useGlobalContext } from "../../context/appContext";
+import UpdateTaskModal from "./UpdateTaskModal";
 
 const priorityData = [
   {
@@ -38,16 +39,52 @@ function Card({
   handleDragStart,
   setTaskUpdate,
   isAddButtomActive,
-  handleOpen,
 }) {
-  const { role, userId } = useGlobalContext();
+  const { role, userId, authFetch, displayAlert } = useGlobalContext();
   const [expanded, setExpanded] = useState(false);
+
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleOpen = () => {
+    setIsUpdating(true);
+  };
+
+  const handleClose = () => {
+    setIsUpdating(false);
+  };
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
+
+  const handlePriorityChange = (e) => {
+    authFetch
+      .put(`/task/updatePriority/${id}`, { priority: e.target.value })
+      .then((res) => {
+        displayAlert("Priority updated of task " + name, "success");
+        setTaskUpdate((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err?.response?.data?.message) {
+          displayAlert(err?.response?.data?.message, "error");
+        } else {
+          displayAlert("something sent wrong", "error");
+        }
+        console.log(err);
+      });
+  };
+
   return (
     <>
+      <UpdateTaskModal
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+        open={isUpdating}
+        setOpen={setIsUpdating}
+        setTaskUpdate={setTaskUpdate}
+        task={id}
+      />
       <motion.div
         layout
         layoutId={id}
@@ -96,6 +133,7 @@ function Card({
             id="priority"
             className="rounded-sm bg-black text-neutral-100/70"
             defaultValue={priority}
+            onChange={handlePriorityChange}
             disabled={
               isAddButtomActive || assignTo.id.toString() === userId
                 ? false
@@ -111,6 +149,7 @@ function Card({
                   key={item.value}
                   value={item.value}
                   className="text-center"
+                  selected={priority.toString() === item.value}
                 >
                   {item.name}
                 </option>

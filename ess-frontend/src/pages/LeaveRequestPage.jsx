@@ -44,7 +44,7 @@ function LeaveRequestPage() {
           <div className="w-[97.5%] mx-auto">
             <LeaveCount allPreviousLeaveRequests={allPreviousLeaveRequests} />
           </div>
-          <div className="w-[93%] mx-auto bg-gray-300/40 backdrop-blur-md rounded-md px-16 mb-5">
+          <div className="w-[93%] mx-auto bg-gray-800 backdrop-blur-md rounded-md px-16 mb-5">
             <div className="w-full">
               <p className="text-gray-200 text-lg py-5">
                 all the prev requests &nbsp; &nbsp; &nbsp;
