@@ -48,7 +48,7 @@ export default function DateTable({
     <Paper
       sx={{ width: "100%", overflow: "hidden", backgroundColor: "#1b1818" }}
     >
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ maxHeight: 440 }} className="min-h-[450px]">
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

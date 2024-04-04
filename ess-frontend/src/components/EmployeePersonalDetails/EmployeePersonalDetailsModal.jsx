@@ -335,6 +335,23 @@ export default function EmployeePersonalDetailsModal({
                         </LoadingButton>
                       </div>
                     </Box>
+                    <Box
+                      sx={{
+                        "& > button": { m: 1 },
+                      }}
+                    >
+                      <div className="bg-white rounded-md">
+                        <LoadingButton
+                          loading={isLoading}
+                          loadingPosition="start"
+                          variant="contained"
+                          className="bg-blue-500 p-2 rounded-md mt-5 cursor-pointer duration-300 hover:bg-blue-400"
+                          onClick={handleClose}
+                        >
+                          <span>Close</span>
+                        </LoadingButton>
+                      </div>
+                    </Box>
                   </div>
                 ) : (
                   ""

@@ -51,6 +51,9 @@ public class Employee{
     @JsonManagedReference
     private List<Leave> leaves;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<AttendanceCorrection> corrections;
 
 
     public Employee(String firstName, String lastName, String email, String password, Role role, Team team) {
@@ -145,6 +148,14 @@ public class Employee{
         return leavesAllowed;
     }
 
+    public List<AttendanceCorrection> getCorrections() {
+        return corrections;
+    }
+
+    public void setCorrections(List<AttendanceCorrection> corrections) {
+        this.corrections = corrections;
+    }
+
     //leaves allowed throughout the year
     @Transient
     private final int leavesAllowed = 18;
@@ -172,9 +183,18 @@ public class Employee{
 
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-                + ", password=" + password + ", role=" + role + ", team=" + team + ", leaves=" + leaves
-                + "]";
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", team=" + team +
+                ", leaves=" + leaves +
+                ", corrections=" + corrections +
+                ", leavesAllowed=" + leavesAllowed +
+                '}';
     }
 
     @Override

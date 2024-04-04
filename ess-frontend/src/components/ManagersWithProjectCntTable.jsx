@@ -54,7 +54,9 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper
+      sx={{ width: "100%", overflow: "hidden", backgroundColor: "#1b1818" }}
+    >
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -64,6 +66,7 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  sx={{ backgroundColor: "#1b1818", color: "#a4a4a8" }}
                 >
                   {column.label}
                 </TableCell>
@@ -84,6 +87,7 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
                           align={column.align}
                           onClick={() => handleClick(row.name)}
                           className="cursor-pointer"
+                          sx={{ color: "#a4a4a8" }}
                         >
                           {column.format && typeof value === "number"
                             ? column.format(value)
@@ -105,6 +109,7 @@ export default function ManagersWithProjectCntTable({ membersWithProjectCnt }) {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{ color: "#a4a4a8" }}
       />
     </Paper>
   );

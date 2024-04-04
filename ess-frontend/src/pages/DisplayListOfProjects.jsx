@@ -94,9 +94,13 @@ function DisplayListOfProjects() {
         <SideBar />
       </div>
       <div className="right relative top-24 w-[85%] mx-auto">
-        <div className="w-[95.5%] m-auto flex flex-row bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
-          <div className="w-[95%] text-center p-5 pb-10">
-            <p className="text-gray-200 text-lg pb-5">All the projects</p>
+        <div className="w-[95.5%] m-auto flex flex-row bg-gray-800 backdrop-blur-md rounded-md mb-5">
+          <div className="w-[95%] p-5 pb-10 mx-auto">
+            <div>
+              <p className="text-white text-base font-semibold mb-3">
+                All the projects
+              </p>
+            </div>
             <ProjectTable projectsToDisplay={listOfProjectsToDisplay} />
           </div>
         </div>

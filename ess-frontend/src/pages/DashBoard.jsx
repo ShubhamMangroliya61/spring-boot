@@ -12,6 +12,7 @@ import EventIcon from "@mui/icons-material/Event";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Alert, AlertTitle, Slide } from "@mui/material";
+import AskCorrectionModal from "../components/Attendance Correction/AskCorrectionModal";
 
 function DashBoard() {
   const { authFetch, showAlert, alert, displayAlert } = useGlobalContext();
@@ -25,6 +26,15 @@ function DashBoard() {
   });
   const [holidays, setHolidays] = useState([]);
   const [selectedHoliday, setSelectedHoliday] = useState({});
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -86,9 +96,22 @@ function DashBoard() {
     const selecteDateWithNetHours = datesWithNethovers.find(
       (x) => x.date === formattedDate
     );
-    if (selecteDateWithNetHours) setSelectedDate(selecteDateWithNetHours);
-    else setSelectedDate({ date: formattedDate, netHours: "00:00:00" });
+    if (selecteDateWithNetHours) {
+      selecteDateWithNetHours.netMinutes =
+        Number(selecteDateWithNetHours.netHours.split(":")[0]) * 60 +
+        Number(selecteDateWithNetHours.netHours.split(":")[1]);
+      setSelectedDate(selecteDateWithNetHours);
+    } else
+      setSelectedDate({
+        date: formattedDate,
+        netHours: "00:00:00",
+        netMinutes: 0,
+      });
   };
+
+  useEffect(() => {
+    console.log(selectedDate);
+  }, [selectedDate]);
 
   const getHolidayOfSelectedDate = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
@@ -134,6 +157,13 @@ function DashBoard() {
 
   return (
     <>
+      <AskCorrectionModal
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+        open={open}
+        date={selectedDate.date}
+        setOpen={setOpen}
+      />
       <div className="absolute h-screen w-screen bg-black overflow-hidden">
         <div className="flex flex-row">
           <div className="left w-[15%]">
@@ -141,7 +171,6 @@ function DashBoard() {
           </div>
           <div className="right w-[85%] h-screen">
             <div className="relative top-20 text-white flex justify-center text-xl">
-              <h1>Dashboard</h1>
               {/* ------ Display alert start ------ */}
               {showAlert && (
                 <div className="absolute right-10 z-50">
@@ -161,8 +190,8 @@ function DashBoard() {
               {/* ------ Display alert end ------ */}
             </div>
             <div className="flex">
-              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col justify-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
-                <h1 className="text-gray-200 mb-5 text-base">
+              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col justify-center bg-gray-800 backdrop-blur-md rounded-md p-[30px]">
+                <h1 className="text-white text-base font-semibold mb-3">
                   Monthly attendance details
                 </h1>
                 <Calendar
@@ -188,11 +217,23 @@ function DashBoard() {
                       {selectedDate && <div>{selectedDate.netHours}</div>}
                     </div>
                   </div>
+                  <div className="w-full">
+                    <div className="w-full text-gray-200 underline cursor-pointer">
+                      {selectedDate && selectedDate.netMinutes < 450 ? (
+                        <div onClick={handleOpen}>Ask correction</div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    &nbsp;&nbsp;
+                  </div>
                 </div>
                 {/* <Button onClick={handleOpen}>Open modal</Button> */}
               </div>
-              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
-                <h1 className="text-gray-200 mb-5 text-base">Holidays list</h1>
+              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col bg-gray-800 backdrop-blur-md rounded-md p-[30px]">
+                <h1 className="text-white text-base font-semibold mb-3">
+                  Holidays list
+                </h1>
                 <Calendar
                   showNeighboringMonth={false}
                   tileClassName={({ date }) => {
@@ -200,8 +241,8 @@ function DashBoard() {
                   }}
                 />
               </div>
-              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col items-center bg-gray-300/40 backdrop-blur-md rounded-md p-[30px]">
-                <div className="bg-gray-100/30 p-5 w-full h-full rounded-md flex flex-col justify-center">
+              <div className="relative mx-[10px] top-24 w-[50%] flex flex-col items-center bg-gray-800 backdrop-blur-md rounded-md p-[30px]">
+                <div className=" p-5 w-full h-full rounded-md flex flex-col justify-center">
                   {cardData.map((data) => (
                     <CounterCardWithIcon
                       count={data.count}

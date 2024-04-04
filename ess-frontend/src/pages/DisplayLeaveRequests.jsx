@@ -107,8 +107,8 @@ function DisplayLeaveRequests({
           </div>
         </div>
         <div className="relative top-10 w-[95.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
-          <div className="w-[95%] text-center p-5 pb-10">
-            <p className="text-gray-200 text-lg pb-5">
+          <div className="w-[95%] p-5 pb-10">
+            <p className="text-white text-base font-semibold mb-3">
               All the {typeToDisplay === "all" ? "" : typeToDisplay} requests
             </p>
             <AdminLeaveRequestTable

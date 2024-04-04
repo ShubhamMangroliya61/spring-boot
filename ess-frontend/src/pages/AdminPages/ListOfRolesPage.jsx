@@ -100,8 +100,9 @@ function ListOfRolesPage() {
               <CustomAlert />
             </div>
           )}
-          <div className="w-[95.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
-            <div className="w-[95%] py-8">
+          <div className="w-[95.5%] m-auto flex flex-col align-middle justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
+            <div className="w-[95%] py-8 mx-auto">
+              <p className="text-white text-base font-semibold mb-3">Roles</p>
               <ListOfRolesTable
                 listOfRoles={listOfRolesToDisplay}
                 setCurrentRole={setCurrentRole}

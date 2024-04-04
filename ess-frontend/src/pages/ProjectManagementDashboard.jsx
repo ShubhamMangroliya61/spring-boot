@@ -122,13 +122,10 @@ function ProjectManagementDashboard() {
       <div className="left w-[15%] h-full">
         <SideBar />
       </div>
-      <div className="right w-[85%] m-auto h-screen">
-        <div className="relative top-20 text-white flex justify-center text-3xl">
-          <h1>Project management Dashboard</h1>
-        </div>
+      <div className="right w-[85%] mx-auto h-screen">
         <div>
           <div className="flex flex-wrap">
-            <div className="relative top-32 w-[97.5%] m-auto flex flex-col align-middle items-center justify-center bg-gray-100/40 backdrop-blur-md rounded-md mb-5">
+            <div className="mt-24 w-[97.5%] mx-auto flex flex-col align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
               <div
                 onClick={() => handleTypeChange("all")}
                 className="w-[95%] px-5 my-5"
@@ -154,9 +151,9 @@ function ProjectManagementDashboard() {
                 ))}
               </div>
             </div>
-            <div className="relative top-32 w-[97.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-300/40 backdrop-blur-md rounded-md mb-5">
-              <div className="w-[95%] p-5 pb-10">
-                <h1 className="text-lg text-gray-400 mb-5 pb-0">
+            <div className="w-[97.5%] m-auto flex flex-row align-middle justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
+              <div className="w-[95%] p-5 pb-10 mx-auto">
+                <h1 className="text-white text-base font-semibold mb-3">
                   Project managers
                 </h1>
                 <ManagersWithProjectCntTable

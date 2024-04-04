@@ -75,7 +75,9 @@ export default function ListOfTeamsTable({
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper
+      sx={{ width: "100%", overflow: "hidden", backgroundColor: "#1b1818" }}
+    >
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -85,6 +87,7 @@ export default function ListOfTeamsTable({
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  sx={{ backgroundColor: "#1b1818", color: "#a4a4a8" }}
                 >
                   {column.label}
                 </TableCell>
@@ -100,7 +103,11 @@ export default function ListOfTeamsTable({
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          sx={{ color: "#a4a4a8" }}
+                        >
                           {column.format && typeof value === "number" ? (
                             column.format(value)
                           ) : column.id === "options" ? (
@@ -138,6 +145,7 @@ export default function ListOfTeamsTable({
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{ color: "#a4a4a8" }}
       />
     </Paper>
   );

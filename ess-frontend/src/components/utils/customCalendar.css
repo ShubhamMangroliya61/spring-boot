@@ -5,6 +5,7 @@
   border: 1px solid #a0a096;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.125em;
+  border-radius: 6px;
 }
 
 .react-calendar--doubleView {
@@ -153,17 +154,20 @@
 
 .highlightRed {
   background-color: #d1000065 !important;
-  margin: 2px !important;
+  border-radius: 50%;
+  /* margin: 2px !important; */
 }
 
 .highlightGreen {
   background-color: #33dc0081 !important;
-  margin: 2px !important;
+  border-radius: 50%;
+  /* margin: 2px !important; */
 }
 
 .holiday {
   background-color: #33dc0081 !important;
-  margin: 2px !important;
+  border-radius: 50%;
+  /* margin: 2px !important; */
 }
 
 .react-calendar__month-view__days__day--weekend {

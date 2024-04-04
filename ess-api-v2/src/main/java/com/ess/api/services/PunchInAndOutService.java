@@ -81,6 +81,12 @@ public class PunchInAndOutService {
                 isPrevOut = true;
             }
         }
+
+        // Return 0 if punch and out are not in pair
+        if(!timeIntervals.isEmpty() && timeIntervals.size() % 2 != 0 && !date.equals(LocalDate.now())){
+            return  0;
+        }
+
         long netMinutes = 0;
 //        System.out.println(timeIntervals);
         if(!timeIntervals.isEmpty()){
@@ -94,12 +100,15 @@ public class PunchInAndOutService {
 //        System.out.println(netMinutes);
         for(int i=0;i< timeIntervals.size();i++){
             if(i > 0 && i % 2 == 0){
-                long outDuration =   ChronoUnit.MINUTES.between(timeIntervals.get(i-1), timeIntervals.get(i));
+                long outDuration = ChronoUnit.MINUTES.between(timeIntervals.get(i-1), timeIntervals.get(i));
 //                System.out.println(outDuration);
                 netMinutes -= outDuration;
             }
         }
-
+//        if(!timeIntervals.isEmpty() && timeIntervals.size() % 2 != 0 && !date.equals(LocalDate.now())){
+//            netMinutes = 0;
+//        }
+//        System.out.println(date + ": " + netMinutes + ": " + timeIntervals);
         return netMinutes;
     }
 
@@ -144,5 +153,17 @@ public class PunchInAndOutService {
         return allDates;
     }
 
+
+    // Delete punches of given date
+    public void deletePunchesOfGivenDateOfGivenEmployee(Employee employee, LocalDate date){
+        List<Punch> allPunchesOfGivenEmployee = this.getAllPunchesByDateAndEmployee(employee, date);
+        for (Punch punch : allPunchesOfGivenEmployee){
+            if(punch.isPunchOut()){
+                punchOutRepository.deleteById(punch.getId());
+            }else{
+                punchInRepository.deleteById(punch.getId());
+            }
+        }
+    }
 
 }

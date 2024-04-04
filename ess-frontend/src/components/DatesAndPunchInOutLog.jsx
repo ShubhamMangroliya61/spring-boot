@@ -47,14 +47,16 @@ function DatesAndPunchInOutLog() {
 
   return (
     <div className="relative top-24 w-[95%] m-auto flex flex-row align-middle items-center justify-center px-[-40px] bg-gray-800 backdrop-blur-md rounded-md pb-5 mb-6">
-      <div className="w-[60%] px-[20px] text-center">
-        <p className="py-4 text-gray-200 text-lg">
+      <div className="w-[60%] px-[20px]">
+        <p className="text-white text-base font-semibold my-3">
           Punch logs of {currentDate}
         </p>
         <PunchInOutTable todaysPunches={todayPunchs} />
       </div>
-      <div className="w-[40%] px-[20px] text-center">
-        <p className="py-4 text-gray-200 text-lg">Select day from here</p>
+      <div className="w-[40%] px-[20px]">
+        <p className="text-white text-base font-semibold my-3">
+          Select day from here
+        </p>
         <DateTable
           datesWithNetHours={datesWithNetHours}
           currentDate={currentDate}
