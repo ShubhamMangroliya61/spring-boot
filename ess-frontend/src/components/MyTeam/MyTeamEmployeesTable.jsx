@@ -16,8 +16,30 @@ const columns = [
   { id: "role", label: "Role", maxWidth: 100 },
 ];
 
+const managerColumns = [
+  { id: "name", label: "Name", maxWidth: 100 },
+  { id: "team", label: "Team", maxWidth: 100 },
+  { id: "email", label: "Email", maxWidth: 100 },
+  { id: "role", label: "Role", maxWidth: 100 },
+  {
+    id: "monthlyNetMinutes",
+    label: "Net hours",
+    maxWidth: 100,
+  },
+  {
+    id: "totalActiveDays",
+    label: "Active days",
+    maxWidth: 100,
+  },
+  {
+    id: "averageWorkMinutes",
+    label: "Avg. hours",
+    maxWidth: 100,
+  },
+];
+
 export default function MyTeamEmployeesTable({ listOfEmployees }) {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, role } = useGlobalContext();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -25,6 +47,7 @@ export default function MyTeamEmployeesTable({ listOfEmployees }) {
   const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
+    console.log(listOfEmployees);
     let temp = [];
     for (let employee in listOfEmployees) {
       //   console.log(listOfEmployees[employee]);
@@ -54,16 +77,27 @@ export default function MyTeamEmployeesTable({ listOfEmployees }) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                  sx={{ backgroundColor: "#1b1818", color: "#a4a4a8" }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
+              {role.toLowerCase() == "manager" || role.toLowerCase() == "admin"
+                ? managerColumns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                      sx={{ backgroundColor: "#1b1818", color: "#a4a4a8" }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))
+                : columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                      sx={{ backgroundColor: "#1b1818", color: "#a4a4a8" }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -72,20 +106,36 @@ export default function MyTeamEmployeesTable({ listOfEmployees }) {
               .map((row) => {
                 return (
                   <TableRow tabIndex={-1} key={row.id}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          sx={{ color: "#a4a4a8" }}
-                        >
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
+                    {role.toLowerCase() == "manager" ||
+                    role.toLowerCase() == "admin"
+                      ? managerColumns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              sx={{ color: "#a4a4a8" }}
+                            >
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })
+                      : columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              sx={{ color: "#a4a4a8" }}
+                            >
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
                   </TableRow>
                 );
               })}

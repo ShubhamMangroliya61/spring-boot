@@ -86,6 +86,7 @@ export default function AskCorrectionModal({
         }
         console.log(err);
         setIsLoading(false);
+        handleClose();
       });
   };
 

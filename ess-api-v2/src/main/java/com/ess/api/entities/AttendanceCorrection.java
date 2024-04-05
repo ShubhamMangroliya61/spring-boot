@@ -37,6 +37,9 @@ public class AttendanceCorrection {
         this.employee = employee;
     }
 
+    public AttendanceCorrection() {
+    }
+
     public long getId() {
         return id;
     }

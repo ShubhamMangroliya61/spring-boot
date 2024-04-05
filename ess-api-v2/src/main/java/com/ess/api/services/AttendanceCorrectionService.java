@@ -61,10 +61,15 @@ public class AttendanceCorrectionService {
     public AttendanceCorrection getByEmployeeAndDate(Long employeeId, LocalDate date){
         List<AttendanceCorrection> allTheAttendaceCorrection = this.getAll();
         for (AttendanceCorrection attendanceCorrection : allTheAttendaceCorrection) {
-            if (attendanceCorrection.getEmployee().getId() == employeeId && attendanceCorrection.getDate() == date) {
+            /*System.out.print(attendanceCorrection.getEmployee().getId() + " " + employeeId + " " + attendanceCorrection.getDate() + " " + date);
+            System.out.print(attendanceCorrection.getEmployee().getId() == employeeId);
+            System.out.println(attendanceCorrection.getDate().equals(date));*/
+            if (attendanceCorrection.getEmployee().getId() == employeeId && attendanceCorrection.getDate().equals(date)) {
+                System.out.println("------------------------------> returning non null" );
                 return attendanceCorrection;
             }
         }
+        System.out.println("------------------------------> returning null" );
         return null;
     }
 }

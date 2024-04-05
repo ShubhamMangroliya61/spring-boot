@@ -3,12 +3,10 @@ package com.ess.api.controllers;
 import com.ess.api.entities.*;
 import com.ess.api.request.AddEmployeeRequest;
 import com.ess.api.response.ApiResponse;
+import com.ess.api.response.EmployeeAnalysisResponse;
 import com.ess.api.security.services.UserDetailsImpl;
 import com.ess.api.security.services.UserDetailsServiceImpl;
-import com.ess.api.services.EmployeePersonalDetailsService;
-import com.ess.api.services.EmployeeService;
-import com.ess.api.services.RoleService;
-import com.ess.api.services.TeamService;
+import com.ess.api.services.*;
 import com.ess.api.utils.GetCurrentEmployee;
 import com.ess.api.utils.SendMail;
 import jakarta.mail.MessagingException;
@@ -53,6 +51,9 @@ public class EmployeeController {
 
     @Autowired
     private EmployeePersonalDetailsService employeePersonalDetailsService;
+
+    @Autowired
+    private PunchInAndOutService punchInAndOutService;
 
     // Add
     @PostMapping
@@ -187,5 +188,13 @@ public class EmployeeController {
         Employee employeeWithId = employeeService.getEmployee(employeeId);
         EmployeePersonalDetails existingEmployeePersonalDetails = employeePersonalDetailsService.getByEmployee(employeeWithId);
         return ResponseEntity.ok(existingEmployeePersonalDetails);
+    }
+
+    // Get analysis
+    @GetMapping("/getAnalysis/{employeeId}/{year}/{month}")
+    public ResponseEntity<?> getEmployeeAnalysis(@PathVariable long employeeId, @PathVariable int year, @PathVariable int month){
+        Employee employee = employeeService.getEmployee(employeeId);
+        EmployeeAnalysisResponse employeeAnalysisResponse = punchInAndOutService.getAnalysisOfEmployee(employee, year, month);
+        return ResponseEntity.ok(employeeAnalysisResponse);
     }
 }

@@ -7,6 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
 import { useGlobalContext } from "../../context/appContext";
 
 const columns = [
@@ -114,13 +118,13 @@ export default function ListOfRolesTable({
                                 className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
                                 onClick={() => handleUpdate(row)}
                               >
-                                update
+                                <BorderColorIcon fontSize="small" />
                               </button>{" "}
                               <button
                                 className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
                                 onClick={() => handleDelete(row)}
                               >
-                                delete
+                                <DeleteOutlineIcon fontSize="small" />
                               </button>
                             </>
                           ) : (

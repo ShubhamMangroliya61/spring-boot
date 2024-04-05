@@ -5,6 +5,7 @@ import com.ess.api.entities.PunchIn;
 import com.ess.api.entities.PunchOut;
 import com.ess.api.repositories.PunchInRepository;
 import com.ess.api.repositories.PunchOutRepository;
+import com.ess.api.response.EmployeeAnalysisResponse;
 import com.ess.api.response.Punch;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import javax.swing.text.html.HTMLDocument;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -149,7 +151,6 @@ public class PunchInAndOutService {
         for(Punch punch:allPunches){
             allDates.add(punch.getDate());
         }
-
         return allDates;
     }
 
@@ -166,4 +167,39 @@ public class PunchInAndOutService {
         }
     }
 
+    // Calculate total active days net hours and average work hours according to given month and year
+    public EmployeeAnalysisResponse getAnalysisOfEmployee(Employee employee, int year, int month){
+        Set<LocalDate> allDates = this.getAllDates(employee);
+
+        long monthlyNetMinutes = 0;
+        long totalActiveDays = 0;
+        for(LocalDate date : allDates){
+            if(date.getYear() == year && date.getMonth().toString().equalsIgnoreCase(Month.of(month).toString())){
+                long dailyNetMinutes = this.countNetMinutes(employee, date);
+                if(dailyNetMinutes > 0) totalActiveDays += 1;
+                monthlyNetMinutes += dailyNetMinutes;
+            }
+        }
+        double averageWorkMinutes = 0;
+        if(totalActiveDays > 0){
+            averageWorkMinutes = ((double)monthlyNetMinutes) / ((double)totalActiveDays);
+        }
+        long hours = monthlyNetMinutes/60;
+        long minutes = monthlyNetMinutes % 60;
+        String monthlyNetTime = Long.toString(hours);
+        if(monthlyNetTime.length() <= 1){
+            monthlyNetTime += '0';
+        }
+        monthlyNetTime += ':';
+        monthlyNetTime += Long.toString(minutes);
+        if(Long.toString(minutes).length() <= 1){
+            monthlyNetTime += '0';
+        }
+        monthlyNetTime += ":00";
+
+        Duration duration2 = Duration.ofMinutes((int)averageWorkMinutes);
+        LocalTime averageNetTime = LocalTime.MIN.plus(duration2);
+
+        return new EmployeeAnalysisResponse(monthlyNetTime, totalActiveDays, averageNetTime);
+    }
 }

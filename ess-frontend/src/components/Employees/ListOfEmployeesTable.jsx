@@ -7,6 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useGlobalContext } from "../../context/appContext";
 
 const columns = [
@@ -16,7 +18,22 @@ const columns = [
   { id: "role", label: "Role", maxWidth: 100 },
   { id: "totalLeavesTaken", label: "Leaves Taken", maxWidth: 100 },
   { id: "totalLeavesLeft", label: "Leaves Left", maxWidth: 100 },
-  { id: "options", label: "options", maxWidth: 100 },
+  { id: "options", label: "options", minWidth: 100 },
+  {
+    id: "monthlyNetMinutes",
+    label: "Net hours",
+    maxWidth: 100,
+  },
+  {
+    id: "totalActiveDays",
+    label: "Active days",
+    maxWidth: 100,
+  },
+  {
+    id: "averageWorkMinutes",
+    label: "Avg. hours",
+    maxWidth: 100,
+  },
 ];
 
 export default function ListOfEmployeesTable({
@@ -102,13 +119,13 @@ export default function ListOfEmployeesTable({
                                 className="bg-green-500/50 rounded-md p-1 cursor-pointer duration-300 hover:bg-green-400/60"
                                 onClick={() => handleUpdate(row)}
                               >
-                                update
+                                <BorderColorIcon fontSize="small" />
                               </button>{" "}
                               <button
                                 className="bg-red-500/60 rounded-md p-1 cursor-pointer duration-300 hover:bg-red-400/60"
                                 onClick={() => handleDelete(row)}
                               >
-                                delete
+                                <DeleteOutlineIcon fontSize="small" />
                               </button>
                             </>
                           ) : (
