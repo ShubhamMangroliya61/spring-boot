@@ -2,6 +2,7 @@ package com.ess.api.controllers;
 
 import com.ess.api.entities.*;
 import com.ess.api.request.AddEmployeeRequest;
+import com.ess.api.request.UpdatePasswordRequest;
 import com.ess.api.response.ApiResponse;
 import com.ess.api.response.EmployeeAnalysisResponse;
 import com.ess.api.security.services.UserDetailsImpl;
@@ -127,6 +128,26 @@ public class EmployeeController {
         employeeWithId.setRole(role);
         Employee updatedEmployee = employeeService.updateEmployee(empId, employeeWithId);
         return ResponseEntity.ok(updatedEmployee);
+    }
+
+    // Get updatePassword email
+    @PostMapping("/updatePassword/getEmail")
+    public ResponseEntity<?> getUpdatePasswordEmail(@RequestBody UpdatePasswordRequest updatePasswordRequest) throws MessagingException, IOException {
+        ApiResponse response = employeeService.getUpdatePasswordEmail(updatePasswordRequest);
+        if(!response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Update password
+    @PutMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest){
+        ApiResponse response = employeeService.updatePassword(updatePasswordRequest);
+        if(!response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // Login

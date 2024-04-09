@@ -22,6 +22,8 @@ import ListOfRolesPage from "./pages/AdminPages/ListOfRolesPage.jsx";
 import ListOfHolidaysPage from "./pages/AdminPages/ListOfHolidaysPage.jsx";
 import EmployeeProjectManagementDashboard from "./pages/EmployeeProjectManagementDashboard.jsx";
 import MyTeamPage from "./pages/MyTeamPage.jsx";
+import GetMailPage from "./pages/GetMailPage.jsx";
+import UpdatePasswordPage from "./pages/UpdatePasswordPage.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
@@ -149,6 +151,8 @@ function App() {
             path="/myTeam"
             element={jwtToken ? <MyTeamPage /> : <Navigate to="/login" />}
           />
+          <Route path="/getEmail" element={<GetMailPage />} />
+          <Route path="/updatePassword" element={<UpdatePasswordPage />} />
         </Routes>
       </Router>
     </div>
