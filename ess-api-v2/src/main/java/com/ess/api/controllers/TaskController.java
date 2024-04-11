@@ -85,6 +85,13 @@ public class TaskController {
         return ResponseEntity.ok(listOfTasksAssignedInGivenProject);
     }
 
+    // Search into tasks
+    @GetMapping("/{projectId}/{keyword}")
+    public ResponseEntity<?> searchIntoTasks(@PathVariable long projectId, @PathVariable String keyword){
+        List<Task> listOfSearchedTasks = taskService.search(projectId, keyword);
+        return ResponseEntity.ok(listOfSearchedTasks);
+    }
+
     //Get task by id
     @GetMapping("/withId/{taskId}")
     public ResponseEntity<?> getTaskById(@PathVariable long taskId){

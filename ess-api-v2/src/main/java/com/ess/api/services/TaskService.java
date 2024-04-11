@@ -119,4 +119,12 @@ public class TaskService {
 
         return isUpdated ? projectLogService.addLogToProject(updatedTask.getProject(), " Updated task " + task.getName() + " by " +  employee.getEmail()) : new ProjectLog(task.getProject(), task.getName() + " updated");
     }
+
+
+    // Search tasks
+    public List<Task> search(long projectId, String keyword) {
+        List<Task> searchedTasks = taskRepository.findByNameContainingOrDescriptionContainingOrAssignToFirstNameContains(keyword, keyword, keyword);
+        searchedTasks = searchedTasks.stream().filter(task -> task.getProject().getId() == projectId).toList();
+        return searchedTasks;
+    }
 }

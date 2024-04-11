@@ -26,6 +26,17 @@ function Board({ selectedProject, searchInput }) {
   };
 
   useEffect(() => {
+    if (searchInput?.trim().length > 0) {
+      authFetch
+        .get(`/task/${projectId}/${searchInput.trim()}`)
+        .then((res) => setCards(res.data))
+        .catch((err) => console.log(err));
+    } else {
+      setCards(allCards);
+    }
+  }, [searchInput]);
+
+  useEffect(() => {
     getAllTasksOfCurrentProject();
   }, [taskUpdate]);
 

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     public Task findTaskByName(String name);
+    public List<Task> findByNameContainingOrDescriptionContainingOrAssignToFirstNameContains(String nameKeyword, String descriptionKeyword, String firstNameKeyword);
 }
