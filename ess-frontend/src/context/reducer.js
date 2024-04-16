@@ -50,6 +50,7 @@ const reducer = (state, action) => {
         role: null,
         jwtToken: null,
         userId: null,
+        team: null,
       };
     case LOGOUT_USER:
       return {
@@ -57,6 +58,7 @@ const reducer = (state, action) => {
         role: null,
         jwtToken: null,
         userId: null,
+        team: null,
       };
     case DISPLAY_PASS_ERROR:
       return {

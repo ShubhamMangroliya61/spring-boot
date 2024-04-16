@@ -106,11 +106,11 @@ function Navbar() {
       <div className="w-[95%] m-auto flex flex-row text-center justify-between items-center">
         <div className="left">TruFlux</div>
         <div className="right">
-          {/* {showAlert && (
+          {showAlert && (
             <div className="absolute right-10 z-50">
               <CustomAlert />
             </div>
-          )} */}
+          )}
           <ul>
             <div className="relative flex flex-row px-[-20px] items-center">
               <li

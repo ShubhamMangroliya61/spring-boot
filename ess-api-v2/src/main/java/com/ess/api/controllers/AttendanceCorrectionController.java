@@ -4,9 +4,11 @@ import com.ess.api.entities.AttendanceCorrection;
 import com.ess.api.entities.Employee;
 import com.ess.api.entities.Leave;
 import com.ess.api.request.AttendanceCorrectionRequest;
+import com.ess.api.request.UpdateCorrectionStatusRequest;
 import com.ess.api.response.ApiResponse;
 import com.ess.api.services.AttendanceCorrectionService;
 import com.ess.api.utils.GetCurrentEmployee;
+import jakarta.mail.MessagingException;
 import jdk.dynalink.linker.LinkerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -59,8 +62,13 @@ public class AttendanceCorrectionController {
 
     // Update status
     @PutMapping("/updateStatus/{correctionId}")
-    public ResponseEntity<?> updateStatus(@PathVariable long correctionId, @RequestBody AttendanceCorrection attendanceCorrection){
-        AttendanceCorrection updatedAttendanceCorrection = attendanceCorrectionService.updateStatus(attendanceCorrection.getStatus(), correctionId);
+    public ResponseEntity<?> updateStatus(Authentication authentication, @PathVariable long correctionId, @RequestBody UpdateCorrectionStatusRequest updateCorrectionStatusRequest) throws MessagingException, IOException {
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin") &&  !currentEmployee.getRole().getName().equalsIgnoreCase("manager")){
+            ApiResponse response = new ApiResponse("You are not authorized", false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        AttendanceCorrection updatedAttendanceCorrection = attendanceCorrectionService.updateStatus(updateCorrectionStatusRequest.getAttendanceCorrection().getStatus(), correctionId, updateCorrectionStatusRequest.getAddNote(), currentEmployee);
         return ResponseEntity.ok(updatedAttendanceCorrection);
     }
 

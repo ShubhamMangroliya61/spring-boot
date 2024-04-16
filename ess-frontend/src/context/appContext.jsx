@@ -15,6 +15,7 @@ import {
 const jwtToken = localStorage.getItem("jwtToken");
 const role = localStorage.getItem("role");
 const userId = localStorage.getItem("userId");
+const team = localStorage.getItem("team");
 
 const initialState = {
   isLoading: false,
@@ -26,6 +27,7 @@ const initialState = {
   role: role || null,
   jwtToken: jwtToken || null,
   userId: userId || null,
+  team: team || null,
 };
 
 const AppContext = React.createContext();
@@ -98,11 +100,13 @@ const AppProvider = ({ children }) => {
               role: res.data.role.toString().toLowerCase(),
               jwtToken: res.data.token,
               userId: res.data.id.toString().toLowerCase(),
+              team: res.data.team.toLowerCase(),
             },
           });
           localStorage.setItem("jwtToken", res.data.token);
           localStorage.setItem("role", res.data.role.toString().toLowerCase());
           localStorage.setItem("userId", res.data.id.toString().toLowerCase());
+          localStorage.setItem("team", res.data.team.toString().toLowerCase());
           displayAlert("Login Successful", "success");
         })
         .catch((error) => {
