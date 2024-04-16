@@ -6,9 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 function SideBar() {
-  const { role } = useGlobalContext();
+  const { role, toggleSubOption, isSubOptionOpen } = useGlobalContext();
   const path = useLocation();
-  const [isSuboptionOpened, setIsSuboptionOpened] = useState(false);
   return (
     <div className="fixed top-20 h-full w-[15%] bg-slate-800 text-gray-800 backdrop-blur-md rounded-md">
       <div className="">
@@ -26,20 +25,12 @@ function SideBar() {
                     <div className="px-3">{<option.icon />}</div>
                     {option.text}
                     {option.text.toLowerCase() === "admin options" ? (
-                      !isSuboptionOpened ? (
-                        <div
-                          onClick={() => {
-                            setIsSuboptionOpened(true);
-                          }}
-                          className="ease-in-out"
-                        >
+                      !isSubOptionOpen ? (
+                        <div onClick={toggleSubOption} className="ease-in-out">
                           <ExpandMoreIcon />
                         </div>
                       ) : (
-                        <div
-                          onClick={() => setIsSuboptionOpened(false)}
-                          className="ease-in-out"
-                        >
+                        <div onClick={toggleSubOption} className="ease-in-out">
                           <ExpandLessIcon />
                         </div>
                       )
@@ -50,7 +41,7 @@ function SideBar() {
                   {option.text.toLowerCase() === "admin options" && (
                     <div
                       className={`${
-                        !isSuboptionOpened ? "hidden" : "flex flex-col"
+                        !isSubOptionOpen ? "hidden" : "flex flex-col"
                       } duration-300 ease-out height-[100px]`}
                     >
                       <ul className="flex flex-col ml-8">

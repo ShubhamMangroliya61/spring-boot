@@ -9,6 +9,8 @@ import {
   SETUP_USER_SUCCESS,
   SETUP_USER_ERROR,
   LOGOUT_USER,
+  CLOSE_SUB_OPTIONS,
+  OPEN_SUB_OPTIONS,
   DISPLAY_PASS_ERROR,
 } from "./actions";
 
@@ -16,6 +18,7 @@ const jwtToken = localStorage.getItem("jwtToken");
 const role = localStorage.getItem("role");
 const userId = localStorage.getItem("userId");
 const team = localStorage.getItem("team");
+const isSubOptionOpen = localStorage.getItem("isSunOptionOpen");
 
 const initialState = {
   isLoading: false,
@@ -28,6 +31,7 @@ const initialState = {
   jwtToken: jwtToken || null,
   userId: userId || null,
   team: team || null,
+  isSubOptionOpen: isSubOptionOpen || false,
 };
 
 const AppContext = React.createContext();
@@ -83,6 +87,17 @@ const AppProvider = ({ children }) => {
         type: CLEAR_ALERT,
       });
     }, 3000);
+  };
+
+  const toggleSubOption = () => {
+    if (isSubOptionOpen) {
+      localStorage.setItem("isSubOptionOpen", false);
+      dispatch({ type: CLOSE_SUB_OPTIONS });
+    } else {
+      localStorage.setItem("isSubOptionOpen", true);
+      console.log("closing");
+      dispatch({ type: OPEN_SUB_OPTIONS });
+    }
   };
 
   const setUpUser = async (employee) => {
@@ -144,6 +159,7 @@ const AppProvider = ({ children }) => {
         logoutUser,
         dispatch,
         setUpUser,
+        toggleSubOption,
       }}
     >
       {children}
