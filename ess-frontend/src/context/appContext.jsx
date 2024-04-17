@@ -91,11 +91,14 @@ const AppProvider = ({ children }) => {
 
   const toggleSubOption = () => {
     if (isSubOptionOpen) {
+      localStorage.removeItem(isSubOptionOpen);
       localStorage.setItem("isSubOptionOpen", false);
       dispatch({ type: CLOSE_SUB_OPTIONS });
+      console.log(initialState.isSubOptionOpen);
     } else {
+      localStorage.removeItem(isSubOptionOpen);
       localStorage.setItem("isSubOptionOpen", true);
-      console.log("closing");
+      console.log(initialState.isSubOptionOpen);
       dispatch({ type: OPEN_SUB_OPTIONS });
     }
   };
