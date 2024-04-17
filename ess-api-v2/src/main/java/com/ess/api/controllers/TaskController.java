@@ -129,4 +129,11 @@ public class TaskController {
         ProjectLog subTaskLog = subTaskService.addSubTask(addSubTaskRequest, task, currentEmployee);
         return ResponseEntity.ok(subTaskLog);
     }
+
+    // Search subTasks
+    @GetMapping("/search/subtasks/{taskId}/{keyword}")
+    public ResponseEntity<?> searchSubTasks(@PathVariable Long taskId, @PathVariable String keyword){
+        List<SubTask> listToSend = subTaskService.searchSubTasksInTask(keyword, taskId);
+        return ResponseEntity.ok(listToSend);
+    }
 }
