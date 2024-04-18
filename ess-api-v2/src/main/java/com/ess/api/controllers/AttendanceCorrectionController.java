@@ -34,18 +34,12 @@ public class AttendanceCorrectionController {
     // Add request
     @PostMapping
     public ResponseEntity<?> addRequest(Authentication authentication,@RequestBody AttendanceCorrectionRequest attendanceCorrectionRequest){
-        LocalDate date = LocalDate.of(attendanceCorrectionRequest.getYear(), attendanceCorrectionRequest.getMonth(), attendanceCorrectionRequest.getDay());
         Employee currentEmployee =  getCurrentEmployee.getCurrentEmployee(authentication);
-        AttendanceCorrection attendanceCorrection = new AttendanceCorrection(date, attendanceCorrectionRequest.getRemark(), Leave.LeaveStatus.PENDING, currentEmployee);
-
-        AttendanceCorrection existingAttendaceCorrection = attendanceCorrectionService.getByEmployeeAndDate(currentEmployee.getId(), attendanceCorrection.getDate());
-        if(existingAttendaceCorrection != null){
-            ApiResponse response = new ApiResponse("You already had request for "+attendanceCorrection.getDate(),false);
+        ApiResponse response = attendanceCorrectionService.addRequest(currentEmployee, attendanceCorrectionRequest);
+        if(!response.isSuccess()){
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
-        AttendanceCorrection addedAttendanceCorrection = attendanceCorrectionService.addRequest(currentEmployee, attendanceCorrection);
-        return ResponseEntity.ok(addedAttendanceCorrection);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // Get all

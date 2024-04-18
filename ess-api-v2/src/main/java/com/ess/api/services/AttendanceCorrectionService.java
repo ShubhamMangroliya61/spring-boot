@@ -6,9 +6,13 @@ import com.ess.api.repositories.AttendaceCorrectionRepository;
 import com.ess.api.repositories.PunchInRepository;
 import com.ess.api.repositories.PunchOutRepository;
 import com.ess.api.request.AddNote;
+import com.ess.api.request.AttendanceCorrectionRequest;
+import com.ess.api.response.ApiResponse;
 import com.ess.api.utils.SendMail;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,9 +39,24 @@ public class AttendanceCorrectionService {
     private SendMail sendMail;
 
     // Add request
-    public AttendanceCorrection addRequest(Employee employee, AttendanceCorrection attendanceCorrection){
+    public ApiResponse addRequest(Employee employee, AttendanceCorrectionRequest attendanceCorrectionRequest){
+        LocalDate date = LocalDate.of(attendanceCorrectionRequest.getYear(), attendanceCorrectionRequest.getMonth(), attendanceCorrectionRequest.getDay());
+
+        long netMinutesOfGivenDate = punchInAndOutService.countNetMinutes(employee, date);
+        if(netMinutesOfGivenDate >= 450){
+            return new ApiResponse("Your net hours are already 7.5 for "+date,false);
+        }
+
+        AttendanceCorrection existingAttendaceCorrection = this.getByEmployeeAndDate(employee.getId(), date);
+        if(existingAttendaceCorrection != null){
+            return new ApiResponse("You already had requested for "+date,false);
+        }
+
+        AttendanceCorrection attendanceCorrection = new AttendanceCorrection(date, attendanceCorrectionRequest.getRemark(), Leave.LeaveStatus.PENDING, employee);
         attendanceCorrection.setEmployee(employee);
-        return attendaceCorrectionRepository.save(attendanceCorrection);
+        attendaceCorrectionRepository.save(attendanceCorrection);
+
+        return new ApiResponse("Attendance correction request added successfully", true);
     }
 
     // Get by id
