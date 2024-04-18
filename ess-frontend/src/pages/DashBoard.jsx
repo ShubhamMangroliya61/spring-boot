@@ -99,7 +99,7 @@ function DashBoard() {
   const setHoliday = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     const dateWithHolidays = holidays.find((x) => x.date === formattedDate);
-    console.log(dateWithHolidays);
+    // console.log(dateWithHolidays);
     if (dateWithHolidays) return "holiday";
   };
 
