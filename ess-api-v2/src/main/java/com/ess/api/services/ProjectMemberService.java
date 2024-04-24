@@ -50,7 +50,6 @@ public class ProjectMemberService {
         Map<String, ArrayList<Project>> memberWithProject = new LinkedHashMap<>();
         listOfMembers.forEach(projectMember -> {
             if(projectMember.getRole().toString().equalsIgnoreCase(role.toString())){
-                System.out.println(projectMember.getRole());
                 String memberName = projectMember.getEmployee().getFirstName() + " " +projectMember.getEmployee().getLastName();
                 Project project = projectMember.getProject();
                 if(memberWithProject.containsKey(memberName)){
@@ -64,7 +63,6 @@ public class ProjectMemberService {
                 }
             }
         });
-
         return memberWithProject;
     }
 

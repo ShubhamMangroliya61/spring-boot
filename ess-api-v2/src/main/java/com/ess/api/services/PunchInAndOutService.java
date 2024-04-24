@@ -90,7 +90,6 @@ public class PunchInAndOutService {
         }
 
         long netMinutes = 0;
-//        System.out.println(timeIntervals);
         if(!timeIntervals.isEmpty()){
             if(timeIntervals.size() % 2 == 0){
                 netMinutes = ChronoUnit.MINUTES.between(timeIntervals.getFirst(), timeIntervals.getLast());
@@ -98,12 +97,9 @@ public class PunchInAndOutService {
                 netMinutes = ChronoUnit.MINUTES.between(timeIntervals.getFirst(), LocalTime.now());
             }
         }
-
-//        System.out.println(netMinutes);
         for(int i=0;i< timeIntervals.size();i++){
             if(i > 0 && i % 2 == 0){
                 long outDuration = ChronoUnit.MINUTES.between(timeIntervals.get(i-1), timeIntervals.get(i));
-//                System.out.println(outDuration);
                 netMinutes -= outDuration;
             }
         }
