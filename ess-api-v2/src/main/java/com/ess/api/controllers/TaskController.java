@@ -1,12 +1,10 @@
 package com.ess.api.controllers;
 
 import com.ess.api.entities.*;
+import com.ess.api.request.AddSubTaskRequest;
 import com.ess.api.request.AddTaskRequest;
 import com.ess.api.response.ApiResponse;
-import com.ess.api.services.EmployeeService;
-import com.ess.api.services.ProjectMemberService;
-import com.ess.api.services.ProjectService;
-import com.ess.api.services.TaskService;
+import com.ess.api.services.*;
 import com.ess.api.utils.GetCurrentEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +35,9 @@ public class TaskController {
 
     @Autowired
     private GetCurrentEmployee getCurrentEmployee;
+
+    @Autowired
+    private SubTaskService subTaskService;
 
     // Add task
     @PostMapping
@@ -85,6 +86,13 @@ public class TaskController {
         return ResponseEntity.ok(listOfTasksAssignedInGivenProject);
     }
 
+    // Search into tasks
+    @GetMapping("/{projectId}/{keyword}")
+    public ResponseEntity<?> searchIntoTasks(@PathVariable long projectId, @PathVariable String keyword){
+        List<Task> listOfSearchedTasks = taskService.search(projectId, keyword);
+        return ResponseEntity.ok(listOfSearchedTasks);
+    }
+
     //Get task by id
     @GetMapping("/withId/{taskId}")
     public ResponseEntity<?> getTaskById(@PathVariable long taskId){
@@ -111,5 +119,21 @@ public class TaskController {
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         ProjectLog updateTaskLog = taskService.updateTask(taskId, task, currentEmployee);
         return ResponseEntity.ok(updateTaskLog);
+    }
+
+    // Add subTask
+    @PostMapping("/addSubTask/{taskId}")
+    public ResponseEntity<?> addSubTask(@RequestBody AddSubTaskRequest addSubTaskRequest, @PathVariable Long taskId, Authentication authentication){
+        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
+        Task task = taskService.getTaskById(taskId);
+        ProjectLog subTaskLog = subTaskService.addSubTask(addSubTaskRequest, task, currentEmployee);
+        return ResponseEntity.ok(subTaskLog);
+    }
+
+    // Search subTasks
+    @GetMapping("/search/subtasks/{taskId}/{keyword}")
+    public ResponseEntity<?> searchSubTasks(@PathVariable Long taskId, @PathVariable String keyword){
+        List<SubTask> listToSend = subTaskService.searchSubTasksInTask(keyword, taskId);
+        return ResponseEntity.ok(listToSend);
     }
 }

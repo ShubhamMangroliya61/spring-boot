@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                                 .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.FORWARD, DispatcherType.ERROR)
                                 .permitAll()
                                 // Above two lines provide inter resources authentication
-                                .requestMatchers("/api/auth/login")
+                                .requestMatchers("/api/auth/login", "/api/employee/updatePassword","/api/employee/updatePassword/getEmail")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

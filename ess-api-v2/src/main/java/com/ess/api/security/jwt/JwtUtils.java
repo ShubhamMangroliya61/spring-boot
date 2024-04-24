@@ -37,9 +37,9 @@ public class JwtUtils {
     }
 
     public String generateJwtToken(Authentication authentication) {
-        System.out.println("Generating...............");
+//        System.out.println("Generating...............");
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        System.out.println("Generating2..............." + userPrincipal);
+//        System.out.println("Generating2..............." + userPrincipal);
 
         return Jwts.builder().setSubject((userPrincipal.getEmail())).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))

@@ -6,6 +6,8 @@ import {
   SETUP_USER_ERROR,
   LOGOUT_USER,
   DISPLAY_PASS_ERROR,
+  OPEN_SUB_OPTIONS,
+  CLOSE_SUB_OPTIONS,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -50,6 +52,7 @@ const reducer = (state, action) => {
         role: null,
         jwtToken: null,
         userId: null,
+        team: null,
       };
     case LOGOUT_USER:
       return {
@@ -57,6 +60,17 @@ const reducer = (state, action) => {
         role: null,
         jwtToken: null,
         userId: null,
+        team: null,
+      };
+    case OPEN_SUB_OPTIONS:
+      return {
+        ...state,
+        isSubOptionOpen: true,
+      };
+    case CLOSE_SUB_OPTIONS:
+      return {
+        ...state,
+        isSubOptionOpen: false,
       };
     case DISPLAY_PASS_ERROR:
       return {

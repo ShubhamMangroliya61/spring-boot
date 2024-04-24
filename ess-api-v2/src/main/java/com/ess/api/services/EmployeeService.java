@@ -7,9 +7,16 @@ import com.ess.api.exceptions.ResourceAlreadyExistsException;
 import com.ess.api.exceptions.ResourceNotFoundException;
 import com.ess.api.repositories.EmployeeRepository;
 import com.ess.api.repositories.RoleRepository;
+import com.ess.api.request.UpdatePasswordRequest;
+import com.ess.api.response.ApiResponse;
+import com.ess.api.utils.SendMail;
+import jakarta.mail.MessagingException;
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +31,12 @@ public class EmployeeService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SendMail sendMail;
 
     // Add Employee
     public Employee addEmployee(Employee employee){
@@ -78,5 +91,33 @@ public class EmployeeService {
     public List<Employee> getEmployeesWithGivenRole(Long roleId){
         Role roleWithGivenId = roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Role", "RoleId", roleId.toString()));
         return employeeRepository.findAllEmployeesByRole(roleWithGivenId);
+    }
+
+    // Get UpdatePassword Email
+    public ApiResponse getUpdatePasswordEmail(UpdatePasswordRequest updatePasswordRequest) throws MessagingException, IOException {
+        if(updatePasswordRequest.getEmail() == null || updatePasswordRequest.getEmail().trim().isEmpty()){
+            return new ApiResponse("Must provide valid email.", false);
+        }
+        Employee employee = this.getEmployeeByEmail(updatePasswordRequest.getEmail());
+        sendMail.sendResetPasswordMail(employee.getEmail(), employee.getFirstName() + " " + employee.getLastName());
+        return new ApiResponse("Link for update password sent to: " + employee.getEmail(), true);
+    }
+
+    // Update password
+    public ApiResponse updatePassword(UpdatePasswordRequest updatePasswordRequest){
+        Employee employee = this.getEmployeeByEmail(updatePasswordRequest.getEmail());
+        if(updatePasswordRequest.getOldPassword() == null || updatePasswordRequest.getNewPassword() == null ||updatePasswordRequest.getOldPassword().trim().isEmpty() || updatePasswordRequest.getNewPassword().isEmpty()){
+            return new ApiResponse("You must provide old and new password both.", false);
+        }
+        if(!passwordEncoder.matches(updatePasswordRequest.getOldPassword(), employee.getPassword())){
+            return new ApiResponse("Wrong old password!!", false);
+        }
+        if(updatePasswordRequest.getOldPassword().trim().equals(updatePasswordRequest.getNewPassword().trim())){
+            return new ApiResponse("Choose different password than previous password.", false);
+        }
+
+        employee.setPassword(passwordEncoder.encode(updatePasswordRequest.getNewPassword()));
+        employeeRepository.save(employee);
+        return new ApiResponse("Your password is updated successfully.", true);
     }
 }

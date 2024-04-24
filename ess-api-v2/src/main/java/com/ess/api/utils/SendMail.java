@@ -72,6 +72,21 @@ public class SendMail {
         mailSender.send(message);
     }
 
+    public void sendResetPasswordMail(String email, String employeeName) throws MessagingException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        message.setFrom(new InternetAddress("aditya@demomailtrap.com"));
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+        message.setSubject("Update password");
+
+        String htmlTemplate = getTemplate(basePath+"/updatePassword.html");
+        String htmlContent = htmlTemplate.replace("${employeeName}", employeeName);
+        htmlContent = htmlContent.replace("${pageUrl}", baseUrl+"/updatePassword");
+
+        message.setContent(htmlContent, "text/html; charset=utf-8");
+        mailSender.send(message);
+    }
+
     private String getTemplate(String filePath) throws IOException {
         Path path = Paths.get(filePath);
         return Files.readString(path, StandardCharsets.UTF_8);

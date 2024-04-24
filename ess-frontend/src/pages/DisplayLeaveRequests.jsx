@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useInsertionEffect, useState } from "react";
 import { useGlobalContext } from "../context/appContext";
 import AdminLeaveRequestTable from "../components/Admin Leave Requests/AdminLeaveRequestTable";
 import CounterCard from "../components/CounterCard";
 import SideBar from "../components/SideBar";
+import AdminAttendanceCorrectionTable from "../components/Attendance Correction/AdminAttendanceCorrectionTable";
 
 function DisplayLeaveRequests({
   allLeaveRequestsProps = [],
+  allCorrectionREquestsProps = [],
   heading,
   setIsChanged,
 }) {
-  const { authFetch } = useGlobalContext();
+  const { authFetch, role, team } = useGlobalContext();
 
   const [allLeaveRequests, setAllLeaveRequests] = useState([]);
   const [pendingLeaveRequests, setPendingLeaveRequests] = useState([]);
@@ -109,12 +111,21 @@ function DisplayLeaveRequests({
         <div className="relative top-10 w-[95.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
           <div className="w-[95%] p-5 pb-10">
             <p className="text-white text-base font-semibold mb-3">
-              All the {typeToDisplay === "all" ? "" : typeToDisplay} requests
+              All the {typeToDisplay === "all" ? "" : typeToDisplay} leave
+              requests
             </p>
             <AdminLeaveRequestTable
               allPreviousLeaveRequests={leavesToDisplay}
               setIsChanged
             />
+          </div>
+        </div>
+        <div className="relative top-10 w-[95.5%] m-auto flex flex-row align-middle items-center justify-center bg-gray-800 backdrop-blur-md rounded-md mb-5">
+          <div className="w-[95%] p-5 pb-10">
+            <p className="text-white text-base font-semibold mb-3">
+              All the attendance correction request
+            </p>
+            <AdminAttendanceCorrectionTable />
           </div>
         </div>
       </div>

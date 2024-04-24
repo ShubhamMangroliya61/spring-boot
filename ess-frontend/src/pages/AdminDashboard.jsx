@@ -9,6 +9,7 @@ function AdminDashboard() {
   const { authFetch, showAlert } = useGlobalContext();
   const [allLeaveRequests, setAllLeaveRequests] = useState([]);
   const [isChanged, setIsChanged] = useState(false);
+  const [allCorrectionRequests, setAllCorrectionRequests] = useState([]);
 
   // useEffect(() => {
   //   authFetch
@@ -26,6 +27,11 @@ function AdminDashboard() {
         setAllLeaveRequests(res.data);
       })
       .catch((err) => console.log(err.data));
+
+    authFetch
+      .get("/correction/getAll")
+      .then((res) => setAllCorrectionRequests(res.data))
+      .catch((err) => console.log(err));
   }, [isChanged]);
 
   return (
@@ -43,6 +49,7 @@ function AdminDashboard() {
             )}
             <DisplayLeaveRequests
               allLeaveRequestsProps={allLeaveRequests}
+              allCorrectionREquestsProps={allCorrectionRequests}
               heading={"Toal leave requests"}
               setIsChanged
             />

@@ -49,6 +49,6 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
         return ResponseEntity
-                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), currentEmployee.getRole().getName()));
+                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), currentEmployee.getRole().getName(), currentEmployee.getTeam().getName()));
     }
 }
