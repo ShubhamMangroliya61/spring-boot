@@ -119,8 +119,7 @@ public class EmployeeController {
 
     // Update by id
     @PutMapping("/{empId}")
-    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long empId, @RequestBody AddEmployeeRequest employee,
-            HttpSession session) {
+    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long empId, @RequestBody AddEmployeeRequest employee) {
         Employee employeeWithId = employeeService.getEmployee(empId);
         Team team = teamService.GetTeamById(employee.getTeamId());
         Role role = roleService.getRoleById(employee.getRoleId());
@@ -152,6 +151,7 @@ public class EmployeeController {
 
     // Login
     @PostMapping("/login")
+
     public ResponseEntity<?> loginEmployee(@RequestBody Employee employee, HttpSession session) {
         Employee employeeByEmail = employeeService.getEmployeeByEmail(employee.getEmail());
         if (employeeByEmail == null || !Objects.equals(employeeByEmail.getPassword(), employee.getPassword())) {
@@ -166,11 +166,6 @@ public class EmployeeController {
     // get all employees from given team
     @GetMapping("/team/{teamId}/all")
     public ResponseEntity<?> getAllTheEmployeesInGivenTeam(@PathVariable long teamId, Authentication authentication){
-        Employee currentEmployee = getCurrentEmployee.getCurrentEmployee(authentication);
-        /*if(!currentEmployee.getRole().getName().equalsIgnoreCase("admin")){
-            ApiResponse response = new ApiResponse("You are not authorized", false);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }*/
         List<Employee> employeesWithGivenTeam = employeeService.getEmployeesFromGivenTeam(teamId);
         return ResponseEntity.ok(employeesWithGivenTeam);
     }

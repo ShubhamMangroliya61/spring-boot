@@ -75,30 +75,24 @@ public class AttendanceCorrectionService {
         existingattendanceCorrection.setStatus(status);
         if(status == Leave.LeaveStatus.APPROVED){
             punchInAndOutService.deletePunchesOfGivenDateOfGivenEmployee(existingattendanceCorrection.getEmployee(), existingattendanceCorrection.getDate());
+            PunchIn newPunchIn = new PunchIn(existingattendanceCorrection.getDate(), LocalTime.of(10,0,0), existingattendanceCorrection.getEmployee());
+            PunchOut newPunchOut = new PunchOut(existingattendanceCorrection.getDate(), LocalTime.of(17,30,0), existingattendanceCorrection.getEmployee());
+            punchInRepository.save(newPunchIn);
+            punchOutRepository.save(newPunchOut);
         }
-        PunchIn newPunchIn = new PunchIn(existingattendanceCorrection.getDate(), LocalTime.of(10,0,0), existingattendanceCorrection.getEmployee());
-        PunchOut newPunchOut = new PunchOut(existingattendanceCorrection.getDate(), LocalTime.of(17,30,0), existingattendanceCorrection.getEmployee());
-        punchInRepository.save(newPunchIn);
-        punchOutRepository.save(newPunchOut);
-
-        sendMail.sendApproveOrRejectedRequestMail(existingattendanceCorrection.getEmployee().getEmail(),existingattendanceCorrection.getStatus().toString(), currentEmployee.getFirstName()  + " " + currentEmployee.getLastName(), addNote.getNote());
+        sendMail.sendApproveOrRejectedRequestMail(existingattendanceCorrection.getEmployee().getEmail(), existingattendanceCorrection.getStatus().toString(), currentEmployee.getFirstName()  + " " + currentEmployee.getLastName(), addNote.getNote());
 
         return attendaceCorrectionRepository.save(existingattendanceCorrection);
     }
 
     // Get by employee and date
     public AttendanceCorrection getByEmployeeAndDate(Long employeeId, LocalDate date){
-        List<AttendanceCorrection> allTheAttendaceCorrection = this.getAll();
-        for (AttendanceCorrection attendanceCorrection : allTheAttendaceCorrection) {
-            /*System.out.print(attendanceCorrection.getEmployee().getId() + " " + employeeId + " " + attendanceCorrection.getDate() + " " + date);
-            System.out.print(attendanceCorrection.getEmployee().getId() == employeeId);
-            System.out.println(attendanceCorrection.getDate().equals(date));*/
+        List<AttendanceCorrection> allTheAttendanceCorrection = this.getAll();
+        for (AttendanceCorrection attendanceCorrection : allTheAttendanceCorrection) {
             if (attendanceCorrection.getEmployee().getId() == employeeId && attendanceCorrection.getDate().equals(date)) {
-//                System.out.println("------------------------------> returning non null" );
                 return attendanceCorrection;
             }
         }
-//        System.out.println("------------------------------> returning null" );
         return null;
     }
 }
