@@ -29,7 +29,7 @@ public class HotelController {
         return ResponseEntity.status(HttpStatus.FOUND).body(hotelService.GetById(hotelId));
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<?> getAll(){
         return ResponseEntity.status(HttpStatus.FOUND).body(hotelService.getAll());
     }
