@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -38,7 +39,7 @@ public class UserServiceImp implements UserService {
         allUsers.forEach(user -> {
             Rating[] ratings =  restTemplate.getForEntity("http://RATING-SERVICE/ratings/byUserId/"+user.getUserId(), Rating[].class).getBody();
             assert ratings != null;
-            List<Rating> ratingsOfUser = Arrays.stream(ratings).toList();
+            List<Rating> ratingsOfUser = Arrays.stream(ratings).collect(Collectors.toList());
             ratingsOfUser.forEach(rating -> {
                 Hotel hotel = restTemplate.getForEntity("http://HOTEL-SERVICE/hotel/"+rating.getHotelId(), Hotel.class).getBody();
                 rating.setHotel(hotel);
@@ -53,7 +54,7 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with given Id"));
         Rating[] ratings = restTemplate.getForEntity("http://RATING-SERVICE/ratings/byUserId/"+userId, Rating[].class).getBody();
         assert ratings != null;
-        List<Rating> ratingsOfUser = Arrays.stream(ratings).toList();
+        List<Rating> ratingsOfUser = Arrays.stream(ratings).collect(Collectors.toList());
         ratingsOfUser.forEach(rating -> {
             Hotel hotel = restTemplate.getForEntity("http://HOTEL-SERVICE/hotel/"+rating.getHotelId(), Hotel.class).getBody();
             rating.setHotel(hotel);
