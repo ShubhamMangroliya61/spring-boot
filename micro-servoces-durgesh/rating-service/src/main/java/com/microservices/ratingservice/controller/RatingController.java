@@ -2,7 +2,6 @@ package com.microservices.ratingservice.controller;
 
 import com.microservices.ratingservice.entities.Rating;
 import com.microservices.ratingservice.service.RatingService;
-import com.sun.net.httpserver.HttpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
