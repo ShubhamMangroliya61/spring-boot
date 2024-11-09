@@ -6,10 +6,9 @@ import CustomAlert from "./utils/CustomAlert";
 import EmployeePersonalDetailsModal from "./EmployeePersonalDetails/EmployeePersonalDetailsModal";
 
 import InitialsAvatar from "react-initials-avatar";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar() {
-  const navigate = useNavigate();
   const { authFetch, logoutUser, displayAlert, showAlert, userId } =
     useGlobalContext();
 
@@ -27,7 +26,7 @@ function Navbar() {
   };
   const handleViewProfile = () => {
     if (userId) {
-      navigate(`/profile/${userId}`); 
+      return <Link to={`/profile/${userId}`} />;
     } else {
       console.error("User ID is not defined");
     }
