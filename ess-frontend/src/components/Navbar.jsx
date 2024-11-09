@@ -23,7 +23,9 @@ function Navbar() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleViewProfile = () => {
+    navigate(`/profile/${userId}`);
+  };
   useEffect(() => {
     authFetch
       .get("/employee/getCurrent")
@@ -169,7 +171,10 @@ function Navbar() {
                   <li className="cursor-pointer duration-200 hover:text-gray-300">
                     Sub-op-1
                   </li>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
+                  <li
+                    className="cursor-pointer duration-200 hover:text-gray-300"
+                    onClick={handleViewProfile}
+                  >
                     View profile
                   </li>
                   <li

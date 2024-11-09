@@ -153,6 +153,10 @@ function App() {
           />
           <Route path="/getEmail" element={<GetMailPage />} />
           <Route path="/updatePassword" element={<UpdatePasswordPage />} />
+          <Route
+            path="/profile/:userId"
+            element={jwtToken ? <ProfilePage /> : <Navigate to="/login" />}
+          />
         </Routes>
       </Router>
     </div>
