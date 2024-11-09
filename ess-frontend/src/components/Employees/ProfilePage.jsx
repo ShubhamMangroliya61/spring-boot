@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGlobalContext } from "../context/appContext";
+import { useGlobalContext } from "../../context/appContext";
 
 function ProfilePage() {
   const { authFetch } = useGlobalContext();
