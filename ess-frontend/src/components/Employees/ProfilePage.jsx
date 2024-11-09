@@ -18,7 +18,7 @@ function ProfilePage() {
     <div className="profile-page">
       {profileData ? (
         <>
-          <h1>{profileData.name}</h1>
+          <h1>{profileData.firstName}</h1> 
           <p>Email: {profileData.email}</p>
           <p>Position: {profileData.position}</p>
         </>
