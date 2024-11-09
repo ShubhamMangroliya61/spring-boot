@@ -6,8 +6,10 @@ import CustomAlert from "./utils/CustomAlert";
 import EmployeePersonalDetailsModal from "./EmployeePersonalDetails/EmployeePersonalDetailsModal";
 
 import InitialsAvatar from "react-initials-avatar";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const navigate = useNavigate();
   const { authFetch, logoutUser, displayAlert, showAlert, userId } =
     useGlobalContext();
 
@@ -24,8 +26,11 @@ function Navbar() {
     setOpen(false);
   };
   const handleViewProfile = () => {
-    let userId = localStorage.getItem('userId');
-    navigate(`/profile/${userId}`);
+    if (userId) {
+      navigate(`/profile/${userId}`); 
+    } else {
+      console.error("User ID is not defined");
+    }
   };
   useEffect(() => {
     authFetch
