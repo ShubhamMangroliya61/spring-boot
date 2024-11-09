@@ -15,17 +15,16 @@ function ProfilePage() {
   }, [authFetch, userId]);
 
   return (
-    <div className="profile-page">
-      {profileData ? (
-        <>
-          <h1>{profileData.firstName}</h1> 
-          <p>Email: {profileData.email}</p>
-          <p>Position: {profileData.position}</p>
-        </>
-      ) : (
-        <p>Loading profile...</p>
-      )}
-    </div>
+    <div className="profile-page min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    {profileData ? (
+      <div className="text-center p-6 bg-gray-800 rounded-md shadow-md">
+        <h1 className="text-3xl font-bold mb-4">{profileData.firstName}</h1> - <h1 className="text-3xl font-bold mb-4">{profileData.lastName}</h1> 
+        <p className="text-lg mb-2">Email: {profileData.email}</p>
+      </div>
+    ) : (
+      <p className="text-lg">Loading profile...</p>
+    )}
+  </div>
   );
 }
 
