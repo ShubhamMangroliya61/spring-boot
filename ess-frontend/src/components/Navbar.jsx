@@ -24,6 +24,7 @@ function Navbar() {
     setOpen(false);
   };
   const handleViewProfile = () => {
+    let userId = localStorage.getItem('userId');
     navigate(`/profile/${userId}`);
   };
   useEffect(() => {
