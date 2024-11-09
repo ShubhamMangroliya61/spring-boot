@@ -24,6 +24,7 @@ import EmployeeProjectManagementDashboard from "./pages/EmployeeProjectManagemen
 import MyTeamPage from "./pages/MyTeamPage.jsx";
 import GetMailPage from "./pages/GetMailPage.jsx";
 import UpdatePasswordPage from "./pages/UpdatePasswordPage.jsx";
+import ProfilePage from "./components/Employees/ProfilePage.jsx";
 
 function App() {
   const { jwtToken, role } = useGlobalContext();
