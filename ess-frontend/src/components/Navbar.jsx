@@ -25,11 +25,7 @@ function Navbar() {
     setOpen(false);
   };
   const handleViewProfile = () => {
-    if (userId) {
-      return <Link to={`/profile/${userId}`} />;
-    } else {
-      console.error("User ID is not defined");
-    }
+      window.open(`/profile/${userId}`, "_blank");
   };
   useEffect(() => {
     authFetch
