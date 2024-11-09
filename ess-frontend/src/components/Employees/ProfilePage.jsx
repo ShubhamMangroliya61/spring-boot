@@ -9,7 +9,7 @@ function ProfilePage() {
 
   useEffect(() => {
     authFetch
-      .get(`/employee/${userId}`)
+      .get(`employee/get-employee/${userId}`)
       .then((response) => setProfileData(response.data))
       .catch((error) => console.error("Error fetching profile data:", error));
   }, [authFetch, userId]);
