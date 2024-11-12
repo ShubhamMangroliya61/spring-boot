@@ -1,14 +1,13 @@
-import { useEffect } from "react";
-import DashBoard from "./pages/DashBoard.jsx";
-import Login from "./components/Login";
-import Navbar from "./components/Navbar.jsx";
-import { useGlobalContext } from "./context/appContext.jsx";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
+import { useGlobalContext } from "./context/appContext";
+import DashBoard from "./pages/DashBoard.jsx";
+import Login from "./components/Login";
+import Navbar from "./components/Navbar.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProjectManagementDashboard from "./pages/ProjectManagementDashboard.jsx";
 import AttendanceDetailsPage from "./pages/AttendanceDetailsPage.jsx";
@@ -25,142 +24,142 @@ import MyTeamPage from "./pages/MyTeamPage.jsx";
 import GetMailPage from "./pages/GetMailPage.jsx";
 import UpdatePasswordPage from "./pages/UpdatePasswordPage.jsx";
 import ProfilePage from "./components/Employees/ProfilePage.jsx";
+import ResetPassPage from "./pages/ResetPassPage.jsx";
+
+
 
 function App() {
-  const { jwtToken, role } = useGlobalContext();
+  const { jwtToken, role, userRedirect } = useGlobalContext();
+
+  const routes = [
+    { path: "/login", element: <Login />, guard: "public" },
+    {
+      path: "/",
+      element: role === "admin" ? <AdminDashboard /> : <DashBoard />,
+      guard: "private",
+    },
+    {
+      path: "/projectManagement/dashboard",
+      element:
+        role === "admin" ? (
+          <ProjectManagementDashboard />
+        ) : (
+          <EmployeeProjectManagementDashboard />
+        ),
+      guard: "private",
+    },
+    {
+      path: "/attendanceDetails",
+      element: <AttendanceDetailsPage />,
+      guard: "private",
+    },
+    { path: "/leaveRequest", element: <LeaveRequestPage />, guard: "private" },
+    {
+      path: "/displayLeaveRequest",
+      element: <DisplayLeaveRequests />,
+      guard: "admin",
+    },
+    {
+      path: "/projectManagementDashboard",
+      element: <ProjectManagementDashboard />,
+      guard: "private",
+    },
+    {
+      path: "/listOfProjects/:status",
+      element: <DisplayListOfProjects />,
+      guard: "private",
+    },
+    {
+      path: "/listOfProjects/managers/:name",
+      element: <DisplayListOfProjects />,
+      guard: "private",
+    },
+    {
+      path: "/listOfTasks/:projectId",
+      element: <ProjectTaksPage />,
+      guard: "private",
+    },
+    { path: "/employees", element: <ListOfEmplyeesPage />, guard: "admin" },
+    { path: "/teams", element: <ListOfTeamsPage />, guard: "admin" },
+    { path: "/roles", element: <ListOfRolesPage />, guard: "admin" },
+    { path: "/holidays", element: <ListOfHolidaysPage />, guard: "private" },
+    { path: "/myTeam", element: <MyTeamPage />, guard: "private" },
+    { path: "/getEmail", element: <GetMailPage />, guard: "public" },
+    {
+      path: "/updatePassword",
+      element: <UpdatePasswordPage />,
+      guard: "public",
+    },
+    { path: "/profile/:userId", element: <ProfilePage />, guard: "private" },
+    { path: "/reset_pass", element: <ResetPassPage />, guard: "private" },
+  ];
+
+
+  const PublicRoute = ({ element }) => {
+    if (!jwtToken) {
+
+      return element;
+    } else {
+      if (userRedirect) {
+        return <Navigate to="/reset_pass" />;
+      } else {
+
+        return <Navigate to="/" />;
+      }
+    }
+  };
+
+  const PrivateRoute = ({ element }) => {
+    if (jwtToken) {
+      if (userRedirect) {
+
+        return <Navigate to="/reset_pass" />;
+      } else {
+
+        return element;
+      }
+    } else {
+
+      return <Navigate to="/login" />;
+    }
+  };
+
+  const AdminRoute = ({ element }) => jwtToken && role === "admin" ? element : <Navigate to="/login" />;
 
   return (
     <div className="absolute bg-black min-h-svh">
       <div className="w-screen relative z-10">{jwtToken && <Navbar />}</div>
       <Router>
         <Routes>
-          <Route
-            path="/login"
-            element={!jwtToken ? <Login /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/"
-            element={
-              jwtToken ? (
-                role === "admin" ? (
-                  <AdminDashboard />
-                ) : (
-                  <DashBoard />
-                )
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/projectManagement/dashdoard"
-            element={
-              jwtToken ? (
-                role === "admin" ? (
-                  <ProjectManagementDashboard />
-                ) : (
-                  <EmployeeProjectManagementDashboard />
-                )
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/attendanceDetails"
-            element={
-              jwtToken ? <AttendanceDetailsPage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/leaveRequest"
-            element={jwtToken ? <LeaveRequestPage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/displayLeaveRequest"
-            element={
-              jwtToken && role === "admin" ? (
-                <DisplayLeaveRequests />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/projectManagementDashboard"
-            element={
-              jwtToken ? (
-                <ProjectManagementDashboard />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/listOfProjects/:status"
-            element={
-              jwtToken ? <DisplayListOfProjects /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/listOfProjects/managers/:name"
-            element={
-              jwtToken ? <DisplayListOfProjects /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/listOfTasks/:projectId"
-            element={jwtToken ? <ProjectTaksPage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/employees"
-            element={
-              jwtToken && role === "admin" ? (
-                <ListOfEmplyeesPage />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/teams"
-            element={
-              jwtToken && role === "admin" ? (
-                <ListOfTeamsPage />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/roles"
-            element={
-              jwtToken && role === "admin" ? (
-                <ListOfRolesPage />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route
-            path="/holidays"
-            element={
-              jwtToken ? <ListOfHolidaysPage /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/myTeam"
-            element={jwtToken ? <MyTeamPage /> : <Navigate to="/login" />}
-          />
-          <Route path="/getEmail" element={<GetMailPage />} />
-          <Route path="/updatePassword" element={<UpdatePasswordPage />} />
-          <Route
-            path="/profile/:userId"
-            element={jwtToken ? <ProfilePage /> : <Navigate to="/login" />}
-          />
+          {routes.map(({ path, element, guard }) => {
+            if (guard === "public")
+              return (
+                <Route
+                  key={path}
+                  path={path}
+                  element={<PublicRoute element={element} />}
+                />
+              );
+            if (guard === "admin")
+              return (
+                <Route
+                  key={path}
+                  path={path}
+                  element={<AdminRoute element={element} />}
+                />
+              );
+            return (
+              <Route
+                key={path}
+                path={path}
+                element={<PrivateRoute element={element} />}
+              />
+            );
+          })}
         </Routes>
       </Router>
     </div>
   );
 }
+
 export default App;

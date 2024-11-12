@@ -32,6 +32,52 @@ export default function ListOfRolesTable({
 
   const [rows, setRows] = React.useState([]);
 
+  const [searchTerm, setSearchTerm] = React.useState("");
+
+
+  console.log("rows",rows)
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setSearchTerm(e.target.value)
+
+    let temp = [];
+    for (let role in listOfRoles) {
+      console.log(listOfRoles[role]);
+      temp.push(listOfRoles[role]);
+    }
+
+    console.log("temp",temp)
+
+    authFetch
+    .get(`/role/search/${e.target.value}`)
+    .then((res) => {
+
+      if(res?.data){
+        const apiNames = res.data.map((item) => item.name);
+        console.log("apiNames",apiNames)
+  
+        // Filter the rows based on the names in the API response
+        const filteredRows = rows.filter((row) => apiNames.includes(row.name));
+        console.log("filteredRows",filteredRows)
+    
+        // Update state with the filtered rows
+        setRows(filteredRows);
+
+      }
+
+
+    })
+    .catch((err) => {
+      if (err?.response?.data?.message) {
+        displayAlert(err?.response?.data?.message, "error");
+      } else {
+        displayAlert("something sent wrong", "error");
+      }
+      console.log(err);
+    });
+  };
+
   React.useEffect(() => {
     let temp = [];
     for (let role in listOfRoles) {
@@ -80,6 +126,13 @@ export default function ListOfRolesTable({
     <Paper
       sx={{ width: "100%", overflow: "hidden", backgroundColor: "#1b1818" }}
     >
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={handleChange}
+      />
+
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

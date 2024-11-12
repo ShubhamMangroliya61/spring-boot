@@ -44,6 +44,7 @@ const reducer = (state, action) => {
         role: action.payload.role,
         jwtToken: action.payload.jwtToken,
         userId: action.payload.userId,
+        userRedirect: action.payload.userRedirect 
       };
     case SETUP_USER_ERROR:
       return {

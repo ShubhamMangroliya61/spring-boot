@@ -11,7 +11,7 @@ function UpdateTemp() {
 
   const getRoleById = (roleId) => {
     axios
-      .get(`http://localhost:8080/api/role/${roleId}`)
+      .get(`http://192.168.16.54:8080/api/role/${roleId}`)
       .then((res) => setRole(res.data))
       .catch((err) => console.log(err));
   };
@@ -26,7 +26,7 @@ function UpdateTemp() {
 
   const updateData = () => {
     axios
-      .put("http://localhost:8080/api/employee/1", {
+      .put("http://192.168.16.54:8080/api/employee/1", {
         email: "adityakaneriya1711@gmail.com",
       })
       .then((response) => {

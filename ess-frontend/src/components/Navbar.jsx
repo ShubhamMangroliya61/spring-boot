@@ -168,18 +168,18 @@ function Navbar() {
                     : "hidden opacity-0 pointer-events-none"
                 } transition-opacity duration-300 absolute top-14 backdrop-blur-md w-[150px] h-[100px] rounded-md right-3 bg-gray-950/50 z-10`}
               >
-                <ul>
-                  <li className="cursor-pointer duration-200 hover:text-gray-300">
+                <ul >
+                  <li className="cursor-pointer duration-200 hover:text-gray-300 mb-5 mt-5">
                     Sub-op-1
                   </li>
                   <li
-                    className="cursor-pointer duration-200 hover:text-gray-300"
+                    className="cursor-pointer duration-200 hover:text-gray-300 mb-5"
                     onClick={handleViewProfile}
                   >
                     View profile
                   </li>
                   <li
-                    className="cursor-pointer duration-200 text-red-400  hover:text-red-600"
+                    className="cursor-pointer duration-200 text-red-400  hover:text-red-600 mb-5"
                     onClick={handleLogOut}
                   >
                     <span>Logout</span>

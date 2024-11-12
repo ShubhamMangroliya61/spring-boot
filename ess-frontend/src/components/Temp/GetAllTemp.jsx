@@ -5,7 +5,7 @@ function GetAllTemp() {
   const [roles, setRoles] = useState([]);
 
   const getAllRoles = () => {
-    axios.get("http://localhost:8080/api/employee/all").then((response) => {
+    axios.get("http://192.168.16.54:8080/api/employee/all").then((response) => {
       setRoles(response.data);
     });
   };

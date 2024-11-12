@@ -40,7 +40,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const authFetch = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://192.168.16.54:8080/api",
   });
 
   authFetch.interceptors.request.use(
@@ -119,6 +119,7 @@ const AppProvider = ({ children }) => {
               jwtToken: res.data.token,
               userId: res.data.id.toString().toLowerCase(),
               team: res.data.team.toLowerCase(),
+              userRedirect:res.data.userRedirect,
             },
           });
           localStorage.setItem("jwtToken", res.data.token);

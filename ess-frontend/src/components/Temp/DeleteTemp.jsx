@@ -3,7 +3,7 @@ import axios from "axios";
 function DeleteTemp() {
   const deleteData = () => {
     axios
-      .delete("http://localhost:8080/api/role/3")
+      .delete("http://192.168.16.54:8080/api/role/3")
       .then((response) => {
         console.log(response);
       })
