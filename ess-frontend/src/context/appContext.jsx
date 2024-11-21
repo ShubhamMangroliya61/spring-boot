@@ -34,20 +34,54 @@ const initialState = {
   isSubOptionOpen: isSubOptionOpen || false,
 };
 
+const setToken = (key, value) => localStorage.setItem(key, value);
+const getToken = (key) => localStorage.getItem(key);
+const removeToken = (key) => localStorage.removeItem(key);
+
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const fetchCsrfToken = async () => {
+  try {
+    const jwtToken = getToken("jwtToken");
+    if (!jwtToken) throw new Error("JWT token is missing");
+
+    const response = await axios.get("http://localhost:8080/api/auth/get-csrf-token", {
+      headers: { Authorization: `Bearer ${jwtToken}` },
+      withCredentials: true,
+    });
+    const csrfToken = response?.data?.token; // Assume csrfToken is in the response
+    setToken("csrfToken", csrfToken); // Save CSRF token to localStorage
+    // await sleep(1000);
+    return csrfToken;
+  } catch (error) {
+    console.error("Failed to fetch CSRF token", error);
+    // throw error;
+  }
+};
+
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const authFetch = axios.create({
-    baseURL: "http://192.168.16.54:8080/api",
+    baseURL: "http://localhost:8080/api",
+    withCredentials: true,
   });
 
   authFetch.interceptors.request.use(
-    (config) => {
-      const token = localStorage.getItem("jwtToken");
+    async (config) => {      
+      const token = getToken("jwtToken");
+      const csrfToken = await fetchCsrfToken();
+
       if (token) {
         config.headers["Authorization"] = "Bearer " + token;
+      }
+      if (csrfToken) {
+        config.headers["X-CSRF-TOKEN"] = csrfToken;
       }
       return config;
     },
@@ -108,8 +142,8 @@ const AppProvider = ({ children }) => {
       type: SETUP_USER_BEGIN,
     });
     try {
-      await authFetch
-        .post("/auth/login", employee)
+      await axios
+        .post("http://localhost:8080/api/auth/login", employee)
         .then((res) => {
           console.log(res.data);
           dispatch({
